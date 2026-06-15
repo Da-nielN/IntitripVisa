@@ -1,12 +1,21 @@
-import { z } from 'zod'
+﻿import { z } from 'zod'
 
 const req = (msg = 'Campo requerido') => z.string().min(1, msg)
 const siNo = z.enum(['si', 'no'])
 const optionalStr = z.string().optional().default('')
+const digits = (msg: string) => z.string().regex(/^\d+$/, msg)
 
 export const visaFormSchema = z.object({
   cedula: req('Cédula requerida').min(10, 'Mínimo 10 dígitos'),
-  fullName: req('Nombre completo requerido'),
+  firstName: req('Primer nombre requerido'),
+  middleName: req('Segundo nombre requerido'),
+  paternalLastName: req('Primer apellido requerido'),
+  maternalLastName: req('Segundo apellido requerido'),
+  fullName: optionalStr,
+  birthdate: req('Fecha de nacimiento requerida'),
+  sex: z.enum(['masculino', 'femenino'], {
+    required_error: 'Sexo requerido',
+  }),
   maritalStatus: z.enum(['soltero', 'casado', 'divorciado', 'viudo', 'union_libre'], {
     required_error: 'Estado civil requerido',
   }),
@@ -14,16 +23,19 @@ export const visaFormSchema = z.object({
   spouseBirthdate: optionalStr,
   spouseNationality: optionalStr,
   nationality: req('Nacionalidad requerida'),
+  hasOtherNationality: siNo,
   otherNationality: optionalStr,
   isPermanentResidentAbroad: siNo,
-  homePhone: optionalStr,
+  permanentResidentCountry: optionalStr,
+  homePhone: z.string().regex(/^\d{7}$|^$/, 'Teléfono domicilio debe tener 7 dígitos').optional().default(''),
   city: req('Ciudad requerida'),
   province: req('Provincia requerida'),
-  cellPhone: req('Celular requerido'),
+  cellPhone: digits('Celular debe contener solo números').length(10, 'Celular debe tener 10 dígitos'),
   previousPhones: optionalStr,
   address: req('Dirección requerida'),
-  postalCode: req('Código postal requerido'),
+  postalCode: digits('Código postal debe contener solo números'),
   email: req('Email requerido').email('Email inválido'),
+  hasPreviousEmails: siNo,
   previousEmails: optionalStr,
   passportCity: req('Ciudad del pasaporte requerida'),
   passportLostOrStolen: siNo,
@@ -34,6 +46,7 @@ export const visaFormSchema = z.object({
   otherSocialMedia: optionalStr,
 
   usDriversLicense: siNo,
+  hasUsTaxId: siNo,
   usTaxId: optionalStr,
 
   currentPosition: req('Cargo actual requerido'),
@@ -95,9 +108,54 @@ export const visaFormSchema = z.object({
   medicalTreatment: siNo,
   covidVaccine: siNo,
   covidDoses: optionalStr,
+}).superRefine((data, ctx) => {
+  if (data.hasPreviousEmails === 'si') {
+    const emailValidation = z.string().email().safeParse(data.previousEmails)
+    if (!emailValidation.success) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Ingrese un correo anterior válido',
+        path: ['previousEmails'],
+      })
+    }
+  }
+
+  if (data.hasOtherNationality === 'si' && !data.otherNationality) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Seleccione la otra nacionalidad',
+      path: ['otherNationality'],
+    })
+  }
+
+  if (data.isPermanentResidentAbroad === 'si' && !data.permanentResidentCountry) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Seleccione el país de residencia permanente',
+      path: ['permanentResidentCountry'],
+    })
+  }
+
+  if (data.hasUsTaxId === 'si') {
+    if (!data.usTaxId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Ingrese el número de identificación fiscal',
+        path: ['usTaxId'],
+      })
+    } else if (!/^\d+$/.test(data.usTaxId)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'La identificación fiscal debe contener solo números',
+        path: ['usTaxId'],
+      })
+    }
+  }
 })
 
 export type VisaFormSchema = z.infer<typeof visaFormSchema>
 
 // Alias kept for legacy imports in Step* components
 export type VisaFormData = VisaFormSchema
+
+

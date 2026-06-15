@@ -1,4 +1,4 @@
-export type ApiResponse = {
+﻿export type ApiResponse = {
   success: boolean
   message: string
   folderId?: string
@@ -13,3 +13,4 @@ export type FormStep = {
 }
 
 export type SubmitStatus = 'idle' | 'loading' | 'success' | 'error'
+

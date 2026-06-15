@@ -1,27 +1,27 @@
-import React from 'react'
+﻿import React from 'react'
 import { cn } from '../../utils/cn'
 
-interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface PropsCampo extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
   hint?: string
   required?: boolean
 }
 
-export const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
+export const Campo = React.forwardRef<HTMLInputElement, PropsCampo>(
   ({ label, error, hint, required, className, id, ...props }, ref) => {
-    const inputId = id ?? label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    const idEntrada = id ?? label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     return (
       <div className="w-full">
-        <label htmlFor={inputId} className="field-label">
+        <label htmlFor={idEntrada} className="field-label">
           {label}
           {required && <span className="text-brand-brown ml-1">*</span>}
         </label>
-        <textarea
-          id={inputId}
+        <input
+          id={idEntrada}
           ref={ref}
-          rows={3}
-          className={cn('field-input resize-none', error && 'border-red-400', className)}
+          className={cn('field-input', error && 'border-red-400 focus:ring-red-400/40 focus:border-red-400', className)}
+          aria-invalid={!!error}
           {...props}
         />
         {hint && !error && <p className="text-xs text-slate-400 mt-1 dark:text-slate-500">{hint}</p>}
@@ -30,4 +30,5 @@ export const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaField
     )
   }
 )
-TextareaField.displayName = 'TextareaField'
+Campo.displayName = 'Campo'
+

@@ -1,38 +1,37 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react'
 
 import { visaFormSchema, type VisaFormSchema } from './lib/schema'
 import { submitVisaForm } from './services/appsScript'
-import { useMultiStep } from './hooks/useMultiStep'
+import { usarMultiplesPasos } from './ganchos/usarMultiplesPasos'
 
 import { Header } from './components/layout/Header'
 import { SuccessScreen } from './components/layout/SuccessScreen'
-import { StepIndicator } from './components/ui/StepIndicator'
+import { IndicadorPasos } from './components/interfaz/IndicadorPasos'
 
-import { PersonalSection } from './components/form/PersonalSection'
-import { SocialMediaSection } from './components/form/SocialMediaSection'
-import { WorkSection } from './components/form/WorkSection'
-import { EducationSection } from './components/form/EducationSection'
-import { FamilySection } from './components/form/FamilySection'
-import { TravelSection } from './components/form/TravelSection'
-import { ReviewSection } from './components/form/ReviewSection'
+import { SeccionPersonal } from './components/formulario/SeccionPersonal'
+import { SeccionRedesSociales } from './components/formulario/SeccionRedesSociales'
+import { SeccionTrabajo } from './components/formulario/SeccionTrabajo'
+import { SeccionEducacion } from './components/formulario/SeccionEducacion'
+import { SeccionFamilia } from './components/formulario/SeccionFamilia'
+import { SeccionViaje } from './components/formulario/SeccionViaje'
+import { SeccionRevision } from './components/formulario/SeccionRevision'
 
-const STEPS = [
-  { label: 'Personal', icon: '👤' },
-  { label: 'Social', icon: '📱' },
-  { label: 'Trabajo', icon: '💼' },
-  { label: 'Estudios', icon: '🎓' },
-  { label: 'Familia', icon: '👨‍👩‍👧' },
-  { label: 'Viaje', icon: '✈️' },
-  { label: 'Revisión', icon: '✅' },
+const PASOS = [
+  { label: 'Personal', icon: '1' },
+  { label: 'Social', icon: '2' },
+  { label: 'Trabajo', icon: '3' },
+  { label: 'Estudios', icon: '4' },
+  { label: 'Familia', icon: '5' },
+  { label: 'Viaje', icon: '6' },
+  { label: 'Revisión', icon: '7' },
 ]
 
-// Step-specific fields to validate per step (trigger on next)
-const STEP_FIELDS: (keyof VisaFormSchema)[][] = [
-  ['cedula', 'fullName', 'maritalStatus', 'nationality', 'city', 'province', 'cellPhone', 'address', 'postalCode', 'email', 'passportCity', 'passportLostOrStolen', 'isPermanentResidentAbroad'],
-  ['usDriversLicense'],
+const CAMPOS_POR_PASO: (keyof VisaFormSchema)[][] = [
+  ['cedula', 'firstName', 'middleName', 'paternalLastName', 'maternalLastName', 'birthdate', 'sex', 'maritalStatus', 'nationality', 'hasOtherNationality', 'otherNationality', 'isPermanentResidentAbroad', 'permanentResidentCountry', 'city', 'province', 'cellPhone', 'address', 'postalCode', 'email', 'hasPreviousEmails', 'previousEmails', 'passportCity', 'passportLostOrStolen', 'usDriversLicense', 'hasUsTaxId', 'usTaxId'],
+  [],
   ['currentPosition', 'currentEmployer', 'currentJobDescription', 'currentSalary', 'currentJobStartDate', 'currentJobAddress', 'hasPreviousJob'],
   ['universityInstitution', 'careerName', 'languages'],
   ['fatherName', 'fatherBirthdate', 'fatherInUSA', 'motherName', 'motherBirthdate', 'motherInUSA', 'immediateRelativesInUSA', 'otherRelativesInUSA'],
@@ -41,21 +40,24 @@ const STEP_FIELDS: (keyof VisaFormSchema)[][] = [
 ]
 
 export default function App() {
-  const [submitted, setSubmitted] = useState(false)
-  const [pdfUrl, setPdfUrl] = useState<string>()
-  const [loading, setLoading] = useState(false)
-  const [apiError, setApiError] = useState<string>()
-  const [isDark, setIsDark] = useState(() => localStorage.getItem('intitrip-theme') !== 'light')
+  const [enviado, setEnviado] = useState(false)
+  const [urlPdf, setUrlPdf] = useState<string>()
+  const [cargando, setCargando] = useState(false)
+  const [errorApi, setErrorApi] = useState<string>()
+  const [modoOscuro, setModoOscuro] = useState(() => localStorage.getItem('intitrip-theme') !== 'light')
 
-  const { currentStep, isFirst, isLast, next, prev } = useMultiStep(STEPS.length)
+  const { pasoActual, esPrimero, esUltimo, siguiente, anterior } = usarMultiplesPasos(PASOS.length)
 
-  const form = useForm<VisaFormSchema>({
+  const formulario = useForm<VisaFormSchema>({
     resolver: zodResolver(visaFormSchema),
     mode: 'onTouched',
     defaultValues: {
+      hasOtherNationality: 'no',
       isPermanentResidentAbroad: 'no',
+      hasPreviousEmails: 'no',
       passportLostOrStolen: 'no',
       usDriversLicense: 'no',
+      hasUsTaxId: 'no',
       hasPreviousJob: 'no',
       fatherInUSA: 'no',
       motherInUSA: 'no',
@@ -72,53 +74,55 @@ export default function App() {
   })
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
-    localStorage.setItem('intitrip-theme', isDark ? 'dark' : 'light')
-  }, [isDark])
+    document.documentElement.classList.toggle('dark', modoOscuro)
+    localStorage.setItem('intitrip-theme', modoOscuro ? 'dark' : 'light')
+  }, [modoOscuro])
 
-  const handleNext = async () => {
-    const fields = STEP_FIELDS[currentStep]
-    const valid = fields.length === 0 || await form.trigger(fields)
-    if (valid) next()
+  const manejarSiguiente = async () => {
+    const campos = CAMPOS_POR_PASO[pasoActual]
+    const esValido = campos.length === 0 || await formulario.trigger(campos)
+    if (esValido) siguiente()
     else window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const onSubmit = async (data: VisaFormSchema) => {
-    setLoading(true)
-    setApiError(undefined)
+  const alEnviar = async (datos: VisaFormSchema) => {
+    setCargando(true)
+    setErrorApi(undefined)
     try {
-      const result = await submitVisaForm(data as never)
-      if (result.success) {
-        setPdfUrl(result.pdfUrl)
-        setSubmitted(true)
+      const resultado = await submitVisaForm({
+        ...datos,
+        fullName: [datos.firstName, datos.middleName, datos.paternalLastName, datos.maternalLastName].filter(Boolean).join(' '),
+      } as never)
+      if (resultado.success) {
+        setUrlPdf(resultado.pdfUrl)
+        setEnviado(true)
       } else {
-        setApiError(result.message || 'Error desconocido al enviar el formulario.')
+        setErrorApi(resultado.message || 'Error desconocido al enviar el formulario.')
       }
-    } catch (err) {
-      setApiError(err instanceof Error ? err.message : 'Error de conexión. Verifique su internet e intente nuevamente.')
+    } catch (error) {
+      setErrorApi(error instanceof Error ? error.message : 'Error de conexión. Verifique su internet e intente nuevamente.')
     } finally {
-      setLoading(false)
+      setCargando(false)
     }
   }
 
-  if (submitted) {
+  if (enviado) {
     return (
       <div className="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-500 dark:bg-slate-950 dark:text-slate-100">
-        <Header isDark={isDark} onToggleTheme={() => setIsDark((value) => !value)} />
+        <Header isDark={modoOscuro} onToggleTheme={() => setModoOscuro((valor) => !valor)} />
         <main className="max-w-4xl mx-auto px-4 py-8">
-          <SuccessScreen pdfUrl={pdfUrl} onReset={() => { setSubmitted(false); form.reset() }} />
+          <SuccessScreen pdfUrl={urlPdf} onReset={() => { setEnviado(false); formulario.reset() }} />
         </main>
       </div>
     )
   }
 
-  const formData = form.watch()
+  const datosFormulario = formulario.watch()
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-500 dark:bg-slate-950 dark:text-slate-100">
-      <Header isDark={isDark} onToggleTheme={() => setIsDark((value) => !value)} />
+      <Header isDark={modoOscuro} onToggleTheme={() => setModoOscuro((valor) => !valor)} />
 
-      {/* Hero bar */}
       <div className="bg-gradient-to-r from-brand-teal to-[#174f57] border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <p className="text-white/70 text-sm">
@@ -128,60 +132,55 @@ export default function App() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-        {/* Step indicator */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 md:p-6 transition-colors duration-500 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/20">
-          <StepIndicator steps={STEPS} currentStep={currentStep} />
+          <IndicadorPasos pasos={PASOS} pasoActual={pasoActual} />
         </div>
 
-        {/* Current step heading */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-brand-teal/10 flex items-center justify-center text-base">
-            {STEPS[currentStep].icon}
+            {PASOS[pasoActual].icon}
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest dark:text-slate-500">Paso {currentStep + 1} de {STEPS.length}</p>
-            <h2 className="font-display font-bold text-brand-teal text-lg leading-tight dark:text-emerald-300">{STEPS[currentStep].label}</h2>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest dark:text-slate-500">Paso {pasoActual + 1} de {PASOS.length}</p>
+            <h2 className="font-display font-bold text-brand-teal text-lg leading-tight dark:text-emerald-300">{PASOS[pasoActual].label}</h2>
           </div>
         </div>
 
-        {/* Form sections */}
-        <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={formulario.handleSubmit(alEnviar)} noValidate>
           <div className="space-y-6">
-            {currentStep === 0 && <PersonalSection form={form} />}
-            {currentStep === 1 && <SocialMediaSection form={form} />}
-            {currentStep === 2 && <WorkSection form={form} />}
-            {currentStep === 3 && <EducationSection form={form} />}
-            {currentStep === 4 && <FamilySection form={form} />}
-            {currentStep === 5 && <TravelSection form={form} />}
-            {currentStep === 6 && <ReviewSection data={formData} />}
+            {pasoActual === 0 && <SeccionPersonal form={formulario} />}
+            {pasoActual === 1 && <SeccionRedesSociales form={formulario} />}
+            {pasoActual === 2 && <SeccionTrabajo form={formulario} />}
+            {pasoActual === 3 && <SeccionEducacion form={formulario} />}
+            {pasoActual === 4 && <SeccionFamilia form={formulario} />}
+            {pasoActual === 5 && <SeccionViaje form={formulario} />}
+            {pasoActual === 6 && <SeccionRevision data={datosFormulario} />}
           </div>
 
-          {/* API error */}
-          {apiError && (
+          {errorApi && (
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 flex items-start gap-3 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
-              <span className="text-red-500 shrink-0 mt-0.5">⚠️</span>
+              <span className="text-red-500 shrink-0 mt-0.5">!</span>
               <div>
-                <strong>Error al enviar:</strong> {apiError}
+                <strong>Error al enviar:</strong> {errorApi}
               </div>
             </div>
           )}
 
-          {/* Navigation */}
           <div className="flex justify-between mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-            <button type="button" onClick={prev} disabled={isFirst} className="btn-secondary disabled:opacity-40">
+            <button type="button" onClick={anterior} disabled={esPrimero} className="btn-secondary disabled:opacity-40">
               <ChevronLeft className="w-4 h-4" /> Anterior
             </button>
 
-            {isLast ? (
-              <button type="submit" disabled={loading} className="btn-primary min-w-[140px]">
-                {loading ? (
+            {esUltimo ? (
+              <button type="submit" disabled={cargando} className="btn-primary min-w-[140px]">
+                {cargando ? (
                   <><Loader2 className="w-4 h-4 animate-spin" /> Enviando...</>
                 ) : (
                   <><Send className="w-4 h-4" /> Enviar formulario</>
                 )}
               </button>
             ) : (
-              <button type="button" onClick={handleNext} className="btn-primary">
+              <button type="button" onClick={manejarSiguiente} className="btn-primary">
                 Siguiente <ChevronRight className="w-4 h-4" />
               </button>
             )}
@@ -189,7 +188,6 @@ export default function App() {
         </form>
       </main>
 
-      {/* Footer */}
       <footer className="mt-16 border-t border-slate-100 bg-white transition-colors duration-500 dark:border-slate-800 dark:bg-slate-900">
         <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -208,3 +206,5 @@ export default function App() {
     </div>
   )
 }
+
+

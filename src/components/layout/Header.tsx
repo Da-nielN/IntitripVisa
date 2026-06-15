@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import intitripLogo from '../../assets/intitrip-logo.svg'
 
@@ -43,3 +43,5 @@ export const Header: React.FC<HeaderProps> = ({ isDark, onToggleTheme }) => (
     </div>
   </header>
 )
+
+

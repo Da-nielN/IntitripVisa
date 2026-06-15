@@ -1,13 +1,21 @@
-export interface VisaFormData {
+﻿export interface VisaFormData {
   // Personal
-  fullName: string
+  firstName: string
+  middleName: string
+  paternalLastName: string
+  maternalLastName: string
+  fullName?: string
+  birthdate: string
+  sex: 'masculino' | 'femenino'
   maritalStatus: 'soltero' | 'casado' | 'divorciado' | 'viudo' | 'union_libre'
   spouseName: string
   spouseBirthdate: string
   spouseNationality: string
   nationality: string
+  hasOtherNationality: 'si' | 'no'
   otherNationality: string
   isPermanentResidentAbroad: 'si' | 'no'
+  permanentResidentCountry: string
   homePhone: string
   city: string
   province: string
@@ -16,6 +24,7 @@ export interface VisaFormData {
   address: string
   postalCode: string
   email: string
+  hasPreviousEmails: 'si' | 'no'
   previousEmails: string
   passportCity: string
   passportLostOrStolen: 'si' | 'no'
@@ -28,6 +37,7 @@ export interface VisaFormData {
 
   // Documents
   usDriversLicense: 'si' | 'no'
+  hasUsTaxId: 'si' | 'no'
   usTaxId: string
 
   // Current Job
@@ -107,3 +117,4 @@ export interface ApiResponse {
   folderId?: string
   pdfUrl?: string
 }
+

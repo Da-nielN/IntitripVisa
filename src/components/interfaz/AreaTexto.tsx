@@ -1,23 +1,23 @@
-import React from 'react'
+﻿import React from 'react'
 import { cn } from '../../utils/cn'
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface PropsAreaTexto extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string
   error?: string
   required?: boolean
 }
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+export const AreaTexto = React.forwardRef<HTMLTextAreaElement, PropsAreaTexto>(
   ({ label, error, required, className, id, ...props }, ref) => {
-    const inputId = id ?? label.toLowerCase().replace(/\s+/g, '-')
+    const idEntrada = id ?? label.toLowerCase().replace(/\s+/g, '-')
     return (
       <div className="w-full">
-        <label htmlFor={inputId} className="field-label">
+        <label htmlFor={idEntrada} className="field-label">
           {label}
           {required && <span className="text-brand-brown ml-1">*</span>}
         </label>
         <textarea
-          id={inputId}
+          id={idEntrada}
           ref={ref}
           rows={3}
           className={cn('field-input resize-none', error && 'border-red-400', className)}
@@ -28,4 +28,5 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     )
   }
 )
-Textarea.displayName = 'Textarea'
+AreaTexto.displayName = 'AreaTexto'
+

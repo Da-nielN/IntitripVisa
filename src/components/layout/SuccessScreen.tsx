@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { CheckCircle, ExternalLink } from 'lucide-react'
 
 interface Props {
@@ -37,3 +37,5 @@ export const SuccessScreen: React.FC<Props> = ({ pdfUrl, onReset }) => (
     </div>
   </div>
 )
+
+

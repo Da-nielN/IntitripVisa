@@ -1,4 +1,4 @@
-import type { VisaFormData } from '@/lib/schema'
+﻿import type { VisaFormData } from '@/lib/schema'
 import type { ApiResponse } from '@/types'
 
 const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL as string
@@ -42,3 +42,5 @@ export async function submitVisaForm(data: VisaFormData): Promise<ApiResponse> {
 
   return result
 }
+
+

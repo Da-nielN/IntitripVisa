@@ -1,37 +1,37 @@
-import React from 'react'
+﻿import React from 'react'
 import { cn } from '../../utils/cn'
 
-interface Option { value: string; label: string }
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface Opcion { value: string; label: string }
+interface PropsSelector extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string
-  options: Option[]
+  options: Opcion[]
   error?: string
   required?: boolean
 }
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
+export const Selector = React.forwardRef<HTMLSelectElement, PropsSelector>(
   ({ label, options, error, required, className, id, ...props }, ref) => {
-    const inputId = id ?? label.toLowerCase().replace(/\s+/g, '-')
+    const idEntrada = id ?? label.toLowerCase().replace(/\s+/g, '-')
     return (
       <div className="w-full">
-        <label htmlFor={inputId} className="field-label">
+        <label htmlFor={idEntrada} className="field-label">
           {label}
           {required && <span className="text-brand-brown ml-1">*</span>}
         </label>
         <select
-          id={inputId}
+          id={idEntrada}
           ref={ref}
           className={cn(
             'field-input appearance-none bg-[url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E")] bg-[right_12px_center] bg-no-repeat pr-10',
             error && 'border-red-400',
-            className
+            className,
           )}
           aria-invalid={!!error}
           {...props}
         >
           <option value="">Seleccionar...</option>
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
+          {options.map((opcion) => (
+            <option key={opcion.value} value={opcion.value}>{opcion.label}</option>
           ))}
         </select>
         {error && (
@@ -46,4 +46,5 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     )
   }
 )
-Select.displayName = 'Select'
+Selector.displayName = 'Selector'
+

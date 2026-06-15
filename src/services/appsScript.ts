@@ -1,4 +1,4 @@
-import type { ApiResponse } from '../types'
+﻿import type { ApiResponse } from '../types'
 
 const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL as string
 
@@ -29,8 +29,8 @@ export async function submitVisaForm(data: Record<string, unknown>): Promise<Api
   const response = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     body,
-    // No Content-Type header override → browser sends application/x-www-form-urlencoded
-    // which is a "simple request" → no preflight → no CORS error
+    // No Content-Type header override: browser sends application/x-www-form-urlencoded.
+    // This is a simple request: no preflight, no CORS error.
   })
 
   if (!response.ok) {
@@ -40,3 +40,5 @@ export async function submitVisaForm(data: Record<string, unknown>): Promise<Api
   const result: ApiResponse = await response.json()
   return result
 }
+
+
