@@ -17,7 +17,7 @@ export const SeccionRedesSociales: React.FC<Props> = ({ form }) => {
         <Entrada label="Facebook (usuario)" {...register('facebook')} error={errors.facebook?.message} placeholder="@usuario o nombre completo" />
         <Entrada label="Instagram (usuario)" {...register('instagram')} error={errors.instagram?.message} placeholder="@usuario" />
         <Entrada label="LinkedIn (usuario)" {...register('linkedin')} error={errors.linkedin?.message} placeholder="nombre-apellido" />
-        <Entrada label="Otras redes sociales" {...register('otherSocialMedia')} error={errors.otherSocialMedia?.message} placeholder="Twitter: @usuario, TikTok: @usuario" />
+        <Entrada label="Otras redes sociales" {...register('otrasRedesSociales')} error={errors.otrasRedesSociales?.message} placeholder="Twitter: @usuario, TikTok: @usuario" />
       </div>
     </div>
   )

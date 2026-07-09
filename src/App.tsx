@@ -14,28 +14,29 @@ import { IndicadorPasos } from './components/interfaz/IndicadorPasos'
 import { SeccionPersonal } from './components/formulario/SeccionPersonal'
 import { SeccionRedesSociales } from './components/formulario/SeccionRedesSociales'
 import { SeccionTrabajo } from './components/formulario/SeccionTrabajo'
-import { SeccionEducacion } from './components/formulario/SeccionEducacion'
 import { SeccionFamilia } from './components/formulario/SeccionFamilia'
 import { SeccionViaje } from './components/formulario/SeccionViaje'
 import { SeccionRevision } from './components/formulario/SeccionRevision'
 
 const PASOS = [
   { label: 'Personal', icon: '1' },
-  { label: 'Social', icon: '2' },
-  { label: 'Trabajo', icon: '3' },
-  { label: 'Estudios', icon: '4' },
+  { label: 'Viaje', icon: '2' },
+  { label: 'Social', icon: '3' },
+  { label: 'Trabajo', icon: '4' },
   { label: 'Familia', icon: '5' },
-  { label: 'Viaje', icon: '6' },
-  { label: 'Revisión', icon: '7' },
+  { label: 'Revisión', icon: '6' },
 ]
 
 const CAMPOS_POR_PASO: (keyof VisaFormSchema)[][] = [
-  ['cedula', 'firstName', 'middleName', 'paternalLastName', 'maternalLastName', 'birthdate', 'sex', 'maritalStatus', 'nationality', 'hasOtherNationality', 'otherNationality', 'isPermanentResidentAbroad', 'permanentResidentCountry', 'city', 'province', 'cellPhone', 'address', 'postalCode', 'email', 'hasPreviousEmails', 'previousEmails', 'passportCity', 'passportLostOrStolen', 'usDriversLicense', 'hasUsTaxId', 'usTaxId'],
+  //['cedula', 'primerNombre', 'segundoNombre', 'primerApellido', 'segundoApellido', 'fechaNacimiento', 'sexo', 'estadoCivil', 'nombresConyuge', 'apellidosConyuge', 'fechaNacimientoConyuge', 'nacionalidadConyuge', 'paisNacimientoConyuge', 'ciudadNacimientoConyuge', 'direccionConyuge', 'direccionConyugeOtro', 'nacionalidad', 'tieneOtraNacionalidad', 'otraNacionalidad', 'esResidentePermanenteExtranjero', 'paisResidenciaPermanente', 'ciudad', 'provincia', 'celular', 'tuvoTelefonosAnteriores', 'telefonosAnteriores', 'direccion', 'codigoPostal', 'correo', 'tuvoCorreosAnteriores', 'correosAnteriores', 'ciudadPasaporte', 'pasaportePerdidoORobado', 'numeroPasaportePerdidoORobado', 'paisAutoridadPasaportePerdidoORobado', 'explicacionPasaportePerdidoORobado', 'licenciaConducirEEUU', 'tieneIdentificacionFiscalEEUU', 'identificacionFiscalEEUU'],
   [],
-  ['currentPosition', 'currentEmployer', 'currentJobDescription', 'currentSalary', 'currentJobStartDate', 'currentJobAddress', 'hasPreviousJob'],
-  ['universityInstitution', 'careerName', 'languages'],
-  ['fatherName', 'fatherBirthdate', 'fatherInUSA', 'motherName', 'motherBirthdate', 'motherInUSA', 'immediateRelativesInUSA', 'otherRelativesInUSA'],
-  ['hasActiveVisa', 'visaDenied', 'deportedFromCountry', 'travelersCount', 'tripPurpose', 'tripPayer', 'contagiousDisease', 'medicalTreatment', 'covidVaccine'],
+  //['categoriaMotivoViaje', 'tipoVisa', 'tienePlanesViajeConcretos', 'pagadorViaje', 'viajaConOtros', 'haVisitadoEEUU', 'haTenidoVisaEEUU', 'visaNegada', 'tienePeticionInmigracion', 'enfermedadContagiosa', 'detalleEnfermedadContagiosa'],
+  [],
+  [],
+  //['cargoActual', 'empleadorActual', 'descripcionTrabajoActual', 'sueldoActual', 'fechaInicioTrabajoActual', 'direccionTrabajoActual', 'tuvoTrabajoAnterior'],
+  [],
+  //['nombrePadre', 'fechaNacimientoPadre', 'padreEnEEUU', 'nombreMadre', 'fechaNacimientoMadre', 'madreEnEEUU', 'familiaresInmediatosEnEEUU', 'otrosFamiliaresEnEEUU'],
+  [],
   [],
 ]
 
@@ -52,24 +53,64 @@ export default function App() {
     resolver: zodResolver(visaFormSchema),
     mode: 'onTouched',
     defaultValues: {
-      hasOtherNationality: 'no',
-      isPermanentResidentAbroad: 'no',
-      hasPreviousEmails: 'no',
-      passportLostOrStolen: 'no',
-      usDriversLicense: 'no',
-      hasUsTaxId: 'no',
-      hasPreviousJob: 'no',
-      fatherInUSA: 'no',
-      motherInUSA: 'no',
-      immediateRelativesInUSA: 'no',
-      otherRelativesInUSA: 'no',
-      hasActiveVisa: 'no',
-      visaDenied: 'no',
-      deportedFromCountry: 'no',
-      tripPayer: 'yo',
-      contagiousDisease: 'no',
-      medicalTreatment: 'no',
-      covidVaccine: 'si',
+      tieneOtraNacionalidad: 'no',
+      nombresConyuge: '',
+      apellidosConyuge: '',
+      nombreConyuge: '',
+      fechaNacimientoConyuge: '',
+      nacionalidadConyuge: '',
+      paisNacimientoConyuge: '',
+      ciudadNacimientoConyuge: '',
+      direccionConyuge: '',
+      direccionConyugeOtro: '',
+      esResidentePermanenteExtranjero: 'no',
+      tuvoTelefonosAnteriores: 'no',
+      tuvoCorreosAnteriores: 'no',
+      pasaportePerdidoORobado: 'no',
+      numeroPasaportePerdidoORobado: '',
+      paisAutoridadPasaportePerdidoORobado: '',
+      explicacionPasaportePerdidoORobado: '',
+      licenciaConducirEEUU: 'no',
+      numeroLicenciaConducirEEUU: '',
+      estadoLicenciaConducirEEUU: '',
+      tieneIdentificacionFiscalEEUU: 'no',
+      tuvoTrabajoAnterior: 'no',
+      asistioInstitucionEducativa: 'no',
+      nombresPadre: '',
+      apellidosPadre: '',
+      nombrePadre: '',
+      padreEnEEUU: 'no',
+      estatusPadreEEUU: '',
+      nombresMadre: '',
+      apellidosMadre: '',
+      nombreMadre: '',
+      madreEnEEUU: 'no',
+      estatusMadreEEUU: '',
+      familiaresInmediatosEnEEUU: 'no',
+      familiaresInmediatosDetalle: [],
+      otrosFamiliaresEnEEUU: 'no',
+      tieneVisaActiva: 'no',
+      visaNegada: 'no',
+      deportadoDePais: 'no',
+      tienePlanesViajeConcretos: 'no',
+      unidadDuracionEstadiaPrevista: 'dias',
+      pagadorViaje: 'YO',
+      viajaConOtros: 'no',
+      acompanantesViaje: [],
+      haVisitadoEEUU: 'no',
+      visitasAnterioresEEUU: [],
+      haTenidoVisaEEUU: 'no',
+      mismoTipoVisa: 'no',
+      mismoPaisResidenciaVisa: 'no',
+      diezHuellasTomadas: 'no',
+      visaEEUUPerdidaORobada: 'no',
+      motivoVisaEEUUPerdidaORobada: '',
+      anioVisaEEUUPerdidaORobada: '',
+      visaEEUUCanceladaORevocada: 'no',
+      razonVisaEEUUCanceladaORevocada: '',
+      tienePeticionInmigracion: 'no',
+      enfermedadContagiosa: 'no',
+      detalleEnfermedadContagiosa: '',
     },
   })
 
@@ -91,8 +132,11 @@ export default function App() {
     try {
       const resultado = await submitVisaForm({
         ...datos,
-        fullName: [datos.firstName, datos.middleName, datos.paternalLastName, datos.maternalLastName].filter(Boolean).join(' '),
-      } as never)
+        nombreCompleto: [datos.primerNombre, datos.segundoNombre, datos.primerApellido, datos.segundoApellido].filter(Boolean).join(' '),
+        nombreConyuge: [datos.nombresConyuge, datos.apellidosConyuge].filter(Boolean).join(' '),
+        nombrePadre: [datos.nombresPadre, datos.apellidosPadre].filter(Boolean).join(' '),
+        nombreMadre: [datos.nombresMadre, datos.apellidosMadre].filter(Boolean).join(' '),
+      })
       if (resultado.success) {
         setUrlPdf(resultado.pdfUrl)
         setEnviado(true)
@@ -149,12 +193,11 @@ export default function App() {
         <form onSubmit={formulario.handleSubmit(alEnviar)} noValidate>
           <div className="space-y-6">
             {pasoActual === 0 && <SeccionPersonal form={formulario} />}
-            {pasoActual === 1 && <SeccionRedesSociales form={formulario} />}
-            {pasoActual === 2 && <SeccionTrabajo form={formulario} />}
-            {pasoActual === 3 && <SeccionEducacion form={formulario} />}
+            {pasoActual === 1 && <SeccionViaje form={formulario} />}
+            {pasoActual === 2 && <SeccionRedesSociales form={formulario} />}
+            {pasoActual === 3 && <SeccionTrabajo form={formulario} />}
             {pasoActual === 4 && <SeccionFamilia form={formulario} />}
-            {pasoActual === 5 && <SeccionViaje form={formulario} />}
-            {pasoActual === 6 && <SeccionRevision data={datosFormulario} />}
+            {pasoActual === 5 && <SeccionRevision data={datosFormulario} />}
           </div>
 
           {errorApi && (
@@ -206,5 +249,3 @@ export default function App() {
     </div>
   )
 }
-
-
