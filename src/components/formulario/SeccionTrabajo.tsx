@@ -4,7 +4,7 @@ import { Briefcase, GraduationCap } from 'lucide-react'
 import { VisaFormSchema } from '../../lib/schema'
 import {
   opcionesCiudadesEcuador,
-  opcionesOcupaciones,
+  ocupacionActual,
   opcionesProvincias,
   opcionesSiNo,
 } from '../../constants/opcionesFormulario'
@@ -58,7 +58,7 @@ export const SeccionTrabajo: React.FC<Props> = ({ form }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="md:col-span-2">
             <Controller name="categoriaOcupacionActual" control={control} render={({ field }) => (
-              <Selector label="Ocupación actual" required options={opcionesOcupaciones} error={errors.categoriaOcupacionActual?.message}
+              <Selector label="Ocupación actual" required options={ocupacionActual} error={errors.categoriaOcupacionActual?.message}
                 value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
             )} />
           </div>
@@ -76,6 +76,7 @@ export const SeccionTrabajo: React.FC<Props> = ({ form }) => {
             <Selector label="Provincia" required options={opcionesProvincias} error={errors.provinciaTrabajoActual?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
+          <Entrada label="Código postal" {...register('codigoPostalTrabajoActual', { onChange: soloNumeros() })} error={errors.codigoPostalTrabajoActual?.message} inputMode="numeric" />
           <Entrada label="Número de teléfono" type="tel" {...register('telefonoTrabajoActual', { onChange: soloNumeros() })} error={errors.telefonoTrabajoActual?.message} inputMode="numeric" />
           <Entrada label="Fecha de inicio" required type="date" {...register('fechaInicioTrabajoActual')} error={errors.fechaInicioTrabajoActual?.message} />
           <div className="md:col-span-2">

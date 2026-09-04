@@ -1,0 +1,2446 @@
+{
+  "version": "2.3",
+  "_notas": [
+    "Estructura centrada en el id del control del DS-160. Una pantalla = una URL.",
+    "'variable' e 'id' son las claves canonicas; 'etiqueta' es solo informativa.",
+    "'tipo' verificado contra el relevamiento en vivo (inventario_ds160_parcial.md).",
+    "'disparaPostback' proviene del relevamiento campo por campo, no se infiere. Su ausencia significa que el control NO recarga la pagina.",
+    "'disparaPostback' describe el control tal como se relevo, no el valor que la app escribe: varios radios fijados en 'N' no recargan al marcar esa opcion. La espera de recarga debe tener timeout y no bloquear.",
+    "'pendientes' lista variables del modelo que aun no tienen id relevado en esa pantalla.",
+    "Campos condicionales: no se declaran en el JSON; la app los omite si no estan en el DOM.",
+    "Cada campo lleva exactamente uno de: variable, variables, valor, manual.",
+    "Los valores de select y radio llegan ya traducidos al value del DS-160 desde el JSON de datos.",
+    "Los rbl son contenedores table: la app actua sobre id + '_0' (Y) e id + '_1' (N).",
+    "v2.2: tipo 'checkbox' nuevo. Su 'valor' es booleano: true = marcado, false = desmarcado. La app compara el estado actual y solo hace click si difiere.",
+    "v2.2: los repetidores se declaran con slots explicitos ctl00..ctl04. Las filas ctl01..ctl04 requieren pulsar 'Add Another' antes de escribir; si no existen en el DOM se marcan omitidas.",
+    "v2.3: los 11 checkboxes 'Does Not Apply / Do Not Know' que deshabilitaban un campo con variable pasan a desmarcado (valor false). Corrige las decisiones de alcance que se contradecian con el modelo de datos."
+  ],
+  "pantallas": [
+    {
+      "id": "Personal1",
+      "seccion": "Personal",
+      "nombre": "Personal 1",
+      "node": "Personal1",
+      "url": "/GenNIV/General/complete/complete_personal.aspx?node=Personal1",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_GIVEN_NAME",
+          "etiqueta": "Nombres",
+          "tipo": "texto",
+          "variables": [
+            "primerNombre",
+            "segundoNombre"
+          ]
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME",
+          "etiqueta": "Apellidos",
+          "tipo": "texto",
+          "variables": [
+            "primerApellido",
+            "segundoApellido"
+          ]
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_FULL_NAME_NATIVE_NA",
+          "etiqueta": "Nombre en alfabeto nativo: no aplica",
+          "tipo": "checkbox",
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames",
+          "etiqueta": "Ha usado otros nombres",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion",
+          "etiqueta": "Tiene telecode",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_GENDER",
+          "etiqueta": "Sexo",
+          "tipo": "select",
+          "variable": "sexo"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS",
+          "etiqueta": "Estado civil",
+          "tipo": "select",
+          "disparaPostback": true,
+          "variable": "estadoCivil"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear"
+          ],
+          "etiqueta": "Fecha de nacimiento",
+          "tipo": "fecha",
+          "variable": "fechaNacimiento"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY",
+          "etiqueta": "Ciudad de nacimiento",
+          "tipo": "texto",
+          "grupo": "Lugar de nacimiento",
+          "variable": "ciudadNacimiento"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_POB_ST_PROVINCE_NA",
+          "etiqueta": "Provincia de nacimiento: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Lugar de nacimiento",
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY",
+          "etiqueta": "Pais de nacimiento",
+          "tipo": "select",
+          "catalogo": "paisesLugarNacimiento",
+          "grupo": "Lugar de nacimiento",
+          "variable": "paisNacimiento"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "Personal2",
+      "seccion": "Personal",
+      "nombre": "Personal 2",
+      "node": "Personal2",
+      "url": "/GenNIV/General/complete/complete_personalcont.aspx?node=Personal2",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL",
+          "etiqueta": "Nacionalidad",
+          "tipo": "select",
+          "catalogo": "paisesNacionalidad",
+          "disparaPostback": true,
+          "variable": "nacionalidad"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAPP_OTH_NATL_IND",
+          "etiqueta": "Tiene otra nacionalidad",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "tieneOtraNacionalidad"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl00_ddlOTHER_NATL",
+          "etiqueta": "Otra nacionalidad",
+          "tipo": "select",
+          "catalogo": "paisesNacionalidad",
+          "variable": "otraNacionalidad"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPermResOtherCntryInd",
+          "etiqueta": "Es residente permanente en otro pais",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "esResidentePermanenteExtranjero"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOthPermResCntry_ctl00_ddlOthPermResCntry",
+          "etiqueta": "Pais de residencia permanente",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "variable": "paisResidenciaPermanente"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_NATIONAL_ID_NA",
+          "etiqueta": "Cedula de identidad: no aplica",
+          "tipo": "checkbox",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_NATIONAL_ID",
+          "etiqueta": "Cedula de identidad",
+          "tipo": "texto",
+          "variable": "cedula"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_SSN_NA",
+          "etiqueta": "Numero de seguro social de EE.UU.: no aplica",
+          "tipo": "checkbox",
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_TAX_ID_NA",
+          "etiqueta": "Identificacion fiscal de EE.UU.: no aplica",
+          "tipo": "checkbox",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TAX_ID",
+          "etiqueta": "Numero de identificacion fiscal de EE.UU.",
+          "tipo": "texto",
+          "variable": "identificacionFiscalEEUU"
+        }
+      ],
+      "pendientes": [
+        {
+          "variable": "tieneIdentificacionFiscalEEUU",
+          "etiqueta": "Tiene identificacion fiscal de EE.UU."
+        }
+      ]
+    },
+    {
+      "id": "Travel",
+      "seccion": "Travel",
+      "nombre": "Travel",
+      "node": "Travel",
+      "url": "/GenNIV/General/complete/complete_travel.aspx?node=Travel",
+      "_operacion": "Los slots dtlTravelLoc_ctl01..ctl04 se infieren del patron del repetidor (solo ctl00 relevado en vivo) y requieren pulsar 'Add Another' antes de escribir.",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip",
+          "etiqueta": "Categoria del motivo de viaje",
+          "tipo": "select",
+          "catalogo": "propositoViaje",
+          "disparaPostback": true,
+          "variable": "categoriaMotivoViaje"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose",
+          "etiqueta": "Tipo de visa o motivo especifico",
+          "tipo": "select",
+          "catalogo": "propositoViajeEspecifico",
+          "disparaPostback": true,
+          "variable": "tipoVisa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblSpecificTravel",
+          "etiqueta": "Tiene planes de viaje concretos",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "tienePlanesViajeConcretos"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlARRIVAL_US_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxARRIVAL_US_DTEYear"
+          ],
+          "etiqueta": "Fecha de llegada a EE.UU.",
+          "tipo": "fecha",
+          "variable": "fechaLlegadaEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxArriveCity",
+          "etiqueta": "Ciudad de llegada a EE.UU.",
+          "tipo": "texto",
+          "variable": "ciudadLlegadaEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxArriveFlight",
+          "etiqueta": "Vuelo de llegada",
+          "tipo": "texto",
+          "valor": ""
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDEPARTURE_US_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxDEPARTURE_US_DTEYear"
+          ],
+          "etiqueta": "Fecha de salida de EE.UU.",
+          "tipo": "fecha",
+          "variable": "fechaSalidaEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartCity",
+          "etiqueta": "Ciudad de salida de EE.UU.",
+          "tipo": "texto",
+          "variable": "ciudadSalidaEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDepartFlight",
+          "etiqueta": "Vuelo de salida",
+          "tipo": "texto",
+          "valor": ""
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl00_tbxSPECTRAVEL_LOCATION",
+          "etiqueta": "Lugar 1 que planea visitar en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Lugares que planea visitar",
+          "variable": "lugarPlaneadoEEUU1"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl01_tbxSPECTRAVEL_LOCATION",
+          "etiqueta": "Lugar 2 que planea visitar en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Lugares que planea visitar",
+          "variable": "lugarPlaneadoEEUU2"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl02_tbxSPECTRAVEL_LOCATION",
+          "etiqueta": "Lugar 3 que planea visitar en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Lugares que planea visitar",
+          "variable": "lugarPlaneadoEEUU3"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl03_tbxSPECTRAVEL_LOCATION",
+          "etiqueta": "Lugar 4 que planea visitar en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Lugares que planea visitar",
+          "variable": "lugarPlaneadoEEUU4"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlTravelLoc_ctl04_tbxSPECTRAVEL_LOCATION",
+          "etiqueta": "Lugar 5 que planea visitar en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Lugares que planea visitar",
+          "variable": "lugarPlaneadoEEUU5"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1",
+          "etiqueta": "Direccion de hospedaje en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Hospedaje",
+          "variable": "direccionHospedajeEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress2",
+          "etiqueta": "Direccion de hospedaje en EE.UU. (linea 2)",
+          "tipo": "texto",
+          "grupo": "Hospedaje",
+          "valor": ""
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxCity",
+          "etiqueta": "Ciudad de hospedaje en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Hospedaje",
+          "variable": "ciudadHospedajeEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState",
+          "etiqueta": "Estado de hospedaje en EE.UU.",
+          "tipo": "select",
+          "catalogo": "estadosEEUU",
+          "grupo": "Hospedaje",
+          "variable": "estadoHospedajeEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode",
+          "etiqueta": "Codigo postal del hospedaje en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Hospedaje",
+          "valor": ""
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear"
+          ],
+          "etiqueta": "Fecha prevista de llegada",
+          "tipo": "fecha",
+          "variable": "fechaLlegadaPrevista"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS",
+          "etiqueta": "Valor de la duracion prevista de estadia",
+          "tipo": "texto",
+          "variable": "valorDuracionEstadiaPrevista"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD",
+          "etiqueta": "Unidad de la duracion prevista de estadia",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "variable": "unidadDuracionEstadiaPrevista"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying",
+          "etiqueta": "Quien paga el viaje",
+          "tipo": "select",
+          "catalogo": "quienPaga",
+          "disparaPostback": true,
+          "variable": "pagadorViaje"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerSurname",
+          "etiqueta": "Apellidos de quien paga el viaje",
+          "tipo": "texto",
+          "grupo": "Pagador del viaje",
+          "variable": "apellidosPagador"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerGivenName",
+          "etiqueta": "Nombres de quien paga el viaje",
+          "tipo": "texto",
+          "grupo": "Pagador del viaje",
+          "variable": "nombresPagador"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPayerPhone",
+          "etiqueta": "Telefono de quien paga el viaje",
+          "tipo": "texto",
+          "grupo": "Pagador del viaje",
+          "variable": "telefonoPagador"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPAYER_EMAIL_ADDR",
+          "etiqueta": "Correo de quien paga el viaje",
+          "tipo": "texto",
+          "grupo": "Pagador del viaje",
+          "variable": "correoPagador"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlPayerRelationship",
+          "etiqueta": "Parentesco con quien paga el viaje",
+          "tipo": "select",
+          "catalogo": "relacionPagador",
+          "grupo": "Pagador del viaje",
+          "variable": "relacionPagador"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPayerAddrSameAsInd",
+          "etiqueta": "La direccion del pagador es la misma del solicitante",
+          "tipo": "radio",
+          "grupo": "Pagador del viaje",
+          "variable": "direccionPagadorIgualSolicitante"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "TravelCompanions",
+      "seccion": "Travel Companions",
+      "nombre": "Travel Companions",
+      "node": "TravelCompanions",
+      "url": "/GenNIV/General/complete/complete_travelcompanions.aspx?node=TravelCompanions",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblOtherPersonsTravelingWithYou",
+          "etiqueta": "Viaja con otras personas",
+          "tipo": "radio",
+          "variable": "viajaConOtros"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblGroupTravel",
+          "etiqueta": "Viaja como parte de un grupo u organizacion",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxGivenName",
+          "etiqueta": "Acompanante 1: nombres",
+          "tipo": "texto",
+          "variable": "acompananteViaje1Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxSurname",
+          "etiqueta": "Acompanante 1: apellidos",
+          "tipo": "texto",
+          "variable": "acompananteViaje1Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_ddlTCRelationship",
+          "etiqueta": "Acompanante 1: relacion",
+          "tipo": "select",
+          "catalogo": "relacionAcompanante",
+          "variable": "acompananteViaje1Relacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxGivenName",
+          "etiqueta": "Acompanante 2: nombres",
+          "tipo": "texto",
+          "variable": "acompananteViaje2Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_tbxSurname",
+          "etiqueta": "Acompanante 2: apellidos",
+          "tipo": "texto",
+          "variable": "acompananteViaje2Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl01_ddlTCRelationship",
+          "etiqueta": "Acompanante 2: relacion",
+          "tipo": "select",
+          "catalogo": "relacionAcompanante",
+          "variable": "acompananteViaje2Relacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_tbxGivenName",
+          "etiqueta": "Acompanante 3: nombres",
+          "tipo": "texto",
+          "variable": "acompananteViaje3Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_tbxSurname",
+          "etiqueta": "Acompanante 3: apellidos",
+          "tipo": "texto",
+          "variable": "acompananteViaje3Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl02_ddlTCRelationship",
+          "etiqueta": "Acompanante 3: relacion",
+          "tipo": "select",
+          "catalogo": "relacionAcompanante",
+          "variable": "acompananteViaje3Relacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl03_tbxGivenName",
+          "etiqueta": "Acompanante 4: nombres",
+          "tipo": "texto",
+          "variable": "acompananteViaje4Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl03_tbxSurname",
+          "etiqueta": "Acompanante 4: apellidos",
+          "tipo": "texto",
+          "variable": "acompananteViaje4Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl03_ddlTCRelationship",
+          "etiqueta": "Acompanante 4: relacion",
+          "tipo": "select",
+          "catalogo": "relacionAcompanante",
+          "variable": "acompananteViaje4Relacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl04_tbxGivenName",
+          "etiqueta": "Acompanante 5: nombres",
+          "tipo": "texto",
+          "variable": "acompananteViaje5Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl04_tbxSurname",
+          "etiqueta": "Acompanante 5: apellidos",
+          "tipo": "texto",
+          "variable": "acompananteViaje5Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl04_ddlTCRelationship",
+          "etiqueta": "Acompanante 5: relacion",
+          "tipo": "select",
+          "catalogo": "relacionAcompanante",
+          "variable": "acompananteViaje5Relacion"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "PreviousUSTravel",
+      "seccion": "Previous U.S. Travel",
+      "nombre": "Previous U.S. Travel",
+      "node": "PreviousUSTravel",
+      "url": "/GenNIV/General/complete/complete_previousustravel.aspx?node=PreviousUSTravel",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_TRAVEL_IND",
+          "etiqueta": "Ha visitado Estados Unidos anteriormente",
+          "tipo": "radio",
+          "variable": "haVisitadoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_DRIVER_LIC_IND",
+          "etiqueta": "Tiene licencia de conducir de EE.UU.",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "licenciaConducirEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_tbxUS_DRIVER_LICENSE",
+          "etiqueta": "Numero de licencia de conducir de EE.UU.",
+          "tipo": "texto",
+          "variable": "numeroLicenciaConducirEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_ddlUS_DRIVER_LICENSE_STATE",
+          "etiqueta": "Estado de emision de la licencia de EE.UU.",
+          "tipo": "select",
+          "catalogo": "estadosEEUU",
+          "variable": "estadoLicenciaConducirEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_IND",
+          "etiqueta": "Ha tenido visa de Estados Unidos",
+          "tipo": "radio",
+          "variable": "haTenidoVisaEEUU"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPREV_VISA_ISSUED_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPREV_VISA_ISSUED_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_ISSUED_DTEYear"
+          ],
+          "etiqueta": "Fecha de emision de la ultima visa de EE.UU.",
+          "tipo": "fecha",
+          "variable": "fechaEmisionUltimaVisa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_FOIL_NUMBER",
+          "etiqueta": "Numero de la ultima visa de EE.UU.",
+          "tipo": "texto",
+          "variable": "numeroVisa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_TYPE_IND",
+          "etiqueta": "Solicita el mismo tipo de visa",
+          "tipo": "radio",
+          "variable": "mismoTipoVisa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_SAME_CNTRY_IND",
+          "etiqueta": "Mantiene el mismo pais de residencia de la visa anterior",
+          "tipo": "radio",
+          "variable": "mismoPaisResidenciaVisa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_TEN_PRINT_IND",
+          "etiqueta": "Le han tomado las diez huellas digitales",
+          "tipo": "radio",
+          "variable": "diezHuellasTomadas"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_LOST_IND",
+          "etiqueta": "Ha perdido o le han robado una visa de EE.UU.",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "visaEEUUPerdidaORobada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_LOST_YEAR",
+          "etiqueta": "Ano de la visa de EE.UU. perdida o robada",
+          "tipo": "texto",
+          "variable": "anioVisaEEUUPerdidaORobada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_LOST_EXPL",
+          "etiqueta": "Motivo de la visa de EE.UU. perdida o robada",
+          "tipo": "textarea",
+          "variable": "motivoVisaEEUUPerdidaORobada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_CANCELLED_IND",
+          "etiqueta": "Le han cancelado o revocado una visa de EE.UU.",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "visaEEUUCanceladaORevocada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_CANCELLED_EXPL",
+          "etiqueta": "Razon de la visa de EE.UU. cancelada o revocada",
+          "tipo": "textarea",
+          "variable": "razonVisaEEUUCanceladaORevocada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblIV_PETITION_IND",
+          "etiqueta": "Alguien ha presentado una peticion de inmigracion en su nombre",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "tienePeticionInmigracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxIV_PETITION_EXPL",
+          "etiqueta": "Razon de la peticion de inmigracion",
+          "tipo": "textarea",
+          "variable": "razonPeticionInmigracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_REFUSED_IND",
+          "etiqueta": "Le han negado alguna visa",
+          "tipo": "radio",
+          "disparaPostback": true,
+          "variable": "visaNegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_REFUSED_EXPL",
+          "etiqueta": "Detalles de la visa negada",
+          "tipo": "textarea",
+          "variable": "detallesVisaNegada"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_DTEYear"
+          ],
+          "etiqueta": "Visita anterior 1: fecha de llegada",
+          "tipo": "fecha",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU1FechaLlegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_tbxPREV_US_VISIT_LOS",
+          "etiqueta": "Visita anterior 1: valor de duracion",
+          "tipo": "texto",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU1ValorDuracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl00_ddlPREV_US_VISIT_LOS_CD",
+          "etiqueta": "Visita anterior 1: unidad de duracion",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU1UnidadDuracion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_DTEYear"
+          ],
+          "etiqueta": "Visita anterior 2: fecha de llegada",
+          "tipo": "fecha",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU2FechaLlegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_tbxPREV_US_VISIT_LOS",
+          "etiqueta": "Visita anterior 2: valor de duracion",
+          "tipo": "texto",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU2ValorDuracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl01_ddlPREV_US_VISIT_LOS_CD",
+          "etiqueta": "Visita anterior 2: unidad de duracion",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU2UnidadDuracion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_DTEYear"
+          ],
+          "etiqueta": "Visita anterior 3: fecha de llegada",
+          "tipo": "fecha",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU3FechaLlegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_tbxPREV_US_VISIT_LOS",
+          "etiqueta": "Visita anterior 3: valor de duracion",
+          "tipo": "texto",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU3ValorDuracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl02_ddlPREV_US_VISIT_LOS_CD",
+          "etiqueta": "Visita anterior 3: unidad de duracion",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU3UnidadDuracion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_DTEYear"
+          ],
+          "etiqueta": "Visita anterior 4: fecha de llegada",
+          "tipo": "fecha",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU4FechaLlegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_tbxPREV_US_VISIT_LOS",
+          "etiqueta": "Visita anterior 4: valor de duracion",
+          "tipo": "texto",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU4ValorDuracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl03_ddlPREV_US_VISIT_LOS_CD",
+          "etiqueta": "Visita anterior 4: unidad de duracion",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU4UnidadDuracion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_DTEYear"
+          ],
+          "etiqueta": "Visita anterior 5: fecha de llegada",
+          "tipo": "fecha",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU5FechaLlegada"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_tbxPREV_US_VISIT_LOS",
+          "etiqueta": "Visita anterior 5: valor de duracion",
+          "tipo": "texto",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU5ValorDuracion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPREV_US_VISIT_ctl04_ddlPREV_US_VISIT_LOS_CD",
+          "etiqueta": "Visita anterior 5: unidad de duracion",
+          "tipo": "select",
+          "catalogo": "unidadDuracion",
+          "grupo": "Visitas anteriores a Estados Unidos",
+          "variable": "visitaAnteriorEEUU5UnidadDuracion"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "AddressPhone",
+      "seccion": "Address and Phone",
+      "nombre": "Address and Phone",
+      "node": "AddressPhone",
+      "url": "/GenNIV/General/complete/complete_contact.aspx?node=AddressPhone",
+      "_operacion": "Redes sociales: la app pulsa 'Add Another' tres veces antes de llenar dtlSocial_ctl01, ctl02 y ctl03.",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1",
+          "etiqueta": "Direccion exacta del domicilio",
+          "tipo": "texto",
+          "grupo": "Domicilio",
+          "variable": "direccion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN2",
+          "etiqueta": "Direccion del domicilio (linea 2)",
+          "tipo": "texto",
+          "grupo": "Domicilio",
+          "valor": ""
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_CITY",
+          "etiqueta": "Ciudad de domicilio",
+          "tipo": "texto",
+          "grupo": "Domicilio",
+          "variable": "ciudad"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_ADDR_STATE_NA",
+          "etiqueta": "Provincia de domicilio: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Domicilio",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_STATE",
+          "etiqueta": "Provincia de domicilio",
+          "tipo": "texto",
+          "grupo": "Domicilio",
+          "variable": "provincia"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_ADDR_POSTAL_CD_NA",
+          "etiqueta": "Codigo postal del domicilio: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Domicilio",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_POSTAL_CD",
+          "etiqueta": "Codigo postal del domicilio",
+          "tipo": "texto",
+          "grupo": "Domicilio",
+          "variable": "codigoPostal"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlCountry",
+          "etiqueta": "Pais del domicilio",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Domicilio",
+          "variable": "paisDomicilio"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame",
+          "etiqueta": "La direccion postal es la misma del domicilio",
+          "tipo": "radio",
+          "grupo": "Direccion postal",
+          "disparaPostback": true,
+          "valor": "Y"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL",
+          "etiqueta": "Telefono principal",
+          "tipo": "texto",
+          "grupo": "Telefonos",
+          "variable": "celular"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_MOBILE_TEL_NA",
+          "etiqueta": "Telefono secundario: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Telefonos",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_MOBILE_TEL",
+          "etiqueta": "Telefono secundario",
+          "tipo": "texto",
+          "grupo": "Telefonos",
+          "variable": "telefonoDomicilio"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_BUS_TEL_NA",
+          "etiqueta": "Telefono del trabajo: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Telefonos",
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAddPhone",
+          "etiqueta": "Ha tenido otros numeros de telefono celular en los ultimos 5 anos",
+          "tipo": "radio",
+          "grupo": "Telefonos",
+          "disparaPostback": true,
+          "variable": "tuvoTelefonosAnteriores"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlAddPhone_ctl00_tbxAddPhoneInfo",
+          "etiqueta": "Otros numeros de telefono celular",
+          "tipo": "texto",
+          "grupo": "Telefonos",
+          "variable": "telefonosAnteriores"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR",
+          "etiqueta": "Direccion de correo electronico actual",
+          "tipo": "texto",
+          "grupo": "Correo electronico",
+          "variable": "correo"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail",
+          "etiqueta": "Ha tenido otras direcciones de correo electronico en los ultimos 5 anos",
+          "tipo": "radio",
+          "grupo": "Correo electronico",
+          "disparaPostback": true,
+          "variable": "tuvoCorreosAnteriores"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlAddEmail_ctl00_tbxAddEmailInfo",
+          "etiqueta": "Otras direcciones de correo electronico",
+          "tipo": "texto",
+          "grupo": "Correo electronico",
+          "variable": "correosAnteriores"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_ddlSocialMedia",
+          "etiqueta": "Plataforma: Usuario de Facebook",
+          "tipo": "select",
+          "catalogo": "redSocial",
+          "grupo": "Redes sociales",
+          "disparaPostback": true,
+          "valor": "FACEBOOK"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent",
+          "etiqueta": "Usuario de Facebook",
+          "tipo": "texto",
+          "grupo": "Redes sociales",
+          "variable": "facebook"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl01_ddlSocialMedia",
+          "etiqueta": "Plataforma: Usuario de Instagram",
+          "tipo": "select",
+          "catalogo": "redSocial",
+          "grupo": "Redes sociales",
+          "disparaPostback": true,
+          "valor": "INSTAGRAM"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl01_tbxSocialMediaIdent",
+          "etiqueta": "Usuario de Instagram",
+          "tipo": "texto",
+          "grupo": "Redes sociales",
+          "variable": "instagram"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl02_ddlSocialMedia",
+          "etiqueta": "Plataforma: Usuario de LinkedIn",
+          "tipo": "select",
+          "catalogo": "redSocial",
+          "grupo": "Redes sociales",
+          "disparaPostback": true,
+          "valor": "LINKEDIN"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl02_tbxSocialMediaIdent",
+          "etiqueta": "Usuario de LinkedIn",
+          "tipo": "texto",
+          "grupo": "Redes sociales",
+          "variable": "linkedin"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl03_ddlSocialMedia",
+          "etiqueta": "Plataforma: Otras redes sociales",
+          "tipo": "select",
+          "catalogo": "redSocial",
+          "grupo": "Redes sociales",
+          "disparaPostback": true,
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl03_tbxSocialMediaIdent",
+          "etiqueta": "Otras redes sociales",
+          "tipo": "texto",
+          "grupo": "Redes sociales",
+          "variable": "otrasRedesSociales"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial",
+          "etiqueta": "Desea informar otras plataformas o aplicaciones",
+          "tipo": "radio",
+          "grupo": "Redes sociales",
+          "disparaPostback": true,
+          "valor": "N"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "PptVisa",
+      "seccion": "Passport",
+      "nombre": "Passport",
+      "node": "PptVisa",
+      "url": "/GenNIV/General/complete/Passport_Visa_Info.aspx?node=PptVisa",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE",
+          "etiqueta": "Tipo de documento de viaje",
+          "tipo": "select",
+          "catalogo": "tipoDocumentoPasaporte",
+          "disparaPostback": true,
+          "variable": "tipoDocumentoPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM",
+          "etiqueta": "Numero de pasaporte",
+          "tipo": "texto",
+          "variable": "numeroPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexPPT_BOOK_NUM_NA",
+          "etiqueta": "Numero de libreta del pasaporte: no aplica",
+          "tipo": "checkbox",
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY",
+          "etiqueta": "Pais o autoridad emisora del pasaporte",
+          "tipo": "select",
+          "catalogo": "paisesAutoridadPasaporte",
+          "variable": "autoridadEmisoraPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_CITY",
+          "etiqueta": "Ciudad donde tramito el pasaporte vigente",
+          "tipo": "texto",
+          "grupo": "Lugar de emision",
+          "variable": "ciudadPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_STATE",
+          "etiqueta": "Provincia donde tramito el pasaporte vigente",
+          "tipo": "texto",
+          "grupo": "Lugar de emision",
+          "variable": "provinciaEmisionPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_IN_CNTRY",
+          "etiqueta": "Pais donde tramito el pasaporte vigente",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Lugar de emision",
+          "variable": "paisEmisionPasaporte"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUEDYear"
+          ],
+          "etiqueta": "Fecha de emision del pasaporte",
+          "tipo": "fecha",
+          "variable": "fechaEmisionPasaporte"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_EXPIRE_DTEDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_EXPIRE_DTEMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_EXPIREYear"
+          ],
+          "etiqueta": "Fecha de expiracion del pasaporte",
+          "tipo": "fecha",
+          "variable": "fechaExpiracionPasaporte"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxPPT_EXPIRE_NA",
+          "etiqueta": "Pasaporte sin fecha de expiracion",
+          "tipo": "checkbox",
+          "disparaPostback": true,
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblLOST_PPT_IND",
+          "etiqueta": "Ha perdido o le han robado un pasaporte",
+          "tipo": "radio",
+          "grupo": "Pasaporte perdido o robado",
+          "disparaPostback": true,
+          "variable": "pasaportePerdidoORobado"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_cbxLOST_PPT_NUM_UNKN_IND",
+          "etiqueta": "Numero del pasaporte perdido/robado: no lo sabe",
+          "tipo": "checkbox",
+          "grupo": "Pasaporte perdido o robado",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_tbxLOST_PPT_NUM",
+          "etiqueta": "Numero de pasaporte o documento perdido/robado",
+          "tipo": "texto",
+          "grupo": "Pasaporte perdido o robado",
+          "variable": "numeroPasaportePerdidoORobado"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_ddlLOST_PPT_NATL",
+          "etiqueta": "Pais o autoridad emisora del documento perdido/robado",
+          "tipo": "select",
+          "catalogo": "paisesAutoridadPasaporte",
+          "grupo": "Pasaporte perdido o robado",
+          "variable": "paisAutoridadPasaportePerdidoORobado"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLostPPT_ctl00_tbxLOST_PPT_EXPL",
+          "etiqueta": "Explicacion del pasaporte perdido/robado",
+          "tipo": "textarea",
+          "grupo": "Pasaporte perdido o robado",
+          "variable": "explicacionPasaportePerdidoORobado"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "USContact",
+      "seccion": "U.S. Contact",
+      "nombre": "U.S. Contact",
+      "node": "USContact",
+      "url": "/GenNIV/General/complete/complete_uscontact.aspx?node=USContact",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA",
+          "etiqueta": "Nombre del contacto en EE.UU.: no lo sabe",
+          "tipo": "checkbox",
+          "grupo": "Contacto",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_SURNAME",
+          "etiqueta": "Apellidos del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Contacto",
+          "variable": "apellidosContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_GIVEN_NAME",
+          "etiqueta": "Nombres del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Contacto",
+          "variable": "nombresContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_ORG_NA_IND",
+          "etiqueta": "Organizacion del contacto en EE.UU.: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Contacto",
+          "disparaPostback": true,
+          "valor": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP",
+          "etiqueta": "Relacion del contacto con el solicitante",
+          "tipo": "select",
+          "catalogo": "relacionContactoEEUU",
+          "grupo": "Contacto",
+          "disparaPostback": true,
+          "variable": "relacionContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1",
+          "etiqueta": "Direccion del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Direccion del contacto",
+          "variable": "direccionContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN2",
+          "etiqueta": "Direccion del contacto en EE.UU. (linea 2)",
+          "tipo": "texto",
+          "grupo": "Direccion del contacto",
+          "valor": ""
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY",
+          "etiqueta": "Ciudad del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Direccion del contacto",
+          "variable": "ciudadContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE",
+          "etiqueta": "Estado del contacto en EE.UU.",
+          "tipo": "select",
+          "catalogo": "estadosEEUU",
+          "grupo": "Direccion del contacto",
+          "variable": "estadoContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD",
+          "etiqueta": "Codigo postal del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Direccion del contacto",
+          "valor": ""
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL",
+          "etiqueta": "Telefono del contacto en EE.UU.",
+          "tipo": "texto",
+          "grupo": "Direccion del contacto",
+          "variable": "telefonoContactoEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexUS_POC_EMAIL_ADDR_NA",
+          "etiqueta": "Correo del contacto en EE.UU.: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Direccion del contacto",
+          "valor": true
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "Relatives",
+      "seccion": "Family",
+      "nombre": "Familiares",
+      "node": "Relatives",
+      "url": "/GenNIV/General/complete/complete_family1.aspx?node=Relatives",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_SURNAME_UNK_IND",
+          "etiqueta": "Apellidos del padre: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Padre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_GIVEN_NAME_UNK_IND",
+          "etiqueta": "Nombres del padre: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Padre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxFATHER_DOB_UNK_IND",
+          "etiqueta": "Fecha de nacimiento del padre: no la sabe",
+          "tipo": "checkbox",
+          "grupo": "Padre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxFATHER_GIVEN_NAME",
+          "etiqueta": "Nombres del padre",
+          "tipo": "texto",
+          "grupo": "Padre",
+          "variable": "nombresPadre"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxFATHER_SURNAME",
+          "etiqueta": "Apellidos del padre",
+          "tipo": "texto",
+          "grupo": "Padre",
+          "variable": "apellidosPadre"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlFathersDOBDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlFathersDOBMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxFathersDOBYear"
+          ],
+          "etiqueta": "Fecha de nacimiento del padre",
+          "tipo": "fecha",
+          "grupo": "Padre",
+          "variable": "fechaNacimientoPadre"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblFATHER_LIVE_IN_US_IND",
+          "etiqueta": "El padre esta en Estados Unidos",
+          "tipo": "radio",
+          "grupo": "Padre",
+          "disparaPostback": true,
+          "variable": "padreEnEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlFATHER_US_STATUS",
+          "etiqueta": "Estatus del padre en Estados Unidos",
+          "tipo": "select",
+          "catalogo": "estatusEEUU",
+          "grupo": "Padre",
+          "variable": "estatusPadreEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_SURNAME_UNK_IND",
+          "etiqueta": "Apellidos de la madre: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Madre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_GIVEN_NAME_UNK_IND",
+          "etiqueta": "Nombres de la madre: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Madre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxMOTHER_DOB_UNK_IND",
+          "etiqueta": "Fecha de nacimiento de la madre: no la sabe",
+          "tipo": "checkbox",
+          "grupo": "Madre",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxMOTHER_GIVEN_NAME",
+          "etiqueta": "Nombres de la madre",
+          "tipo": "texto",
+          "grupo": "Madre",
+          "variable": "nombresMadre"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxMOTHER_SURNAME",
+          "etiqueta": "Apellidos de la madre",
+          "tipo": "texto",
+          "grupo": "Madre",
+          "variable": "apellidosMadre"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlMothersDOBDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlMothersDOBMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxMothersDOBYear"
+          ],
+          "etiqueta": "Fecha de nacimiento de la madre",
+          "tipo": "fecha",
+          "grupo": "Madre",
+          "variable": "fechaNacimientoMadre"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblMOTHER_LIVE_IN_US_IND",
+          "etiqueta": "La madre esta en Estados Unidos",
+          "tipo": "radio",
+          "grupo": "Madre",
+          "disparaPostback": true,
+          "variable": "madreEnEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlMOTHER_US_STATUS",
+          "etiqueta": "Estatus de la madre en Estados Unidos",
+          "tipo": "select",
+          "catalogo": "estatusEEUU",
+          "grupo": "Madre",
+          "variable": "estatusMadreEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblUS_IMMED_RELATIVE_IND",
+          "etiqueta": "Tiene familiares inmediatos en Estados Unidos, sin incluir padres",
+          "tipo": "radio",
+          "grupo": "Otros familiares en Estados Unidos",
+          "disparaPostback": true,
+          "variable": "familiaresInmediatosEnEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblUS_OTHER_RELATIVE_IND",
+          "etiqueta": "Tiene otros familiares en Estados Unidos",
+          "tipo": "radio",
+          "grupo": "Otros familiares en Estados Unidos",
+          "variable": "otrosFamiliaresEnEEUU"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_tbxUS_REL_GIVEN_NAME",
+          "etiqueta": "Familiar inmediato 1: nombres",
+          "tipo": "texto",
+          "grupo": "Otros familiares en Estados Unidos",
+          "variable": "familiarInmediato1Nombres"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_tbxUS_REL_SURNAME",
+          "etiqueta": "Familiar inmediato 1: apellidos",
+          "tipo": "texto",
+          "grupo": "Otros familiares en Estados Unidos",
+          "variable": "familiarInmediato1Apellidos"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_ddlUS_REL_TYPE",
+          "etiqueta": "Familiar inmediato 1: relacion",
+          "tipo": "select",
+          "catalogo": "parentescoFamiliarEEUU",
+          "grupo": "Otros familiares en Estados Unidos",
+          "variable": "familiarInmediato1Relacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dlUSRelatives_ctl00_ddlUS_REL_STATUS",
+          "etiqueta": "Familiar inmediato 1: estatus en EE.UU.",
+          "tipo": "select",
+          "catalogo": "estatusEEUU",
+          "grupo": "Otros familiares en Estados Unidos",
+          "variable": "familiarInmediato1Estatus"
+        }
+      ],
+      "pendientes": [
+        {
+          "variable": "familiarInmediato2Nombres",
+          "etiqueta": "Familiar inmediato 2: nombres"
+        },
+        {
+          "variable": "familiarInmediato2Apellidos",
+          "etiqueta": "Familiar inmediato 2: apellidos"
+        },
+        {
+          "variable": "familiarInmediato2Relacion",
+          "etiqueta": "Familiar inmediato 2: relacion"
+        },
+        {
+          "variable": "familiarInmediato2Estatus",
+          "etiqueta": "Familiar inmediato 2: estatus en EE.UU."
+        },
+        {
+          "variable": "familiarInmediato3Nombres",
+          "etiqueta": "Familiar inmediato 3: nombres"
+        },
+        {
+          "variable": "familiarInmediato3Apellidos",
+          "etiqueta": "Familiar inmediato 3: apellidos"
+        },
+        {
+          "variable": "familiarInmediato3Relacion",
+          "etiqueta": "Familiar inmediato 3: relacion"
+        },
+        {
+          "variable": "familiarInmediato3Estatus",
+          "etiqueta": "Familiar inmediato 3: estatus en EE.UU."
+        },
+        {
+          "variable": "familiarInmediato4Nombres",
+          "etiqueta": "Familiar inmediato 4: nombres"
+        },
+        {
+          "variable": "familiarInmediato4Apellidos",
+          "etiqueta": "Familiar inmediato 4: apellidos"
+        },
+        {
+          "variable": "familiarInmediato4Relacion",
+          "etiqueta": "Familiar inmediato 4: relacion"
+        },
+        {
+          "variable": "familiarInmediato4Estatus",
+          "etiqueta": "Familiar inmediato 4: estatus en EE.UU."
+        },
+        {
+          "variable": "familiarInmediato5Nombres",
+          "etiqueta": "Familiar inmediato 5: nombres"
+        },
+        {
+          "variable": "familiarInmediato5Apellidos",
+          "etiqueta": "Familiar inmediato 5: apellidos"
+        },
+        {
+          "variable": "familiarInmediato5Relacion",
+          "etiqueta": "Familiar inmediato 5: relacion"
+        },
+        {
+          "variable": "familiarInmediato5Estatus",
+          "etiqueta": "Familiar inmediato 5: estatus en EE.UU."
+        }
+      ]
+    },
+    {
+      "id": "Spouse",
+      "seccion": "Family",
+      "nombre": "Datos del conyuge",
+      "node": "Spouse",
+      "url": "/GenNIV/General/complete/complete_family2.aspx?node=Spouse",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName",
+          "etiqueta": "Nombres del conyuge",
+          "tipo": "texto",
+          "variable": "nombresConyuge"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname",
+          "etiqueta": "Apellidos del conyuge",
+          "tipo": "texto",
+          "variable": "apellidosConyuge"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear"
+          ],
+          "etiqueta": "Fecha de nacimiento del conyuge",
+          "tipo": "fecha",
+          "variable": "fechaNacimientoConyuge"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList",
+          "etiqueta": "Nacionalidad del conyuge",
+          "tipo": "select",
+          "catalogo": "paisesNacionalidadConyuge",
+          "variable": "nacionalidadConyuge"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexSPOUSE_POB_CITY_NA",
+          "etiqueta": "Ciudad de nacimiento del conyuge: no la sabe",
+          "tipo": "checkbox",
+          "grupo": "Lugar de nacimiento del conyuge",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity",
+          "etiqueta": "Ciudad de nacimiento del conyuge",
+          "tipo": "texto",
+          "grupo": "Lugar de nacimiento del conyuge",
+          "variable": "ciudadNacimientoConyuge"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpousePOBCountry",
+          "etiqueta": "Pais de nacimiento del conyuge",
+          "tipo": "select",
+          "catalogo": "paisesLugarNacimiento",
+          "grupo": "Lugar de nacimiento del conyuge",
+          "variable": "paisNacimientoConyuge"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseAddressType",
+          "etiqueta": "Direccion actual del conyuge",
+          "tipo": "select",
+          "disparaPostback": true,
+          "valor": "H"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "WorkEducation1",
+      "seccion": "Work / Education / Training",
+      "nombre": "Trabajo actual",
+      "node": "WorkEducation1",
+      "url": "/GenNIV/General/complete/complete_workeducation1.aspx?node=WorkEducation1",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation",
+          "etiqueta": "Categoria de ocupacion actual",
+          "tipo": "select",
+          "catalogo": "ocupacionActual",
+          "disparaPostback": true,
+          "variable": "categoriaOcupacionActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName",
+          "etiqueta": "Nombre de la empresa o escuela actual",
+          "tipo": "texto",
+          "variable": "empleadorActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDescribeDuties",
+          "etiqueta": "Funciones actuales (incluye el cargo)",
+          "tipo": "textarea",
+          "variables": [
+            "cargoActual",
+            "descripcionTrabajoActual"
+          ]
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxCURR_MONTHLY_SALARY_NA",
+          "etiqueta": "Sueldo actual: no aplica",
+          "tipo": "checkbox",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxCURR_MONTHLY_SALARY",
+          "etiqueta": "Sueldo actual",
+          "tipo": "texto",
+          "variable": "sueldoActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchAddr1",
+          "etiqueta": "Direccion del trabajo actual",
+          "tipo": "texto",
+          "grupo": "Direccion del trabajo actual",
+          "variable": "direccionTrabajoActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchCity",
+          "etiqueta": "Ciudad del trabajo actual",
+          "tipo": "texto",
+          "grupo": "Direccion del trabajo actual",
+          "variable": "ciudadTrabajoActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxWORK_EDUC_ADDR_STATE_NA",
+          "etiqueta": "Provincia del trabajo actual: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Direccion del trabajo actual",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_STATE",
+          "etiqueta": "Provincia del trabajo actual",
+          "tipo": "texto",
+          "grupo": "Direccion del trabajo actual",
+          "variable": "provinciaTrabajoActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxWORK_EDUC_ADDR_POSTAL_CD_NA",
+          "etiqueta": "Codigo postal del trabajo actual: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Direccion del trabajo actual",
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_POSTAL_CD",
+          "etiqueta": "Codigo postal del trabajo actual",
+          "tipo": "texto",
+          "grupo": "Direccion del trabajo actual",
+          "variable": "codigoPostalTrabajoActual"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_TEL",
+          "etiqueta": "Telefono del trabajo actual",
+          "tipo": "texto",
+          "grupo": "Direccion del trabajo actual",
+          "variable": "telefonoTrabajoActual"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlEmpDateFromDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_ddlEmpDateFromMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpDateFromYear"
+          ],
+          "etiqueta": "Fecha de inicio del trabajo actual",
+          "tipo": "fecha",
+          "variable": "fechaInicioTrabajoActual"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "WorkEducation2",
+      "seccion": "Work / Education / Training",
+      "nombre": "Trabajo anterior y educacion",
+      "node": "WorkEducation2",
+      "url": "/GenNIV/General/complete/complete_workeducation2.aspx?node=WorkEducation2",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPreviouslyEmployed",
+          "etiqueta": "Tuvo trabajos anteriores",
+          "tipo": "radio",
+          "grupo": "Trabajo anterior",
+          "disparaPostback": true,
+          "variable": "tuvoTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerName",
+          "etiqueta": "Nombre del empleador anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "empleadorAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbJobTitle",
+          "etiqueta": "Cargo desempenado anteriormente",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "cargoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerStreetAddress1",
+          "etiqueta": "Direccion del trabajo anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "direccionTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerCity",
+          "etiqueta": "Ciudad del trabajo anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "ciudadTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxPREV_EMPL_ADDR_STATE_NA",
+          "etiqueta": "Provincia del trabajo anterior: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Trabajo anterior",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_STATE",
+          "etiqueta": "Provincia del trabajo anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "provinciaTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxPREV_EMPL_ADDR_POSTAL_CD_NA",
+          "etiqueta": "Codigo postal del trabajo anterior: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Trabajo anterior",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxPREV_EMPL_ADDR_POSTAL_CD",
+          "etiqueta": "Codigo postal del trabajo anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "codigoPostalTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbEmployerPhone",
+          "etiqueta": "Telefono del trabajo anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "telefonoTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxSupervisorSurname_NA",
+          "etiqueta": "Apellidos del supervisor anterior: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Trabajo anterior",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorSurname",
+          "etiqueta": "Apellidos del supervisor anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "apellidosSupervisorAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_cbxSupervisorGivenName_NA",
+          "etiqueta": "Nombres del supervisor anterior: no los sabe",
+          "tipo": "checkbox",
+          "grupo": "Trabajo anterior",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbSupervisorGivenName",
+          "etiqueta": "Nombres del supervisor anterior",
+          "tipo": "texto",
+          "grupo": "Trabajo anterior",
+          "variable": "nombreSupervisorAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbDescribeDuties",
+          "etiqueta": "Descripcion del cargo anterior",
+          "tipo": "textarea",
+          "grupo": "Trabajo anterior",
+          "variable": "descripcionTrabajoAnterior"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateFromMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateFromYear"
+          ],
+          "etiqueta": "Fecha de inicio del trabajo anterior",
+          "tipo": "fecha",
+          "grupo": "Trabajo anterior",
+          "variable": "fechaInicioTrabajoAnterior"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_ddlEmpDateToMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEmpl_ctl00_tbxEmpDateToYear"
+          ],
+          "etiqueta": "Fecha de finalizacion del trabajo anterior",
+          "tipo": "fecha",
+          "grupo": "Trabajo anterior",
+          "variable": "fechaFinTrabajoAnterior"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblOtherEduc",
+          "etiqueta": "Asistio a una institucion educativa de nivel secundario o superior",
+          "tipo": "radio",
+          "grupo": "Educacion",
+          "disparaPostback": true,
+          "variable": "asistioInstitucionEducativa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolName",
+          "etiqueta": "Institucion universitaria, instituto o colegio",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "institucionUniversitaria"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCourseOfStudy",
+          "etiqueta": "Nombre de la carrera o programa",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "nombreCarrera"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolAddr1",
+          "etiqueta": "Direccion de la institucion educativa",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "direccionEducacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolCity",
+          "etiqueta": "Ciudad de la institucion educativa",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "ciudadEducacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_cbxEDUC_INST_ADDR_STATE_NA",
+          "etiqueta": "Provincia de la institucion educativa: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Educacion",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_ADDR_STATE",
+          "etiqueta": "Provincia de la institucion educativa",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "provinciaEducacion"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_cbxEDUC_INST_POSTAL_CD_NA",
+          "etiqueta": "Codigo postal de la institucion educativa: no aplica",
+          "tipo": "checkbox",
+          "grupo": "Educacion",
+          "disparaPostback": true,
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxEDUC_INST_POSTAL_CD",
+          "etiqueta": "Codigo postal de la institucion educativa",
+          "tipo": "texto",
+          "grupo": "Educacion",
+          "variable": "codigoPostalEducacion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolFromMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolFromYear"
+          ],
+          "etiqueta": "Fecha de inicio de estudios",
+          "tipo": "fecha",
+          "grupo": "Educacion",
+          "variable": "fechaInicioEducacion"
+        },
+        {
+          "id": [
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToDay",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_ddlSchoolToMonth",
+            "ctl00_SiteContentPlaceHolder_FormView1_dtlPrevEduc_ctl00_tbxSchoolToYear"
+          ],
+          "etiqueta": "Fecha de finalizacion de estudios",
+          "tipo": "fecha",
+          "grupo": "Educacion",
+          "variable": "fechaFinEducacion"
+        }
+      ],
+      "pendientes": [
+        {
+          "variable": "institucionBachillerato",
+          "etiqueta": "Institucion de bachillerato",
+          "_estado": "el DS-160 usa un solo repetidor para toda la educacion; el bachillerato seria otra fila (Add Another) del mismo dtlPrevEduc"
+        },
+        {
+          "variable": "telefonoEducacion",
+          "etiqueta": "Telefono de la institucion educativa",
+          "_estado": "el DS-160 no pide telefono de la institucion educativa"
+        }
+      ]
+    },
+    {
+      "id": "WorkEducation3",
+      "seccion": "Work / Education / Training",
+      "nombre": "Idiomas, viajes y antecedentes adicionales",
+      "node": "WorkEducation3",
+      "url": "/GenNIV/General/complete/complete_workeducation3.aspx?node=WorkEducation3",
+      "_operacion": "Los slots dtlLANGUAGES_ctl01..ctl04 y dtlCountriesVisited_ctl01..ctl04 se infieren del patron del repetidor (solo ctl00 relevado en vivo) y requieren pulsar 'Add Another' antes de escribir.",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl00_tbxLANGUAGE_NAME",
+          "etiqueta": "Idioma 1",
+          "tipo": "texto",
+          "grupo": "Idiomas",
+          "variable": "idioma1"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl01_tbxLANGUAGE_NAME",
+          "etiqueta": "Idioma 2",
+          "tipo": "texto",
+          "grupo": "Idiomas",
+          "variable": "idioma2"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl02_tbxLANGUAGE_NAME",
+          "etiqueta": "Idioma 3",
+          "tipo": "texto",
+          "grupo": "Idiomas",
+          "variable": "idioma3"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl03_tbxLANGUAGE_NAME",
+          "etiqueta": "Idioma 4",
+          "tipo": "texto",
+          "grupo": "Idiomas",
+          "variable": "idioma4"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl04_tbxLANGUAGE_NAME",
+          "etiqueta": "Idioma 5",
+          "tipo": "texto",
+          "grupo": "Idiomas",
+          "variable": "idioma5"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblCOUNTRIES_VISITED_IND",
+          "etiqueta": "Viajes realizados a otros paises en los ultimos 5 anos",
+          "tipo": "radio",
+          "grupo": "Paises visitados",
+          "disparaPostback": true,
+          "variable": "tieneHistorialViajes"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl00_ddlCOUNTRIES_VISITED",
+          "etiqueta": "Pais visitado 1",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Paises visitados",
+          "variable": "paisVisitado1"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl01_ddlCOUNTRIES_VISITED",
+          "etiqueta": "Pais visitado 2",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Paises visitados",
+          "variable": "paisVisitado2"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl02_ddlCOUNTRIES_VISITED",
+          "etiqueta": "Pais visitado 3",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Paises visitados",
+          "variable": "paisVisitado3"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl03_ddlCOUNTRIES_VISITED",
+          "etiqueta": "Pais visitado 4",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Paises visitados",
+          "variable": "paisVisitado4"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlCountriesVisited_ctl04_ddlCOUNTRIES_VISITED",
+          "etiqueta": "Pais visitado 5",
+          "tipo": "select",
+          "catalogo": "paisesResidenciaPermanente",
+          "grupo": "Paises visitados",
+          "variable": "paisVisitado5"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblCLAN_TRIBE_IND",
+          "etiqueta": "Pertenece a un clan o tribu",
+          "tipo": "radio",
+          "grupo": "Antecedentes adicionales",
+          "disparaPostback": true,
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblORGANIZATION_IND",
+          "etiqueta": "Ha pertenecido a alguna organizacion",
+          "tipo": "radio",
+          "grupo": "Antecedentes adicionales",
+          "disparaPostback": true,
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblSPECIALIZED_SKILLS_IND",
+          "etiqueta": "Tiene habilidades o entrenamiento especializado",
+          "tipo": "radio",
+          "grupo": "Antecedentes adicionales",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblMILITARY_SERVICE_IND",
+          "etiqueta": "Ha servido en las fuerzas armadas",
+          "tipo": "radio",
+          "grupo": "Antecedentes adicionales",
+          "disparaPostback": true,
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblINSURGENT_ORG_IND",
+          "etiqueta": "Ha pertenecido a un grupo paramilitar, rebelde o insurgente",
+          "tipo": "radio",
+          "grupo": "Antecedentes adicionales",
+          "valor": "N"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "SecurityandBackground1",
+      "seccion": "Security and Background",
+      "nombre": "Part 1",
+      "node": "SecurityandBackground1",
+      "url": "/GenNIV/General/complete/complete_securityandbackground1.aspx?node=SecurityandBackground1",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblDisease",
+          "etiqueta": "Tiene o ha tenido una enfermedad contagiosa",
+          "tipo": "radio",
+          "variable": "enfermedadContagiosa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDisease",
+          "etiqueta": "Detalle de la enfermedad contagiosa",
+          "tipo": "textarea",
+          "variable": "detalleEnfermedadContagiosa"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblDisorder",
+          "etiqueta": "Tiene un trastorno fisico o mental que representa una amenaza",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDisorder",
+          "etiqueta": "Explicacion del trastorno fisico o mental",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblDruguser",
+          "etiqueta": "Es o ha sido consumidor o adicto a drogas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDruguser",
+          "etiqueta": "Explicacion del consumo de drogas",
+          "tipo": "textarea",
+          "manual": true
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "SecurityandBackground2",
+      "seccion": "Security and Background",
+      "nombre": "Part 2",
+      "node": "SecurityandBackground2",
+      "url": "/GenNIV/General/complete/complete_securityandbackground2.aspx?node=SecurityandBackground2",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblArrested",
+          "etiqueta": "Ha sido arrestado o condenado por algun delito",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxArrested",
+          "etiqueta": "Explicacion del arresto o condena",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblControlledSubstances",
+          "etiqueta": "Ha violado alguna ley sobre sustancias controladas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxControlledSubstances",
+          "etiqueta": "Explicacion sobre sustancias controladas",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblProstitution",
+          "etiqueta": "Prostitucion o vicio comercializado ilegalmente",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxProstitution",
+          "etiqueta": "Explicacion sobre prostitucion o vicio",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblMoneyLaundering",
+          "etiqueta": "Ha estado involucrado en lavado de dinero",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxMoneyLaundering",
+          "etiqueta": "Explicacion sobre lavado de dinero",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblHumanTrafficking",
+          "etiqueta": "Ha cometido un delito de trata de personas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxHumanTrafficking",
+          "etiqueta": "Explicacion sobre trata de personas",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAssistedSevereTrafficking",
+          "etiqueta": "Ha ayudado en un delito grave de trata de personas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAssistedSevereTrafficking",
+          "etiqueta": "Explicacion sobre ayuda en trata de personas",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblHumanTraffickingRelated",
+          "etiqueta": "Es familiar de un traficante que se beneficio del delito",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxHumanTraffickingRelated",
+          "etiqueta": "Explicacion sobre familiar traficante",
+          "tipo": "textarea",
+          "manual": true
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "SecurityandBackground3",
+      "seccion": "Security and Background",
+      "nombre": "Part 3",
+      "node": "SecurityandBackground3",
+      "url": "/GenNIV/General/complete/complete_securityandbackground3.aspx?node=SecurityandBackground3",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblIllegalActivity",
+          "etiqueta": "Espionaje, sabotaje o violacion de controles de exportacion",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxIllegalActivity",
+          "etiqueta": "Explicacion sobre actividad ilegal",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTerroristActivity",
+          "etiqueta": "Actividades terroristas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTerroristActivity",
+          "etiqueta": "Explicacion sobre actividades terroristas",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTerroristSupport",
+          "etiqueta": "Asistencia financiera a terroristas",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTerroristSupport",
+          "etiqueta": "Explicacion sobre asistencia a terroristas",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTerroristOrg",
+          "etiqueta": "Miembro de una organizacion terrorista",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTerroristOrg",
+          "etiqueta": "Explicacion sobre organizacion terrorista",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTerroristRel",
+          "etiqueta": "Es familiar de un terrorista",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTerroristRel",
+          "etiqueta": "Explicacion sobre familiar terrorista",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblGenocide",
+          "etiqueta": "Genocidio",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxGenocide",
+          "etiqueta": "Explicacion sobre genocidio",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTorture",
+          "etiqueta": "Tortura",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTorture",
+          "etiqueta": "Explicacion sobre tortura",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblExViolence",
+          "etiqueta": "Ejecuciones extrajudiciales o asesinatos politicos",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxExViolence",
+          "etiqueta": "Explicacion sobre violencia extrajudicial",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblChildSoldier",
+          "etiqueta": "Reclutamiento o uso de ninos soldados",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxChildSoldier",
+          "etiqueta": "Explicacion sobre ninos soldados",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblReligiousFreedom",
+          "etiqueta": "Violaciones a la libertad religiosa como funcionario",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxReligiousFreedom",
+          "etiqueta": "Explicacion sobre libertad religiosa",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPopulationControls",
+          "etiqueta": "Controles coercitivos de poblacion",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPopulationControls",
+          "etiqueta": "Explicacion sobre controles de poblacion",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblTransplant",
+          "etiqueta": "Trasplante coercitivo de organos humanos",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxTransplant",
+          "etiqueta": "Explicacion sobre trasplante de organos",
+          "tipo": "textarea",
+          "manual": true
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "SecurityandBackground4",
+      "seccion": "Security and Background",
+      "nombre": "Part 4",
+      "node": "SecurityandBackground4",
+      "url": "/GenNIV/General/complete/complete_securityandbackground4.aspx?node=SecurityandBackground4",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing",
+          "etiqueta": "Ha sido sujeto de una audiencia de expulsion o deportacion",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxRemovalHearing",
+          "etiqueta": "Explicacion sobre audiencia de expulsion",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblImmigrationFraud",
+          "etiqueta": "Ha obtenido un beneficio migratorio por fraude o tergiversacion",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxImmigrationFraud",
+          "etiqueta": "Explicacion sobre fraude migratorio",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend",
+          "etiqueta": "No asistio a una audiencia sobre su expulsion",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxFailToAttend",
+          "etiqueta": "Explicacion sobre inasistencia a la audiencia",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation",
+          "etiqueta": "Permanencia ilegal o violacion de los terminos de una visa",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxVisaViolation",
+          "etiqueta": "Explicacion sobre violacion de la visa",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblDeport",
+          "etiqueta": "Le han deportado de algun pais",
+          "tipo": "radio",
+          "variable": "deportadoDePais"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxDeport_EXPL",
+          "etiqueta": "Detalles de la deportacion",
+          "tipo": "textarea",
+          "variable": "detallesDeportacion"
+        }
+      ],
+      "pendientes": []
+    },
+    {
+      "id": "SecurityandBackground5",
+      "seccion": "Security and Background",
+      "nombre": "Part 5",
+      "node": "SecurityandBackground5",
+      "url": "/GenNIV/General/complete/complete_securityandbackground5.aspx?node=SecurityandBackground5",
+      "campos": [
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblChildCustody",
+          "etiqueta": "Ha retenido la custodia de un menor ciudadano estadounidense",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxChildCustody",
+          "etiqueta": "Explicacion sobre custodia del menor",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblVotingViolation",
+          "etiqueta": "Ha votado en Estados Unidos violando alguna ley",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxVotingViolation",
+          "etiqueta": "Explicacion sobre voto irregular",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblRenounceExp",
+          "etiqueta": "Renuncio a la ciudadania estadounidense para evitar impuestos",
+          "tipo": "radio",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxRenounceExp",
+          "etiqueta": "Explicacion sobre renuncia a la ciudadania",
+          "tipo": "textarea",
+          "manual": true
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblAttWoReimb",
+          "etiqueta": "Asistio a una escuela publica sin reembolsarla",
+          "tipo": "radio",
+          "_nota": "Postback asincrono solo al marcar Y. Con el valor fijo N no recarga ni inyecta tbxAttWoReimb.",
+          "valor": "N"
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAttWoReimb",
+          "etiqueta": "Explicacion sobre escuela publica sin reembolso",
+          "tipo": "textarea",
+          "_nota": "No existe en el DOM hasta marcar Y; con el valor fijo N se marca omitido.",
+          "manual": true
+        }
+      ],
+      "pendientes": []
+    }
+  ]
+}

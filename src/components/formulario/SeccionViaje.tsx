@@ -7,25 +7,17 @@ import { AreaTexto } from '../interfaz/AreaTexto'
 import { GrupoRadios } from '../interfaz/GrupoRadios'
 import { Selector } from '../interfaz/Selector'
 import {
-  opcionesDuracion,
-  opcionesEstadosUnidos,
-  opcionesPagador,
-  opcionesRelacionAcompanante,
+  unidadDuracion,
+  estadosEEUU,
+  quienPaga,
+  relacionAcompanante,
   opcionesSiNo,
-  razonesViajeEspecifico,
-  razonesViaje,
+  propositoViajeEspecifico,
+  propositoViaje,
 } from '../../constants/opcionesFormulario'
 import { soloNumeros } from '../../utils/validacionesFormulario'
 
 interface Props { form: UseFormReturn<VisaFormSchema> }
-
-const extraerCodigo = (opcion: string) => opcion.match(/\(([^)]+)\)$/)?.[1] ?? ''
-const obtenerPrefijos = (opcion: string) => extraerCodigo(opcion).split('/').filter(Boolean)
-const coincideConPrefijo = (codigo: string, prefijo: string) => {
-  if (prefijo === 'NATO') return codigo.startsWith('NATO')
-  if (prefijo.length === 1 && codigo.startsWith('NATO')) return false
-  return codigo.startsWith(prefijo)
-}
 
 export const SeccionViaje: React.FC<Props> = ({ form }) => {
   const { register, control, watch, setValue, formState: { errors } } = form
@@ -39,13 +31,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
   const visaNegada = watch('visaNegada')
   const tienePeticionInmigracion = watch('tienePeticionInmigracion')
   const tieneEnfermedadContagiosa = watch('enfermedadContagiosa')
-  const prefijosSeleccionados = obtenerPrefijos(razonViaje ?? '')
-  const razonesViajeEspecificoFiltradas = razonesViajeEspecifico
-    .filter((opcion) => {
-      const codigo = extraerCodigo(opcion)
-      return prefijosSeleccionados.some((prefijo) => coincideConPrefijo(codigo, prefijo))
-    })
-    .map((opcion) => ({ value: opcion, label: opcion }))
+  const propositoViajeEspecificoFiltradas = propositoViajeEspecifico[razonViaje ?? ''] ?? []
 
   const acompanantes = useFieldArray({ control, name: 'acompanantesViaje' })
   const visitasEstadosUnidos = useFieldArray({ control, name: 'visitasAnterioresEEUU' })
@@ -58,7 +44,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
 
   React.useEffect(() => {
     if (haEstadoEnEstadosUnidos === 'si' && visitasEstadosUnidos.fields.length === 0) {
-      visitasEstadosUnidos.append({ fechaLlegada: '', valorDuracion: '', unidadDuracion: 'dias' })
+      visitasEstadosUnidos.append({ fechaLlegada: '', valorDuracion: '', unidadDuracion: 'D' })
     }
   }, [haEstadoEnEstadosUnidos, visitasEstadosUnidos.fields.length])
 
@@ -77,7 +63,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
   }, [setValue, tieneEnfermedadContagiosa])
 
   const agregarAcompanante = () => acompanantes.append({ apellidos: '', nombres: '', relacion: '' })
-  const agregarVisita = () => visitasEstadosUnidos.append({ fechaLlegada: '', valorDuracion: '', unidadDuracion: 'dias' })
+  const agregarVisita = () => visitasEstadosUnidos.append({ fechaLlegada: '', valorDuracion: '', unidadDuracion: 'D' })
 
   return (
     <div className="space-y-6">
@@ -86,7 +72,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="md:col-span-2">
             <Controller name="categoriaMotivoViaje" control={control} render={({ field }) => (
-              <Selector label="Razón de viaje" required options={razonesViaje}
+              <Selector label="Razón de viaje" required options={propositoViaje}
                 error={errors.categoriaMotivoViaje?.message} value={field.value ?? ''} onChange={(evento) => {
                   field.onChange(evento)
                   setValue('tipoVisa', '', { shouldValidate: true })
@@ -95,7 +81,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
           </div>
           <div className="md:col-span-2">
             <Controller name="tipoVisa" control={control} render={({ field }) => (
-              <Selector label="Motivo Especifico" required options={razonesViajeEspecificoFiltradas} disabled={!razonViaje}
+              <Selector label="Motivo Especifico" required options={propositoViajeEspecificoFiltradas} disabled={!razonViaje}
                 error={errors.tipoVisa?.message} value={field.value ?? ''} onChange={(evento) => {
                   setValue('tipoVisa', evento.target.value, { shouldValidate: true, shouldDirty: true, shouldTouch: true })
                 }} onBlur={field.onBlur} />
@@ -116,7 +102,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
                 <Entrada label="Duración prevista de la estancia en EE. UU." type="number" min="1" step="1"
                   {...register('valorDuracionEstadiaPrevista')} error={errors.valorDuracionEstadiaPrevista?.message} />
                 <Controller name="unidadDuracionEstadiaPrevista" control={control} render={({ field }) => (
-                  <Selector label="Unidad" options={opcionesDuracion} error={errors.unidadDuracionEstadiaPrevista?.message}
+                  <Selector label="Unidad" options={unidadDuracion} error={errors.unidadDuracionEstadiaPrevista?.message}
                     value={field.value ?? ''} onChange={field.onChange} />
                 )} />
               </div>
@@ -139,12 +125,12 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
           <Entrada label="Dirección donde se hospedará en los Estados Unidos" {...register('direccionHospedajeEEUU')} error={errors.direccionHospedajeEEUU?.message} />
           <Entrada label="Ciudad" {...register('ciudadHospedajeEEUU')} error={errors.ciudadHospedajeEEUU?.message} />
           <Controller name="estadoHospedajeEEUU" control={control} render={({ field }) => (
-            <Selector label="Estado" options={opcionesEstadosUnidos} error={errors.estadoHospedajeEEUU?.message}
+            <Selector label="Estado" options={estadosEEUU} error={errors.estadoHospedajeEEUU?.message}
               value={field.value ?? ''} onChange={field.onChange} />
           )} />
           <div>
             <Controller name="pagadorViaje" control={control} render={({ field }) => (
-              <Selector label="¿Quién paga el viaje?" required options={opcionesPagador}
+              <Selector label="¿Quién paga el viaje?" required options={quienPaga}
                 error={errors.pagadorViaje?.message} value={field.value} onChange={field.onChange} />
             )} />
           </div>
@@ -168,7 +154,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
                   <Entrada label="Apellidos" {...register(`acompanantesViaje.${indice}.apellidos` as const)} />
                   <Entrada label="Nombres" {...register(`acompanantesViaje.${indice}.nombres` as const)} />
                   <Controller name={`acompanantesViaje.${indice}.relacion` as const} control={control} render={({ field }) => (
-                    <Selector label="Relación con la persona" options={opcionesRelacionAcompanante}
+                    <Selector label="Relación con la persona" options={relacionAcompanante}
                       value={field.value ?? ''} onChange={field.onChange} />
                   )} />
                 </div>
@@ -193,7 +179,7 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
                   <Entrada label="Fecha de llegada" type="date" {...register(`visitasAnterioresEEUU.${indice}.fechaLlegada` as const)} />
                   <Entrada label="Duración de la estancia" type="number" min="1" step="1" {...register(`visitasAnterioresEEUU.${indice}.valorDuracion` as const)} />
                   <Controller name={`visitasAnterioresEEUU.${indice}.unidadDuracion` as const} control={control} render={({ field }) => (
-                    <Selector label="Unidad" options={opcionesDuracion} value={field.value ?? ''} onChange={field.onChange} />
+                    <Selector label="Unidad" options={unidadDuracion} value={field.value ?? ''} onChange={field.onChange} />
                   )} />
                 </div>
               ))}

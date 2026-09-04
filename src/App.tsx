@@ -28,14 +28,14 @@ const PASOS = [
 ]
 
 const CAMPOS_POR_PASO: (keyof VisaFormSchema)[][] = [
-  //['cedula', 'primerNombre', 'segundoNombre', 'primerApellido', 'segundoApellido', 'fechaNacimiento', 'sexo', 'estadoCivil', 'nombresConyuge', 'apellidosConyuge', 'fechaNacimientoConyuge', 'nacionalidadConyuge', 'paisNacimientoConyuge', 'ciudadNacimientoConyuge', 'direccionConyuge', 'direccionConyugeOtro', 'nacionalidad', 'tieneOtraNacionalidad', 'otraNacionalidad', 'esResidentePermanenteExtranjero', 'paisResidenciaPermanente', 'ciudad', 'provincia', 'celular', 'tuvoTelefonosAnteriores', 'telefonosAnteriores', 'direccion', 'codigoPostal', 'correo', 'tuvoCorreosAnteriores', 'correosAnteriores', 'ciudadPasaporte', 'pasaportePerdidoORobado', 'numeroPasaportePerdidoORobado', 'paisAutoridadPasaportePerdidoORobado', 'explicacionPasaportePerdidoORobado', 'licenciaConducirEEUU', 'tieneIdentificacionFiscalEEUU', 'identificacionFiscalEEUU'],
+  //['cedula', 'primerNombre', 'segundoNombre', 'primerApellido', 'segundoApellido', 'fechaNacimiento', 'sexo', 'estadoCivil', 'nombresConyuge', 'apellidosConyuge', 'fechaNacimientoConyuge', 'nacionalidadConyuge', 'paisNacimientoConyuge', 'ciudadNacimientoConyuge', 'nacionalidad', 'tieneOtraNacionalidad', 'otraNacionalidad', 'esResidentePermanenteExtranjero', 'paisResidenciaPermanente', 'ciudad', 'provincia', 'celular', 'tuvoTelefonosAnteriores', 'telefonosAnteriores', 'direccion', 'codigoPostal', 'correo', 'tuvoCorreosAnteriores', 'correosAnteriores', 'ciudadPasaporte', 'pasaportePerdidoORobado', 'numeroPasaportePerdidoORobado', 'paisAutoridadPasaportePerdidoORobado', 'explicacionPasaportePerdidoORobado', 'licenciaConducirEEUU', 'tieneIdentificacionFiscalEEUU', 'identificacionFiscalEEUU'],
   [],
   //['categoriaMotivoViaje', 'tipoVisa', 'tienePlanesViajeConcretos', 'pagadorViaje', 'viajaConOtros', 'haVisitadoEEUU', 'haTenidoVisaEEUU', 'visaNegada', 'tienePeticionInmigracion', 'enfermedadContagiosa', 'detalleEnfermedadContagiosa'],
   [],
   [],
   //['cargoActual', 'empleadorActual', 'descripcionTrabajoActual', 'sueldoActual', 'fechaInicioTrabajoActual', 'direccionTrabajoActual', 'tuvoTrabajoAnterior'],
   [],
-  //['nombrePadre', 'fechaNacimientoPadre', 'padreEnEEUU', 'nombreMadre', 'fechaNacimientoMadre', 'madreEnEEUU', 'familiaresInmediatosEnEEUU', 'otrosFamiliaresEnEEUU'],
+  //['nombresPadre', 'apellidosPadre', 'fechaNacimientoPadre', 'padreEnEEUU', 'nombresMadre', 'apellidosMadre', 'fechaNacimientoMadre', 'madreEnEEUU', 'familiaresInmediatosEnEEUU', 'otrosFamiliaresEnEEUU'],
   [],
   [],
 ]
@@ -56,13 +56,10 @@ export default function App() {
       tieneOtraNacionalidad: 'no',
       nombresConyuge: '',
       apellidosConyuge: '',
-      nombreConyuge: '',
       fechaNacimientoConyuge: '',
       nacionalidadConyuge: '',
       paisNacimientoConyuge: '',
       ciudadNacimientoConyuge: '',
-      direccionConyuge: '',
-      direccionConyugeOtro: '',
       esResidentePermanenteExtranjero: 'no',
       tuvoTelefonosAnteriores: 'no',
       tuvoCorreosAnteriores: 'no',
@@ -78,12 +75,10 @@ export default function App() {
       asistioInstitucionEducativa: 'no',
       nombresPadre: '',
       apellidosPadre: '',
-      nombrePadre: '',
       padreEnEEUU: 'no',
       estatusPadreEEUU: '',
       nombresMadre: '',
       apellidosMadre: '',
-      nombreMadre: '',
       madreEnEEUU: 'no',
       estatusMadreEEUU: '',
       familiaresInmediatosEnEEUU: 'no',
@@ -93,8 +88,8 @@ export default function App() {
       visaNegada: 'no',
       deportadoDePais: 'no',
       tienePlanesViajeConcretos: 'no',
-      unidadDuracionEstadiaPrevista: 'dias',
-      pagadorViaje: 'YO',
+      unidadDuracionEstadiaPrevista: 'D',
+      pagadorViaje: 'S',
       viajaConOtros: 'no',
       acompanantesViaje: [],
       haVisitadoEEUU: 'no',
@@ -130,13 +125,7 @@ export default function App() {
     setCargando(true)
     setErrorApi(undefined)
     try {
-      const resultado = await submitVisaForm({
-        ...datos,
-        nombreCompleto: [datos.primerNombre, datos.segundoNombre, datos.primerApellido, datos.segundoApellido].filter(Boolean).join(' '),
-        nombreConyuge: [datos.nombresConyuge, datos.apellidosConyuge].filter(Boolean).join(' '),
-        nombrePadre: [datos.nombresPadre, datos.apellidosPadre].filter(Boolean).join(' '),
-        nombreMadre: [datos.nombresMadre, datos.apellidosMadre].filter(Boolean).join(' '),
-      })
+      const resultado = await submitVisaForm(datos)
       if (resultado.success) {
         setUrlPdf(resultado.pdfUrl)
         setEnviado(true)

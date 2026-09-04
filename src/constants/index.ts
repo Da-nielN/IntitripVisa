@@ -48,50 +48,5 @@ export const ECUADOR_CITIES_BY_PROVINCE: Record<string, string[]> = {
 
 export const ECUADOR_CITIES = Array.from(new Set(Object.values(ECUADOR_CITIES_BY_PROVINCE).flat())).sort((a, b) => a.localeCompare(b, 'es'))
 
-export const COUNTRIES = [
-  'Afganistán', 'Albania', 'Alemania', 'Andorra', 'Angola', 'Antigua y Barbuda', 'Arabia Saudita', 'Argelia', 'Argentina', 'Armenia',
-  'Australia', 'Austria', 'Azerbaiyán', 'Bahamas', 'Bangladés', 'Barbados', 'Baréin', 'Bélgica', 'Belice', 'Benín',
-  'Bielorrusia', 'Bolivia', 'Bosnia y Herzegovina', 'Botsuana', 'Brasil', 'Brunéi', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Bután',
-  'Cabo Verde', 'Camboya', 'Camerún', 'Canadá', 'Catar', 'Chad', 'Chile', 'China', 'Chipre', 'Colombia',
-  'Comoras', 'Congo', 'Corea del Norte', 'Corea del Sur', 'Costa de Marfil', 'Costa Rica', 'Croacia', 'Cuba', 'Dinamarca', 'Dominica',
-  'Ecuador', 'Egipto', 'El Salvador', 'Emiratos Árabes Unidos', 'Eritrea', 'Eslovaquia', 'Eslovenia', 'España', 'Estados Unidos', 'Estonia',
-  'Esuatini', 'Etiopía', 'Filipinas', 'Finlandia', 'Fiyi', 'Francia', 'Gabón', 'Gambia', 'Georgia', 'Ghana',
-  'Granada', 'Grecia', 'Guatemala', 'Guinea', 'Guinea Ecuatorial', 'Guinea-Bisáu', 'Guyana', 'Haití', 'Honduras', 'Hungría',
-  'India', 'Indonesia', 'Irak', 'Irán', 'Irlanda', 'Islandia', 'Islas Marshall', 'Islas Salomón', 'Israel', 'Italia',
-  'Jamaica', 'Japón', 'Jordania', 'Kazajistán', 'Kenia', 'Kirguistán', 'Kiribati', 'Kuwait', 'Laos', 'Lesoto',
-  'Letonia', 'Líbano', 'Liberia', 'Libia', 'Liechtenstein', 'Lituania', 'Luxemburgo', 'Macedonia del Norte', 'Madagascar', 'Malasia',
-  'Malaui', 'Maldivas', 'Malí', 'Malta', 'Marruecos', 'Mauricio', 'Mauritania', 'México', 'Micronesia', 'Moldavia',
-  'Mónaco', 'Mongolia', 'Montenegro', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Nicaragua', 'Níger',
-  'Nigeria', 'Noruega', 'Nueva Zelanda', 'Omán', 'Países Bajos', 'Pakistán', 'Palaos', 'Palestina', 'Panamá', 'Papúa Nueva Guinea',
-  'Paraguay', 'Perú', 'Polonia', 'Portugal', 'Reino Unido', 'República Centroafricana', 'República Checa', 'República Democrática del Congo', 'República Dominicana', 'Ruanda',
-  'Rumanía', 'Rusia', 'Samoa', 'San Cristóbal y Nieves', 'San Marino', 'San Vicente y las Granadinas', 'Santa Lucía', 'Santo Tomé y Príncipe', 'Senegal', 'Serbia',
-  'Seychelles', 'Sierra Leona', 'Singapur', 'Siria', 'Somalia', 'Sri Lanka', 'Sudáfrica', 'Sudán', 'Sudán del Sur', 'Suecia',
-  'Suiza', 'Surinam', 'Tailandia', 'Tanzania', 'Tayikistán', 'Timor Oriental', 'Togo', 'Tonga', 'Trinidad y Tobago', 'Túnez',
-  'Turkmenistán', 'Turquía', 'Tuvalu', 'Ucrania', 'Uganda', 'Uruguay', 'Uzbekistán', 'Vanuatu', 'Vaticano', 'Venezuela',
-  'Vietnam', 'Yemen', 'Yibuti', 'Zambia', 'Zimbabue',
-]
-
-export const NATIONALITIES = [
-  'Afgana', 'Albanesa', 'Alemana', 'Andorrana', 'Angoleña', 'Antiguana', 'Saudí', 'Argelina', 'Argentina', 'Armenia',
-  'Australiana', 'Austriaca', 'Azerbaiyana', 'Bahameña', 'Bangladesí', 'Barbadense', 'Bareiní', 'Belga', 'Beliceña', 'Beninesa',
-  'Bielorrusa', 'Boliviana', 'Bosnia', 'Botsuana', 'Brasileña', 'Bruneana', 'Búlgara', 'Burkinesa', 'Burundesa', 'Butanesa',
-  'Caboverdiana', 'Camboyana', 'Camerunesa', 'Canadiense', 'Catarí', 'Chadiana', 'Chilena', 'China', 'Chipriota', 'Colombiana',
-  'Comorense', 'Congoleña', 'Norcoreana', 'Surcoreana', 'Marfileña', 'Costarricense', 'Croata', 'Cubana', 'Danesa', 'Dominiquesa',
-  'Ecuatoriana', 'Egipcia', 'Salvadoreña', 'Emiratí', 'Eritrea', 'Eslovaca', 'Eslovena', 'Española', 'Estadounidense', 'Estonia',
-  'Suazi', 'Etíope', 'Filipina', 'Finlandesa', 'Fiyiana', 'Francesa', 'Gabonesa', 'Gambiana', 'Georgiana', 'Ghanesa',
-  'Granadina', 'Griega', 'Guatemalteca', 'Guineana', 'Ecuatoguineana', 'Guineana-bisauense', 'Guyanesa', 'Haitiana', 'Hondureña', 'Húngara',
-  'India', 'Indonesia', 'Iraquí', 'Iraní', 'Irlandesa', 'Islandesa', 'Marshalesa', 'Salomonense', 'Israelí', 'Italiana',
-  'Jamaicana', 'Japonesa', 'Jordana', 'Kazaja', 'Keniana', 'Kirguisa', 'Kiribatiana', 'Kuwaití', 'Laosiana', 'Lesotense',
-  'Letona', 'Libanesa', 'Liberiana', 'Libia', 'Liechtensteiniana', 'Lituana', 'Luxemburguesa', 'Macedonia', 'Malgache', 'Malasia',
-  'Malauí', 'Maldiva', 'Maliense', 'Maltesa', 'Marroquí', 'Mauriciana', 'Mauritana', 'Mexicana', 'Micronesia', 'Moldava',
-  'Monegasca', 'Mongola', 'Montenegrina', 'Mozambiqueña', 'Birmana', 'Namibia', 'Nauruana', 'Nepalí', 'Nicaragüense', 'Nigerina',
-  'Nigeriana', 'Noruega', 'Neozelandesa', 'Omaní', 'Neerlandesa', 'Pakistaní', 'Palauana', 'Palestina', 'Panameña', 'Papú',
-  'Paraguaya', 'Peruana', 'Polaca', 'Portuguesa', 'Británica', 'Centroafricana', 'Checa', 'Congoleña', 'Dominicana', 'Ruandesa',
-  'Rumana', 'Rusa', 'Samoana', 'Sancristobaleña', 'Sanmarinense', 'Sanvicentina', 'Santalucense', 'Santotomense', 'Senegalesa', 'Serbia',
-  'Seychellense', 'Sierraleonesa', 'Singapurense', 'Siria', 'Somalí', 'Esrilanquesa', 'Sudafricana', 'Sudanesa', 'Sursudanesa', 'Sueca',
-  'Suiza', 'Surinamesa', 'Tailandesa', 'Tanzana', 'Tayika', 'Timorense', 'Togolesa', 'Tongana', 'Trinitense', 'Tunecina',
-  'Turcomana', 'Turca', 'Tuvaluana', 'Ucraniana', 'Ugandesa', 'Uruguaya', 'Uzbeka', 'Vanuatuense', 'Vaticana', 'Venezolana',
-  'Vietnamita', 'Yemení', 'Yibutiana', 'Zambiana', 'Zimbabuense',
-]
 
 

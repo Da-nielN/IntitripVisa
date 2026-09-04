@@ -3,9 +3,8 @@ import { UseFormReturn, Controller, useFieldArray } from 'react-hook-form'
 import { Plus, Users } from 'lucide-react'
 import { VisaFormSchema } from '../../lib/schema'
 import {
-  opcionesEstatusFamiliarEEUU,
-  opcionesEstatusFamiliarInmediatoEEUU,
-  opcionesRelacionFamiliarInmediato,
+  estatusEEUU,
+  parentescoFamiliarEEUU,
   opcionesSiNo,
 } from '../../constants/opcionesFormulario'
 import { Entrada } from '../interfaz/Entrada'
@@ -69,7 +68,7 @@ export const SeccionFamilia: React.FC<Props> = ({ form }) => {
         {padreEnEstadosUnidos === 'si' && (
           <div className="md:col-span-2 animate-fade-in">
             <Controller name="estatusPadreEEUU" control={control} render={({ field }) => (
-              <Selector label="Estatus del padre en Estados Unidos" required options={opcionesEstatusFamiliarEEUU}
+              <Selector label="Estatus del padre en Estados Unidos" required options={estatusEEUU}
                 error={errors.estatusPadreEEUU?.message} value={field.value ?? ''} onChange={field.onChange} />
             )} />
           </div>
@@ -87,7 +86,7 @@ export const SeccionFamilia: React.FC<Props> = ({ form }) => {
         {madreEnEstadosUnidos === 'si' && (
           <div className="md:col-span-2 animate-fade-in">
             <Controller name="estatusMadreEEUU" control={control} render={({ field }) => (
-              <Selector label="Estatus de la madre en Estados Unidos" required options={opcionesEstatusFamiliarEEUU}
+              <Selector label="Estatus de la madre en Estados Unidos" required options={estatusEEUU}
                 error={errors.estatusMadreEEUU?.message} value={field.value ?? ''} onChange={field.onChange} />
             )} />
           </div>
@@ -108,11 +107,11 @@ export const SeccionFamilia: React.FC<Props> = ({ form }) => {
                 <Entrada label="Apellidos" required {...register(`familiaresInmediatosDetalle.${indice}.apellidos` as const)}
                   error={errors.familiaresInmediatosDetalle?.[indice]?.apellidos?.message} />
                 <Controller name={`familiaresInmediatosDetalle.${indice}.relacion` as const} control={control} render={({ field }) => (
-                  <Selector label="Relación contigo" required options={opcionesRelacionFamiliarInmediato}
+                  <Selector label="Relación contigo" required options={parentescoFamiliarEEUU}
                     error={errors.familiaresInmediatosDetalle?.[indice]?.relacion?.message} value={field.value ?? ''} onChange={field.onChange} />
                 )} />
                 <Controller name={`familiaresInmediatosDetalle.${indice}.estatus` as const} control={control} render={({ field }) => (
-                  <Selector label="Estado relativo" required options={opcionesEstatusFamiliarInmediatoEEUU}
+                  <Selector label="Estado relativo" required options={estatusEEUU}
                     error={errors.familiaresInmediatosDetalle?.[indice]?.estatus?.message} value={field.value ?? ''} onChange={field.onChange} />
                 )} />
               </div>

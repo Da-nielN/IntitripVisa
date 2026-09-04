@@ -4,15 +4,17 @@ import { User } from 'lucide-react'
 import { VisaFormSchema } from '../../lib/schema'
 import { ECUADOR_CITIES_BY_PROVINCE } from '../../constants'
 import {
+  estadoCivil,
+  estadosEEUU,
   opcionesCiudadesEcuador,
-  opcionesDireccionConyuge,
-  opcionesEstadoCivil,
-  opcionesEstadosUnidos,
-  opcionesNacionalidades,
-  opcionesPaises,
   opcionesProvincias,
-  opcionesSexo,
   opcionesSiNo,
+  paisesAutoridadPasaporte,
+  paisesLugarNacimiento,
+  paisesNacionalidad,
+  paisesNacionalidadConyuge,
+  paisesResidenciaPermanente,
+  sexo,
 } from '../../constants/opcionesFormulario'
 import { recortarEspacios, soloLetras, soloNumeros } from '../../utils/validacionesFormulario'
 import { Entrada } from '../interfaz/Entrada'
@@ -22,10 +24,14 @@ import { AreaTexto } from '../interfaz/AreaTexto'
 
 interface Props { form: UseFormReturn<VisaFormSchema> }
 
+// El DS-160 pide los datos de la pareja en los tres estados civiles que
+// describen a alguien que la tiene: casado, union de hecho y union civil.
+const ESTADOS_CIVILES_CON_CONYUGE: VisaFormSchema['estadoCivil'][] = ['M', 'C', 'P']
+
 
 export const SeccionPersonal: React.FC<Props> = ({ form }) => {
   const { register, control, watch, setValue, formState: { errors } } = form
-  const estadoCivil = watch('estadoCivil')
+  const estadoCivilSeleccionado = watch('estadoCivil')
   const provinciaSeleccionada = watch('provincia')
   const ciudadSeleccionada = watch('ciudad')
   const tieneOtraNacionalidad = watch('tieneOtraNacionalidad')
@@ -33,9 +39,9 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
   const tuvoTelefonosAnteriores = watch('tuvoTelefonosAnteriores')
   const tuvoCorreosAnteriores = watch('tuvoCorreosAnteriores')
   const pasaportePerdidoORobado = watch('pasaportePerdidoORobado')
-  const direccionConyuge = watch('direccionConyuge')
   const licenciaConducirEEUU = watch('licenciaConducirEEUU')
   const tieneIdentificacionFiscal = watch('tieneIdentificacionFiscalEEUU')
+  const tieneConyuge = ESTADOS_CIVILES_CON_CONYUGE.includes(estadoCivilSeleccionado)
   const ciudadesPorProvincia = provinciaSeleccionada ? ECUADOR_CITIES_BY_PROVINCE[provinciaSeleccionada] ?? [] : []
   const opcionesCiudadesPorProvincia = ciudadesPorProvincia.map((ciudad) => ({ value: ciudad, label: ciudad }))
 
@@ -46,18 +52,14 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
   }, [ciudadSeleccionada, ciudadesPorProvincia, provinciaSeleccionada, setValue])
 
   useEffect(() => {
-    if (estadoCivil !== 'casado') {
+    if (!tieneConyuge) {
       setValue('nombresConyuge', '')
       setValue('apellidosConyuge', '')
-      setValue('nombreConyuge', '')
       setValue('fechaNacimientoConyuge', '')
       setValue('nacionalidadConyuge', '')
       setValue('paisNacimientoConyuge', '')
       setValue('ciudadNacimientoConyuge', '')
-      setValue('direccionConyuge', '')
-      setValue('direccionConyugeOtro', '')
     }
-    if (direccionConyuge !== 'Otro (Especificar direccion)') setValue('direccionConyugeOtro', '')
     if (tieneOtraNacionalidad === 'no') setValue('otraNacionalidad', '')
     if (esResidentePermanenteExtranjero === 'no') setValue('paisResidenciaPermanente', '')
     if (tuvoTelefonosAnteriores === 'no') setValue('telefonosAnteriores', '')
@@ -72,7 +74,7 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
       setValue('estadoLicenciaConducirEEUU', '')
     }
     if (tieneIdentificacionFiscal === 'no') setValue('identificacionFiscalEEUU', '')
-  }, [direccionConyuge, esResidentePermanenteExtranjero, estadoCivil, licenciaConducirEEUU, pasaportePerdidoORobado, setValue, tieneIdentificacionFiscal, tieneOtraNacionalidad, tuvoCorreosAnteriores, tuvoTelefonosAnteriores])
+  }, [esResidentePermanenteExtranjero, tieneConyuge, licenciaConducirEEUU, pasaportePerdidoORobado, setValue, tieneIdentificacionFiscal, tieneOtraNacionalidad, tuvoCorreosAnteriores, tuvoTelefonosAnteriores])
 
   return (
     <div className="section-card">
@@ -90,46 +92,35 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
         <Entrada label="Segundo apellido" required {...register('segundoApellido', { onChange: soloLetras, onBlur: recortarEspacios })} error={errors.segundoApellido?.message} placeholder="Torres" />
         <Entrada label="Fecha de nacimiento" required type="date" {...register('fechaNacimiento')} error={errors.fechaNacimiento?.message} />
         <Controller name="sexo" control={control} render={({ field }) => (
-          <Selector label="Sexo del cliente" required options={opcionesSexo} error={errors.sexo?.message}
+          <Selector label="Sexo del cliente" required options={sexo} error={errors.sexo?.message}
             value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
         )} />
 
         <div className="md:col-span-2">
           <Controller name="estadoCivil" control={control} render={({ field }) => (
-            <Selector label="Estado civil" required options={opcionesEstadoCivil} error={errors.estadoCivil?.message}
+            <Selector label="Estado civil" required options={estadoCivil} error={errors.estadoCivil?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
         </div>
 
-        {estadoCivil === 'casado' && <>
+        {tieneConyuge && <>
           <Entrada label="Nombres del cónyuge" {...register('nombresConyuge', { onChange: soloLetras, onBlur: recortarEspacios })} error={errors.nombresConyuge?.message} />
           <Entrada label="Apellidos del cónyuge" {...register('apellidosConyuge', { onChange: soloLetras, onBlur: recortarEspacios })} error={errors.apellidosConyuge?.message} />
           <Entrada label="Fecha de nacimiento del cónyuge" type="date" {...register('fechaNacimientoConyuge')} error={errors.fechaNacimientoConyuge?.message} />
           <Controller name="nacionalidadConyuge" control={control} render={({ field }) => (
-            <Selector label="Nacionalidad del cónyuge" options={opcionesPaises} error={errors.nacionalidadConyuge?.message}
+            <Selector label="Nacionalidad del cónyuge" options={paisesNacionalidadConyuge} error={errors.nacionalidadConyuge?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
           <Controller name="paisNacimientoConyuge" control={control} render={({ field }) => (
-            <Selector label="País de nacimiento del cónyuge" options={opcionesPaises} error={errors.paisNacimientoConyuge?.message}
+            <Selector label="País de nacimiento del cónyuge" options={paisesLugarNacimiento} error={errors.paisNacimientoConyuge?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
           <Entrada label="Ciudad de nacimiento del cónyuge" {...register('ciudadNacimientoConyuge')} error={errors.ciudadNacimientoConyuge?.message} />
-          <div className="md:col-span-2">
-            <Controller name="direccionConyuge" control={control} render={({ field }) => (
-              <Selector label="Dirección del cónyuge" options={opcionesDireccionConyuge} error={errors.direccionConyuge?.message}
-                value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
-            )} />
-          </div>
-          {direccionConyuge === 'Otro (Especificar direccion)' && (
-            <div className="md:col-span-2">
-              <AreaTexto label="Especificar dirección del cónyuge" {...register('direccionConyugeOtro')} error={errors.direccionConyugeOtro?.message} />
-            </div>
-          )}
         </>}
 
         <div className="md:col-span-2">
           <Controller name="nacionalidad" control={control} render={({ field }) => (
-            <Selector label="Nacionalidad" required options={opcionesNacionalidades} error={errors.nacionalidad?.message}
+            <Selector label="Nacionalidad" required options={paisesNacionalidad} error={errors.nacionalidad?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
         </div>
@@ -140,7 +131,7 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
         {tieneOtraNacionalidad === 'si' && (
           <div className="md:col-span-2">
             <Controller name="otraNacionalidad" control={control} render={({ field }) => (
-              <Selector label="Otra nacionalidad" required options={opcionesNacionalidades} error={errors.otraNacionalidad?.message}
+              <Selector label="Otra nacionalidad" required options={paisesNacionalidad} error={errors.otraNacionalidad?.message}
                 value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
             )} />
           </div>
@@ -155,7 +146,7 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
         {esResidentePermanenteExtranjero === 'si' && (
           <div className="md:col-span-2">
             <Controller name="paisResidenciaPermanente" control={control} render={({ field }) => (
-              <Selector label="País de residencia permanente" required options={opcionesPaises} error={errors.paisResidenciaPermanente?.message}
+              <Selector label="País de residencia permanente" required options={paisesResidenciaPermanente} error={errors.paisResidenciaPermanente?.message}
                 value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
             )} />
           </div>
@@ -212,7 +203,7 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
             <Entrada label="Número de pasaporte/documento de viaje" required {...register('numeroPasaportePerdidoORobado', { onChange: soloNumeros() })}
               error={errors.numeroPasaportePerdidoORobado?.message} placeholder="Solo números" inputMode="numeric" />
             <Controller name="paisAutoridadPasaportePerdidoORobado" control={control} render={({ field }) => (
-              <Selector label="País/Autoridad que emitió el pasaporte/documento de viaje" required options={opcionesPaises}
+              <Selector label="País/Autoridad que emitió el pasaporte/documento de viaje" required options={paisesAutoridadPasaporte}
                 error={errors.paisAutoridadPasaportePerdidoORobado?.message} value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
             )} />
             <div className="md:col-span-2">
@@ -230,7 +221,7 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 animate-fade-in">
             <Entrada label="Número de licencia de conducir" required {...register('numeroLicenciaConducirEEUU')} error={errors.numeroLicenciaConducirEEUU?.message} />
             <Controller name="estadoLicenciaConducirEEUU" control={control} render={({ field }) => (
-              <Selector label="Estado en el que fue emitida esta licencia" required options={opcionesEstadosUnidos}
+              <Selector label="Estado en el que fue emitida esta licencia" required options={estadosEEUU}
                 error={errors.estadoLicenciaConducirEEUU?.message} value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
             )} />
           </div>

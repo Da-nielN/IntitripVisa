@@ -1,4 +1,11 @@
 ﻿import { z } from 'zod'
+import {
+  estadoCivil as catEstadoCivil,
+  quienPaga as catQuienPaga,
+  sexo as catSexo,
+  unidadDuracion as catUnidadDuracion,
+  valoresDe,
+} from '../constants/catalogos'
 
 const requerido = (msg = 'Campo requerido') => z.string().trim().min(1, msg)
 const siNo = z.enum(['si', 'no'])
@@ -6,7 +13,7 @@ const textoOpcional = z.string().optional().default('')
 const soloDigitos = (msg: string) => z.string().regex(/^\d+$/, msg)
 const campoNombre = (msg: string) => requerido(msg)
   .regex(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?: [A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/, 'No ingrese números ni espacios al inicio o al final')
-const duracion = z.enum(['dias', 'semanas', 'meses', 'anios']).optional().default('dias')
+const duracion = z.enum(valoresDe(catUnidadDuracion)).optional().default('D')
 const acompanante = z.object({
   apellidos: textoOpcional,
   nombres: textoOpcional,
@@ -30,23 +37,19 @@ export const visaFormSchema = z.object({
   segundoNombre: campoNombre('Segundo nombre requerido'),
   primerApellido: campoNombre('Primer apellido requerido'),
   segundoApellido: campoNombre('Segundo apellido requerido'),
-  nombreCompleto: textoOpcional,
   fechaNacimiento: requerido('Fecha de nacimiento requerida'),
-  sexo: z.enum(['masculino', 'femenino'], {
+  sexo: z.enum(valoresDe(catSexo), {
     required_error: 'Sexo requerido',
   }),
-  estadoCivil: z.enum(['soltero', 'casado', 'divorciado', 'viudo', 'union_libre'], {
+  estadoCivil: z.enum(valoresDe(catEstadoCivil), {
     required_error: 'Estado civil requerido',
   }),
   nombresConyuge: textoOpcional,
   apellidosConyuge: textoOpcional,
-  nombreConyuge: textoOpcional,
   fechaNacimientoConyuge: textoOpcional,
   nacionalidadConyuge: textoOpcional,
   paisNacimientoConyuge: textoOpcional,
   ciudadNacimientoConyuge: textoOpcional,
-  direccionConyuge: textoOpcional,
-  direccionConyugeOtro: textoOpcional,
   nacionalidad: requerido('Nacionalidad requerida'),
   tieneOtraNacionalidad: siNo,
   otraNacionalidad: textoOpcional,
@@ -121,13 +124,11 @@ export const visaFormSchema = z.object({
 
   nombresPadre: requerido('Nombres del padre requeridos'),
   apellidosPadre: requerido('Apellidos del padre requeridos'),
-  nombrePadre: textoOpcional,
   fechaNacimientoPadre: requerido('Fecha de nacimiento del padre requerida'),
   padreEnEEUU: siNo,
   estatusPadreEEUU: textoOpcional,
   nombresMadre: requerido('Nombres de la madre requeridos'),
   apellidosMadre: requerido('Apellidos de la madre requeridos'),
-  nombreMadre: textoOpcional,
   fechaNacimientoMadre: requerido('Fecha de nacimiento de la madre requerida'),
   madreEnEEUU: siNo,
   estatusMadreEEUU: textoOpcional,
@@ -160,7 +161,7 @@ export const visaFormSchema = z.object({
   estadoHospedajeEEUU: textoOpcional,
   cantidadViajeros: textoOpcional,
   relacionViaje: textoOpcional,
-  pagadorViaje: z.enum(['YO', 'OTRA PERSONA', 'EMPLEADOR ACTUAL', 'EMPLEADOR EN EE. UU', 'OTRA EMPRESA/ORGANIZACIÓN']),
+  pagadorViaje: z.enum(valoresDe(catQuienPaga)),
   viajaConOtros: siNo,
   acompanantesViaje: z.array(acompanante).optional().default([]),
   haVisitadoEEUU: siNo,
@@ -293,6 +294,7 @@ export const visaFormSchema = z.object({
 
   const camposNumericos = [
     { campo: 'telefonoTrabajoActual', valor: data.telefonoTrabajoActual, mensaje: 'El teléfono debe contener solo números' },
+    { campo: 'codigoPostalTrabajoActual', valor: data.codigoPostalTrabajoActual, mensaje: 'El código postal debe contener solo números' },
     { campo: 'telefonoTrabajoAnterior', valor: data.telefonoTrabajoAnterior, mensaje: 'El teléfono debe contener solo números' },
     { campo: 'codigoPostalTrabajoAnterior', valor: data.codigoPostalTrabajoAnterior, mensaje: 'El código postal debe contener solo números' },
     { campo: 'codigoPostalEducacion', valor: data.codigoPostalEducacion, mensaje: 'El código postal debe contener solo números' },

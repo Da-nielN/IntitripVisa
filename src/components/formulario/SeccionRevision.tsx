@@ -50,8 +50,6 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Nacionalidad del cónyuge" value={data.nacionalidadConyuge} />
       <FilaResumen label="País de nacimiento del cónyuge" value={data.paisNacimientoConyuge} />
       <FilaResumen label="Ciudad de nacimiento del cónyuge" value={data.ciudadNacimientoConyuge} />
-      <FilaResumen label="Dirección del cónyuge" value={data.direccionConyuge} />
-      <FilaResumen label="Dirección del cónyuge especificada" value={data.direccionConyugeOtro} />
       <FilaResumen label="Nacionalidad" value={data.nacionalidad} />
       <FilaResumen label="Otra nacionalidad" value={data.otraNacionalidad} />
       <FilaResumen label="País de residencia permanente" value={data.paisResidenciaPermanente} />
