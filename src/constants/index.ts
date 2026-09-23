@@ -12,6 +12,10 @@ export const FORM_STEPS: FormStep[] = [
   { id: 9, title: 'Renovación',         description: 'Solo si tiene visa anterior',          icon: '9' },
 ]
 
+// Los repetidores del DS-160 admiten cinco filas (ctl00..ctl04). Sin este tope
+// la web dejaba cargar mas y Code.gs recortaba en silencio al serializar.
+export const MAXIMO_FILAS_REPETIDOR = 5
+
 export const PROVINCES_EC = [
   'Azuay','Bolívar','Cañar','Carchi','Chimborazo','Cotopaxi','El Oro',
   'Esmeraldas','Galápagos','Guayas','Imbabura','Loja','Los Ríos','Manabí',

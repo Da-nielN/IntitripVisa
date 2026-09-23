@@ -1,12 +1,13 @@
 ﻿import React from 'react'
-import { CheckCircle, ExternalLink } from 'lucide-react'
+import { AlertTriangle, CheckCircle, ExternalLink } from 'lucide-react'
 
 interface Props {
+  jsonUrl?: string
   pdfUrl?: string
   onReset: () => void
 }
 
-export const SuccessScreen: React.FC<Props> = ({ pdfUrl, onReset }) => (
+export const SuccessScreen: React.FC<Props> = ({ jsonUrl, pdfUrl, onReset }) => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-16 animate-slide-up">
     <div className="w-20 h-20 rounded-full bg-brand-green/10 flex items-center justify-center mb-6">
       <CheckCircle className="w-10 h-10 text-brand-green" />
@@ -16,6 +17,17 @@ export const SuccessScreen: React.FC<Props> = ({ pdfUrl, onReset }) => (
       Su información fue recibida exitosamente. Nuestro equipo generó su documento y lo guardó en Google Drive.
       Nos pondremos en contacto pronto.
     </p>
+    {!jsonUrl && (
+      <div className="mb-8 max-w-md p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 text-left flex items-start gap-3 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100">
+        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+        <div>
+          <strong>Falta actualizar el Apps Script.</strong> La respuesta no trae el archivo JSON,
+          así que el script desplegado todavía es el que generaba PDF. Vuelva a pegar
+          <code className="mx-1">apps-script/Code.gs</code> en script.google.com.
+        </div>
+      </div>
+    )}
+
     <div className="flex flex-wrap gap-3 justify-center">
       {pdfUrl && (
         <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">

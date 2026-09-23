@@ -1,3 +1,8 @@
+> **Documento histórico.** Foto del generador web en agosto de 2026, conservada por su
+> tabla de correspondencia. Sus conteos de catálogos ("9 faltantes", "10 disponibles") y
+> sus números de línea a `src/` ya no describen el estado actual: hoy hay 19 catálogos
+> volcados y 0 faltantes. Para el estado vigente, ver `plan_asistente_formularios_v5.md`.
+
 # Diagnóstico — Migración del generador web de PDF a JSON para el DS-160
 
 Fecha: 2026-09-02. Sin cambios de código: esto es solo el relevamiento.

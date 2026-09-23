@@ -6,13 +6,15 @@ var CONFIGURACION = {
   TEMPLATE_DOC_ID: '1PsfmYfeFEMjy0FzMCus-JMWeX0VSl9lU2btbtzecRg0', // ID del Google Doc plantilla
   PARENT_FOLDER_ID: '1UedawxmFR_ndhZljWm0AzgpiihsRQXUn', // ID de la carpeta raiz en Drive
   VALOR_PREDETERMINADO: '',
+  // La ruta del PDF quedo desactivada al migrar a JSON. Ponerlo en true la
+  // vuelve a habilitar sin tocar nada mas: el codigo sigue completo abajo.
+  GENERAR_PDF: false,
 }
 
 // Valores predeterminados especificos por campo opcional.
 // Si un campo no aparece aqui, queda vacio.
 // Ejemplo:
 // var VALORES_PREDETERMINADOS = {
-//   telefonoDomicilio: 'No registra',
 //   correosAnteriores: 'No ha tenido correos anteriores',
 // }
 var VALORES_PREDETERMINADOS = {}
@@ -25,6 +27,8 @@ var CLAVES_CAMPOS = [
   'primerApellido',
   'segundoApellido',
   'fechaNacimiento',
+  'ciudadNacimiento',
+  'paisNacimiento',
   'sexo',
   'estadoCivil',
   'nombresConyuge',
@@ -38,7 +42,6 @@ var CLAVES_CAMPOS = [
   'otraNacionalidad',
   'esResidentePermanenteExtranjero',
   'paisResidenciaPermanente',
-  'telefonoDomicilio',
   'ciudad',
   'provincia',
   'celular',
@@ -46,10 +49,18 @@ var CLAVES_CAMPOS = [
   'telefonosAnteriores',
   'direccion',
   'codigoPostal',
+  'paisDomicilio',
   'correo',
   'tuvoCorreosAnteriores',
   'correosAnteriores',
+  'tipoDocumentoPasaporte',
+  'numeroPasaporte',
+  'autoridadEmisoraPasaporte',
   'ciudadPasaporte',
+  'provinciaEmisionPasaporte',
+  'paisEmisionPasaporte',
+  'fechaEmisionPasaporte',
+  'fechaExpiracionPasaporte',
   'pasaportePerdidoORobado',
   'numeroPasaportePerdidoORobado',
   'paisAutoridadPasaportePerdidoORobado',
@@ -57,7 +68,6 @@ var CLAVES_CAMPOS = [
   'facebook',
   'instagram',
   'linkedin',
-  'otrasRedesSociales',
   'licenciaConducirEEUU',
   'numeroLicenciaConducirEEUU',
   'estadoLicenciaConducirEEUU',
@@ -71,7 +81,6 @@ var CLAVES_CAMPOS = [
   'direccionTrabajoActual',
   'ciudadTrabajoActual',
   'provinciaTrabajoActual',
-  'codigoPostalTrabajoActual',
   'telefonoTrabajoActual',
   'fechaInicioTrabajoActual',
   'tuvoTrabajoAnterior',
@@ -88,7 +97,6 @@ var CLAVES_CAMPOS = [
   'fechaInicioTrabajoAnterior',
   'fechaFinTrabajoAnterior',
   'asistioInstitucionEducativa',
-  'institucionBachillerato',
   'institucionUniversitaria',
   'nombreCarrera',
   'direccionEducacion',
@@ -97,8 +105,11 @@ var CLAVES_CAMPOS = [
   'codigoPostalEducacion',
   'fechaInicioEducacion',
   'fechaFinEducacion',
-  'telefonoEducacion',
-  'idiomas',
+  'idioma1',
+  'idioma2',
+  'idioma3',
+  'idioma4',
+  'idioma5',
   'nombresPadre',
   'apellidosPadre',
   'fechaNacimientoPadre',
@@ -111,10 +122,12 @@ var CLAVES_CAMPOS = [
   'estatusMadreEEUU',
   'familiaresInmediatosEnEEUU',
   'otrosFamiliaresEnEEUU',
-  'historialViajes',
-  'tieneVisaActiva',
-  'paisVisa',
-  'fechaEmisionVisa',
+  'tieneHistorialViajes',
+  'paisVisitado1',
+  'paisVisitado2',
+  'paisVisitado3',
+  'paisVisitado4',
+  'paisVisitado5',
   'visaNegada',
   'detallesVisaNegada',
   'deportadoDePais',
@@ -129,13 +142,28 @@ var CLAVES_CAMPOS = [
   'ciudadLlegadaEEUU',
   'fechaSalidaEEUU',
   'ciudadSalidaEEUU',
-  'lugaresPlaneadosEEUU',
+  'lugarPlaneadoEEUU1',
+  'lugarPlaneadoEEUU2',
+  'lugarPlaneadoEEUU3',
+  'lugarPlaneadoEEUU4',
+  'lugarPlaneadoEEUU5',
   'direccionHospedajeEEUU',
   'ciudadHospedajeEEUU',
   'estadoHospedajeEEUU',
-  'cantidadViajeros',
-  'relacionViaje',
+  'apellidosContactoEEUU',
+  'nombresContactoEEUU',
+  'relacionContactoEEUU',
+  'direccionContactoEEUU',
+  'ciudadContactoEEUU',
+  'estadoContactoEEUU',
+  'telefonoContactoEEUU',
   'pagadorViaje',
+  'apellidosPagador',
+  'nombresPagador',
+  'telefonoPagador',
+  'correoPagador',
+  'relacionPagador',
+  'direccionPagadorIgualSolicitante',
   'viajaConOtros',
   'haVisitadoEEUU',
   'haTenidoVisaEEUU',
@@ -155,7 +183,97 @@ var CLAVES_CAMPOS = [
   'detalleEnfermedadContagiosa',
 ]
 
+// Identificacion fiscal de EE.UU.: desde el mapeo v2.7 el checkbox
+// cbexAPP_TAX_ID_NA va marcado y tbxAPP_TAX_ID ya no existe, asi que el DS-160
+// no pide el numero. La web todavia hace las dos preguntas -- salen del modelo
+// recien cuando se limpie el formulario -- pero ninguna de las dos viaja.
+var CLAVES_NO_EMITIDAS = ['tieneIdentificacionFiscalEEUU', 'identificacionFiscalEEUU']
+
+// Variables disparadoras (mapeo v2.6, seccion 12 de variables_nuevas.md).
+// 141 campos del mapeo declaran "condicion": solo existen en una rama del
+// formulario. Illari evalua esa condicion con el dato del cliente y, si la
+// variable disparadora no viene en el JSON, no adivina: marca el campo como
+// "omitido - sin dato disparador" y no lo llena.
+//
+// Por eso estas 24 se emiten SIEMPRE, aunque la respuesta sea "N" o la rama
+// quede sin llenar. Emitir de mas no molesta: una variable que ningun campo del
+// mapeo usa se ignora. Lo que rompe el llenado de la rama contraria es que falte.
+var CLAVES_DISPARADORAS = [
+  // Personal2
+  'tieneOtraNacionalidad',
+  'esResidentePermanenteExtranjero',
+  // Travel
+  'tienePlanesViajeConcretos',
+  'pagadorViaje',
+  // TravelCompanions
+  'viajaConOtros',
+  // PreviousUSTravel
+  'haVisitadoEEUU',
+  'haTenidoVisaEEUU',
+  'licenciaConducirEEUU',
+  'visaEEUUPerdidaORobada',
+  'visaEEUUCanceladaORevocada',
+  'tienePeticionInmigracion',
+  'visaNegada',
+  // AddressPhone
+  'tuvoTelefonosAnteriores',
+  'tuvoCorreosAnteriores',
+  // PptVisa
+  'pasaportePerdidoORobado',
+  // Relatives
+  'padreEnEEUU',
+  'madreEnEEUU',
+  'familiaresInmediatosEnEEUU',
+  // WorkEducation1
+  'categoriaOcupacionActual',
+  // WorkEducation2
+  'tuvoTrabajoAnterior',
+  'asistioInstitucionEducativa',
+  // WorkEducation3
+  'tieneHistorialViajes',
+  // SecurityandBackground1
+  'enfermedadContagiosa',
+  // SecurityandBackground4
+  'deportadoDePais',
+]
+
+// Las dos disparadoras que en el DS-160 son <select>. Importan solo para el
+// relleno de emergencia de abajo: el formato no cambia, un select sigue saliendo
+// como { texto, valor } y un radio como string plano.
+var CLAVES_DISPARADORAS_SELECT = ['pagadorViaje', 'categoriaOcupacionActual']
+
 var CANTIDAD_MAXIMA_REPETIBLES = 5
+
+// Repetidores del DS-160. Los seis tienen techo de 5 slots y ese techo viene del
+// mapeo, no de aca.
+//
+// Illari agrega filas hasta el numero mas ALTO que trae dato, no hasta la
+// cantidad de datos: si el JSON manda solo lugarPlaneadoEEUU5, la app pulsa
+// "Add Another" cuatro veces y deja cuatro filas vacias en el DS-160. Por eso al
+// serializar las listas se compactan a 1..N, sin huecos.
+
+// Un solo campo por slot: la clave es el prefijo mas el numero.
+var REPETIDORES_SIMPLES = ['lugarPlaneadoEEUU', 'idioma', 'paisVisitado']
+
+// Varios campos por fila. La fila se renumera entera: si el cliente dejo vacia la
+// segunda de tres, la tercera pasa a ser la segunda con sus cuatro campos juntos.
+var REPETIDORES_DE_FILA = [
+  {
+    prefijo: 'acompananteViaje',
+    origen: 'acompanantesViaje',
+    campos: [['Apellidos', 'apellidos'], ['Nombres', 'nombres'], ['Relacion', 'relacion']],
+  },
+  {
+    prefijo: 'visitaAnteriorEEUU',
+    origen: 'visitasAnterioresEEUU',
+    campos: [['FechaLlegada', 'fechaLlegada'], ['ValorDuracion', 'valorDuracion'], ['UnidadDuracion', 'unidadDuracion']],
+  },
+  {
+    prefijo: 'familiarInmediato',
+    origen: 'familiaresInmediatosDetalle',
+    campos: [['Nombres', 'nombres'], ['Apellidos', 'apellidos'], ['Relacion', 'relacion'], ['Estatus', 'estatus']],
+  },
+]
 
 // ============================================================
 // doPost - recibe el formulario como application/x-www-form-urlencoded
@@ -212,6 +330,25 @@ function procesarFormulario(datos) {
   var carpetaPadre = DriveApp.getFolderById(CONFIGURACION.PARENT_FOLDER_ID)
   var carpetaCliente = carpetaPadre.createFolder(nombreCarpeta)
 
+  var archivoJson = crearArchivoJson(datos, carpetaCliente)
+
+  var respuesta = {
+    success: true,
+    message: 'Formulario procesado exitosamente',
+    folderId: carpetaCliente.getId(),
+    jsonUrl: 'https://drive.google.com/file/d/' + archivoJson.getId() + '/view',
+  }
+
+  if (CONFIGURACION.GENERAR_PDF) {
+    respuesta.pdfUrl = generarPdf(datos, nombreCarpeta, carpetaCliente)
+  }
+
+  return respuesta
+}
+
+// Ruta del PDF: desactivada por CONFIGURACION.GENERAR_PDF, intacta por si hay
+// que volver a ella.
+function generarPdf(datos, nombreCarpeta, carpetaCliente) {
   var archivoPlantilla = DriveApp.getFileById(CONFIGURACION.TEMPLATE_DOC_ID)
   var archivoNuevo = archivoPlantilla.makeCopy('Formulario_' + nombreCarpeta, carpetaCliente)
   var documento = DocumentApp.openById(archivoNuevo.getId())
@@ -227,15 +364,152 @@ function procesarFormulario(datos) {
 
   var pdfBlob = DriveApp.getFileById(archivoNuevo.getId()).getAs('application/pdf')
   pdfBlob.setName('Visa_' + nombreCarpeta + '.pdf')
+  // Sin setSharing: el archivo queda solo para quien tenga acceso a la carpeta.
+  // Antes se publicaba con ANYONE_WITH_LINK y el enlace salia hacia el cliente.
   var archivoPdf = carpetaCliente.createFile(pdfBlob)
-  archivoPdf.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW)
 
-  return {
-    success: true,
-    message: 'Formulario procesado exitosamente',
-    folderId: carpetaCliente.getId(),
-    pdfUrl: 'https://drive.google.com/file/d/' + archivoPdf.getId() + '/view',
+  return 'https://drive.google.com/file/d/' + archivoPdf.getId() + '/view'
+}
+
+// ============================================================
+// Ruta JSON: la que consume Illari
+// ============================================================
+// El navegador manda los select ya resueltos como { texto, valor }, asi que
+// aca no hay ni un catalogo: esto solo serializa.
+//
+// Reglas de formato (plan v5, seccion 4):
+//   texto libre       -> string, sin tildes ni ñ
+//   fechas            -> "AAAA-MM-DD", tal como llegan del input date
+//   radios            -> "Y" / "N"   (la web manda 'si' / 'no')
+//   selects           -> { "texto": "...", "valor": "..." }
+//   vacio o no aplica -> la clave se omite
+
+function crearArchivoJson(datos, carpetaCliente) {
+  var contenido = JSON.stringify(construirDatosDs160(datos), null, 2)
+  var blob = Utilities.newBlob(contenido, 'application/json', construirNombreArchivoJson(datos))
+  return carpetaCliente.createFile(blob)
+}
+
+function construirDatosDs160(datos) {
+  var salida = {}
+
+  CLAVES_CAMPOS.forEach(function(clave) {
+    if (CLAVES_NO_EMITIDAS.indexOf(clave) !== -1) return
+    // Los slots numerados salen mas abajo, ya compactados.
+    if (esSlotDeRepetidorSimple(clave)) return
+    asignarCampoJson(salida, clave, datos ? datos[clave] : null)
+  })
+
+  agregarRepetidoresJson(salida, datos)
+  garantizarDisparadoras(salida)
+
+  return salida
+}
+
+// Compacta los seis repetidores a 1..N. Un slot -- o una fila entera -- que no
+// deja dato no ocupa numero: el que sigue se corre hacia arriba.
+function agregarRepetidoresJson(salida, datos) {
+  REPETIDORES_SIMPLES.forEach(function(prefijo) {
+    var numero = 1
+    for (var indice = 1; indice <= CANTIDAD_MAXIMA_REPETIBLES; indice++) {
+      var valor = datos ? datos[prefijo + indice] : null
+      if (!tieneDatoJson(valor)) continue
+      asignarCampoJson(salida, prefijo + numero, valor)
+      numero++
+    }
+  })
+
+  REPETIDORES_DE_FILA.forEach(function(definicion) {
+    var numero = 1
+    filasDeRepetidor(datos, definicion).forEach(function(fila) {
+      var filaConDato = definicion.campos.some(function(campo) {
+        return tieneDatoJson(fila[campo[1]])
+      })
+      if (!filaConDato) return
+
+      definicion.campos.forEach(function(campo) {
+        asignarCampoJson(salida, definicion.prefijo + numero + campo[0], fila[campo[1]])
+      })
+      numero++
+    })
+  })
+}
+
+function esSlotDeRepetidorSimple(clave) {
+  for (var indice = 0; indice < REPETIDORES_SIMPLES.length; indice++) {
+    var prefijo = REPETIDORES_SIMPLES[indice]
+    if (clave.indexOf(prefijo) === 0 && /^\d+$/.test(clave.substring(prefijo.length))) return true
   }
+  return false
+}
+
+function tieneDatoJson(valor) {
+  return serializarValorJson(valor) !== null
+}
+
+// Red de seguridad: las 24 disparadoras nunca se omiten. Si el cliente contesto,
+// ya salieron por el camino normal y esto no toca nada. Si no contesto -- payload
+// viejo, borrador, o un reinicio de rama que dejo el campo vacio -- sale igual
+// con el valor vacio del tipo que le corresponde, para que Illari pueda evaluar
+// la condicion en vez de dejar toda la rama sin llenar.
+function garantizarDisparadoras(salida) {
+  CLAVES_DISPARADORAS.forEach(function(clave) {
+    if (Object.prototype.hasOwnProperty.call(salida, clave)) return
+    salida[clave] = CLAVES_DISPARADORAS_SELECT.indexOf(clave) !== -1
+      ? { texto: '', valor: '' }
+      : ''
+  })
+}
+
+function asignarCampoJson(salida, clave, valor) {
+  var serializado = serializarValorJson(valor)
+  if (serializado !== null) salida[clave] = serializado
+}
+
+function serializarValorJson(valor) {
+  if (valor === null || valor === undefined) return null
+  if (Array.isArray(valor)) return null
+
+  // Select ya resuelto por el navegador. El "valor" es un codigo del DS-160
+  // (ECUA, B1-B2): nunca se le quitan las tildes porque se romperia.
+  if (typeof valor === 'object') {
+    var codigo = valor.valor === null || valor.valor === undefined ? '' : String(valor.valor).trim()
+    if (!codigo) return null
+    var etiqueta = valor.texto === null || valor.texto === undefined ? '' : String(valor.texto)
+    return { texto: etiqueta, valor: codigo }
+  }
+
+  var texto = String(valor).trim()
+  if (!texto) return null
+  if (texto === 'si') return 'Y'
+  if (texto === 'no') return 'N'
+  return quitarTildes(texto)
+}
+
+// Misma tecnica que construirNombreCarpeta: "Munoz" sale de "Muñoz".
+function quitarTildes(texto) {
+  return String(texto)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
+function construirNombreArchivoJson(datos) {
+  var partes = ['primerNombre', 'primerApellido', 'cedula']
+    .map(function(clave) {
+      return normalizarParteNombreArchivo(datos ? datos[clave] : '')
+    })
+    .filter(function(parte) {
+      return parte !== ''
+    })
+
+  return (partes.length ? partes.join('_') : 'sin_datos') + '.json'
+}
+
+function normalizarParteNombreArchivo(valor) {
+  return quitarTildes(valor === null || valor === undefined ? '' : String(valor))
+    .replace(/[^A-Za-z0-9\s]/g, '')
+    .trim()
+    .replace(/\s+/g, '_')
 }
 
 function construirNombreCarpeta(datos) {
@@ -260,42 +534,38 @@ function crearReemplazos(datos) {
     reemplazos[clave] = obtenerValor(datos, clave)
   })
 
-  agregarCamposAcompanantes(reemplazos, datos)
-  agregarCamposVisitas(reemplazos, datos)
-  agregarCamposFamiliaresInmediatos(reemplazos, datos)
+  REPETIDORES_DE_FILA.forEach(function(definicion) {
+    paresDeRepetidor(datos, definicion).forEach(function(par) {
+      reemplazos[par[0]] = normalizarValor(par[1], obtenerValorPredeterminado(par[0]))
+    })
+  })
 
   return reemplazos
 }
 
-function agregarCamposAcompanantes(reemplazos, datos) {
+// Los seis repetidores se declaran una sola vez, en REPETIDORES_* arriba. La
+// ruta JSON los compacta; la del PDF no, porque la plantilla tiene un
+// marcador fijo por slot y los que sobran se limpian al final.
+
+// Las 5 filas del repetidor, tal como llegan del navegador y sin compactar.
+function filasDeRepetidor(datos, definicion) {
+  var origen = (datos && datos[definicion.origen]) || []
+  var filas = []
   for (var indice = 0; indice < CANTIDAD_MAXIMA_REPETIBLES; indice++) {
-    var acompanante = datos.acompanantesViaje && datos.acompanantesViaje[indice] ? datos.acompanantesViaje[indice] : {}
-    var numero = indice + 1
-    reemplazos['acompananteViaje' + numero + 'Apellidos'] = normalizarValor(acompanante.apellidos, obtenerValorPredeterminado('acompananteViaje' + numero + 'Apellidos'))
-    reemplazos['acompananteViaje' + numero + 'Nombres'] = normalizarValor(acompanante.nombres, obtenerValorPredeterminado('acompananteViaje' + numero + 'Nombres'))
-    reemplazos['acompananteViaje' + numero + 'Relacion'] = normalizarValor(acompanante.relacion, obtenerValorPredeterminado('acompananteViaje' + numero + 'Relacion'))
+    filas.push(origen[indice] || {})
   }
+  return filas
 }
 
-function agregarCamposVisitas(reemplazos, datos) {
-  for (var indice = 0; indice < CANTIDAD_MAXIMA_REPETIBLES; indice++) {
-    var visita = datos.visitasAnterioresEEUU && datos.visitasAnterioresEEUU[indice] ? datos.visitasAnterioresEEUU[indice] : {}
-    var numero = indice + 1
-    reemplazos['visitaAnteriorEEUU' + numero + 'FechaLlegada'] = normalizarValor(visita.fechaLlegada, obtenerValorPredeterminado('visitaAnteriorEEUU' + numero + 'FechaLlegada'))
-    reemplazos['visitaAnteriorEEUU' + numero + 'ValorDuracion'] = normalizarValor(visita.valorDuracion, obtenerValorPredeterminado('visitaAnteriorEEUU' + numero + 'ValorDuracion'))
-    reemplazos['visitaAnteriorEEUU' + numero + 'UnidadDuracion'] = normalizarValor(visita.unidadDuracion, obtenerValorPredeterminado('visitaAnteriorEEUU' + numero + 'UnidadDuracion'))
-  }
-}
-
-function agregarCamposFamiliaresInmediatos(reemplazos, datos) {
-  for (var indice = 0; indice < CANTIDAD_MAXIMA_REPETIBLES; indice++) {
-    var familiar = datos.familiaresInmediatosDetalle && datos.familiaresInmediatosDetalle[indice] ? datos.familiaresInmediatosDetalle[indice] : {}
-    var numero = indice + 1
-    reemplazos['familiarInmediato' + numero + 'Nombres'] = normalizarValor(familiar.nombres, obtenerValorPredeterminado('familiarInmediato' + numero + 'Nombres'))
-    reemplazos['familiarInmediato' + numero + 'Apellidos'] = normalizarValor(familiar.apellidos, obtenerValorPredeterminado('familiarInmediato' + numero + 'Apellidos'))
-    reemplazos['familiarInmediato' + numero + 'Relacion'] = normalizarValor(familiar.relacion, obtenerValorPredeterminado('familiarInmediato' + numero + 'Relacion'))
-    reemplazos['familiarInmediato' + numero + 'Estatus'] = normalizarValor(familiar.estatus, obtenerValorPredeterminado('familiarInmediato' + numero + 'Estatus'))
-  }
+// Los mismos datos como pares [nombre de slot, valor crudo], para el PDF.
+function paresDeRepetidor(datos, definicion) {
+  var pares = []
+  filasDeRepetidor(datos, definicion).forEach(function(fila, indice) {
+    definicion.campos.forEach(function(campo) {
+      pares.push([definicion.prefijo + (indice + 1) + campo[0], fila[campo[1]]])
+    })
+  })
+  return pares
 }
 
 function obtenerValor(datos, clave) {

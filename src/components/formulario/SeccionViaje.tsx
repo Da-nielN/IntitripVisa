@@ -2,6 +2,7 @@
 import { UseFormReturn, Controller, useFieldArray } from 'react-hook-form'
 import { Globe, Plane, Heart, Plus } from 'lucide-react'
 import { VisaFormSchema } from '../../lib/schema'
+import { MAXIMO_FILAS_REPETIDOR } from '../../constants'
 import { Entrada } from '../interfaz/Entrada'
 import { AreaTexto } from '../interfaz/AreaTexto'
 import { GrupoRadios } from '../interfaz/GrupoRadios'
@@ -11,13 +12,24 @@ import {
   estadosEEUU,
   quienPaga,
   relacionAcompanante,
+  relacionPagador,
   opcionesSiNo,
   propositoViajeEspecifico,
   propositoViaje,
 } from '../../constants/opcionesFormulario'
-import { soloNumeros } from '../../utils/validacionesFormulario'
+import { useSlotsRepetidor } from '../../ganchos/useSlotsRepetidor'
+import { recortarEspacios, soloLetras, soloNumeros } from '../../utils/validacionesFormulario'
 
 interface Props { form: UseFormReturn<VisaFormSchema> }
+
+// El DS-160 acepta hasta cinco lugares (dtlTravelLoc_ctl00..ctl04).
+const LUGARES_PLANEADOS = [
+  'lugarPlaneadoEEUU1',
+  'lugarPlaneadoEEUU2',
+  'lugarPlaneadoEEUU3',
+  'lugarPlaneadoEEUU4',
+  'lugarPlaneadoEEUU5',
+] as const
 
 export const SeccionViaje: React.FC<Props> = ({ form }) => {
   const { register, control, watch, setValue, formState: { errors } } = form
@@ -30,6 +42,11 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
   const visaCanceladaORevocada = watch('visaEEUUCanceladaORevocada')
   const visaNegada = watch('visaNegada')
   const tienePeticionInmigracion = watch('tienePeticionInmigracion')
+  const fueDeportado = watch('deportadoDePais')
+  const pagadorViaje = watch('pagadorViaje')
+  const pagaOtraPersona = pagadorViaje === 'O'
+  const lugares = useSlotsRepetidor(form, LUGARES_PLANEADOS)
+  const reiniciarLugares = lugares.reiniciar
   const tieneEnfermedadContagiosa = watch('enfermedadContagiosa')
   const propositoViajeEspecificoFiltradas = propositoViajeEspecifico[razonViaje ?? ''] ?? []
 
@@ -61,6 +78,28 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
   React.useEffect(() => {
     if (tieneEnfermedadContagiosa === 'no') setValue('detalleEnfermedadContagiosa', '')
   }, [setValue, tieneEnfermedadContagiosa])
+
+  React.useEffect(() => {
+    if (fueDeportado === 'no') setValue('detallesDeportacion', '')
+  }, [fueDeportado, setValue])
+
+  React.useEffect(() => {
+    if (tienePlanesConcretos !== 'si') reiniciarLugares()
+  }, [reiniciarLugares, tienePlanesConcretos])
+
+  React.useEffect(() => {
+    if (!pagaOtraPersona) {
+      setValue('apellidosPagador', '')
+      setValue('nombresPagador', '')
+      setValue('telefonoPagador', '')
+      setValue('correoPagador', '')
+      setValue('relacionPagador', '')
+      setValue('direccionPagadorIgualSolicitante', 'si')
+    }
+  }, [pagaOtraPersona, setValue])
+
+  const acompanantesAlTope = acompanantes.fields.length >= MAXIMO_FILAS_REPETIDOR
+  const visitasAlTope = visitasEstadosUnidos.fields.length >= MAXIMO_FILAS_REPETIDOR
 
   const agregarAcompanante = () => acompanantes.append({ apellidos: '', nombres: '', relacion: '' })
   const agregarVisita = () => visitasEstadosUnidos.append({ fechaLlegada: '', valorDuracion: '', unidadDuracion: 'D' })
@@ -115,9 +154,30 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
               <Entrada label="Ciudad de llegada" {...register('ciudadLlegadaEEUU')} error={errors.ciudadLlegadaEEUU?.message} />
               <Entrada label="Fecha de salida de EE. UU" type="date" {...register('fechaSalidaEEUU')} error={errors.fechaSalidaEEUU?.message} />
               <Entrada label="Ciudad de salida" {...register('ciudadSalidaEEUU')} error={errors.ciudadSalidaEEUU?.message} />
-              <div className="md:col-span-2">
-                <AreaTexto label="Lugares que planea visitar en los Estados Unidos" {...register('lugaresPlaneadosEEUU')}
-                  error={errors.lugaresPlaneadosEEUU?.message} placeholder="Nueva York, Orlando, Miami..." />
+              <div className="md:col-span-2 space-y-4">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide dark:text-slate-500">
+                  Lugares que planea visitar en los Estados Unidos
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {LUGARES_PLANEADOS.slice(0, lugares.visibles).map((campo, indice) => (
+                    <div key={campo}>
+                      <Entrada label={`Lugar ${indice + 1}`} required={indice === 0}
+                        {...register(campo)} error={errors[campo]?.message}
+                        placeholder={indice === 0 ? 'Nueva York' : 'Opcional'} maxLength={40} />
+                      {indice > 0 && (
+                        <button type="button" onClick={() => lugares.quitar(indice)}
+                          className="mt-1 text-xs font-medium text-slate-400 hover:text-red-500 dark:text-slate-500">
+                          Quitar
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {lugares.puedeAgregar && (
+                  <button type="button" onClick={lugares.agregar} className="btn-secondary">
+                    <Plus className="w-4 h-4" /> Añadir lugar
+                  </button>
+                )}
               </div>
             </>
           )}
@@ -128,12 +188,33 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
             <Selector label="Estado" options={estadosEEUU} error={errors.estadoHospedajeEEUU?.message}
               value={field.value ?? ''} onChange={field.onChange} />
           )} />
-          <div>
+          <div className="md:col-span-2">
             <Controller name="pagadorViaje" control={control} render={({ field }) => (
               <Selector label="¿Quién paga el viaje?" required options={quienPaga}
                 error={errors.pagadorViaje?.message} value={field.value} onChange={field.onChange} />
             )} />
           </div>
+
+          {pagaOtraPersona && (
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 animate-fade-in">
+              <p className="md:col-span-2 text-xs font-semibold text-slate-400 uppercase tracking-wide dark:text-slate-500">
+                Datos de quien paga el viaje
+              </p>
+              <Entrada label="Apellidos" required {...register('apellidosPagador', { onChange: soloLetras, onBlur: recortarEspacios })} error={errors.apellidosPagador?.message} />
+              <Entrada label="Nombres" required {...register('nombresPagador', { onChange: soloLetras, onBlur: recortarEspacios })} error={errors.nombresPagador?.message} />
+              <Entrada label="Teléfono" required type="tel" {...register('telefonoPagador', { onChange: soloNumeros() })}
+                error={errors.telefonoPagador?.message} inputMode="numeric" />
+              <Entrada label="Correo electrónico" required type="email" {...register('correoPagador')} error={errors.correoPagador?.message} />
+              <Controller name="relacionPagador" control={control} render={({ field }) => (
+                <Selector label="Parentesco con usted" required options={relacionPagador} error={errors.relacionPagador?.message}
+                  value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+              )} />
+              <Controller name="direccionPagadorIgualSolicitante" control={control} render={({ field }) => (
+                <GrupoRadios label="¿Su dirección es la misma que la suya?" required name="direccionPagadorIgualSolicitante"
+                  options={opcionesSiNo} value={field.value} onChange={field.onChange} error={errors.direccionPagadorIgualSolicitante?.message} />
+              )} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -151,17 +232,23 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
             <div className="md:col-span-2 space-y-4 animate-fade-in">
               {acompanantes.fields.map((campo, indice) => (
                 <div key={campo.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 rounded-lg border border-slate-100 p-4 dark:border-slate-800">
-                  <Entrada label="Apellidos" {...register(`acompanantesViaje.${indice}.apellidos` as const)} />
-                  <Entrada label="Nombres" {...register(`acompanantesViaje.${indice}.nombres` as const)} />
+                  <Entrada label="Apellidos" {...register(`acompanantesViaje.${indice}.apellidos` as const, { onChange: soloLetras, onBlur: recortarEspacios })} />
+                  <Entrada label="Nombres" {...register(`acompanantesViaje.${indice}.nombres` as const, { onChange: soloLetras, onBlur: recortarEspacios })} />
                   <Controller name={`acompanantesViaje.${indice}.relacion` as const} control={control} render={({ field }) => (
                     <Selector label="Relación con la persona" options={relacionAcompanante}
                       value={field.value ?? ''} onChange={field.onChange} />
                   )} />
                 </div>
               ))}
-              <button type="button" onClick={agregarAcompanante} className="btn-secondary">
+              <button type="button" onClick={agregarAcompanante} disabled={acompanantesAlTope}
+                className="btn-secondary disabled:opacity-40 disabled:cursor-not-allowed">
                 <Plus className="w-4 h-4" /> Añadir acompañante
               </button>
+              {acompanantesAlTope && (
+                <p className="text-xs text-slate-400 dark:text-slate-500">
+                  El DS-160 admite hasta {MAXIMO_FILAS_REPETIDOR} acompañantes.
+                </p>
+              )}
             </div>
           )}
 
@@ -183,9 +270,15 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
                   )} />
                 </div>
               ))}
-              <button type="button" onClick={agregarVisita} className="btn-secondary">
+              <button type="button" onClick={agregarVisita} disabled={visitasAlTope}
+                className="btn-secondary disabled:opacity-40 disabled:cursor-not-allowed">
                 <Plus className="w-4 h-4" /> Añadir otro
               </button>
+              {visitasAlTope && (
+                <p className="text-xs text-slate-400 dark:text-slate-500">
+                  El DS-160 admite hasta {MAXIMO_FILAS_REPETIDOR} visitas anteriores.
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -249,6 +342,18 @@ export const SeccionViaje: React.FC<Props> = ({ form }) => {
           {visaNegada === 'si' && (
             <div className="md:col-span-2 animate-fade-in">
               <AreaTexto label="Motivo" {...register('detallesVisaNegada')} error={errors.detallesVisaNegada?.message} />
+            </div>
+          )}
+
+          <div className="md:col-span-2">
+            <Controller name="deportadoDePais" control={control} render={({ field }) => (
+              <GrupoRadios label="¿Alguna vez ha sido deportado o expulsado de algún país?" required name="deportadoDePais"
+                options={opcionesSiNo} value={field.value} onChange={field.onChange} error={errors.deportadoDePais?.message} />
+            )} />
+          </div>
+          {fueDeportado === 'si' && (
+            <div className="md:col-span-2 animate-fade-in">
+              <AreaTexto label="Explique la deportación o expulsión" required {...register('detallesDeportacion')} error={errors.detallesDeportacion?.message} />
             </div>
           )}
 

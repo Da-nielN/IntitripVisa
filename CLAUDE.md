@@ -33,7 +33,7 @@ Pendiente, en este orden:
 
 ## Fuente de verdad
 
-`docs/mapeo_ds160.json` (v2.3) define los nombres canónicos de variable: 196 con
+`docs/mapeo_ds160.json` (v2.7) define los nombres canónicos de variable: 196 con
 `id` relevado más 19 en `pendientes`. El resto de `docs/` documenta el alcance y
 los catálogos.
 
@@ -88,6 +88,10 @@ No volver a preguntarlas.
   `primerNombre_primerApellido_cedula.json`.
 - Se agregan controles para `cargoActual`, `sueldoActual`, `nombreCarrera`,
   `deportadoDePais` y `detallesDeportacion`.
+- `cbexAPP_TAX_ID_NA` pasa a `valor: true` y `tbxAPP_TAX_ID` se elimina (mapeo
+  v2.7), así el DS-160 no exige el tax ID. `identificacionFiscalEEUU` y
+  `tieneIdentificacionFiscalEEUU` salen del modelo; un cliente que sí tenga
+  tax ID ya no puede declararlo.
 
 ## Ajustes pendientes en `docs/mapeo_ds160.json`
 
@@ -104,9 +108,6 @@ No volver a preguntarlas.
 
 - El bloque de cónyuge hoy aparece solo con `estadoCivil = M`. El DS-160 también
   ofrece `C` (unión de hecho) y `P` (unión civil). ¿Se amplía?
-- `cbexAPP_TAX_ID_NA` está fijo en `false` (desmarcado), así que el DS-160 va a
-  exigir `identificacionFiscalEEUU` aunque el cliente no tenga una. Es el mismo
-  problema que ya se resolvió para `telefonoDomicilio`.
 - Falta confirmar en el DS-160 real que la segunda fila del repetidor de
   familiares es `ctl01`, antes de que Illari corra en producción.
 

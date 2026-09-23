@@ -4,8 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronLeft, ChevronRight, Send, Loader2 } from 'lucide-react'
 
 import { visaFormSchema, type VisaFormSchema } from './lib/schema'
+import { construirPayloadDs160 } from './lib/payloadDs160'
 import { submitVisaForm } from './services/appsScript'
-import { usarMultiplesPasos } from './ganchos/usarMultiplesPasos'
+import { useMultiplesPasos } from './ganchos/useMultiplesPasos'
 
 import { Header } from './components/layout/Header'
 import { SuccessScreen } from './components/layout/SuccessScreen'
@@ -16,6 +17,7 @@ import { SeccionRedesSociales } from './components/formulario/SeccionRedesSocial
 import { SeccionTrabajo } from './components/formulario/SeccionTrabajo'
 import { SeccionFamilia } from './components/formulario/SeccionFamilia'
 import { SeccionViaje } from './components/formulario/SeccionViaje'
+import { SeccionContactoEEUU } from './components/formulario/SeccionContactoEEUU'
 import { SeccionRevision } from './components/formulario/SeccionRevision'
 
 const PASOS = [
@@ -42,12 +44,13 @@ const CAMPOS_POR_PASO: (keyof VisaFormSchema)[][] = [
 
 export default function App() {
   const [enviado, setEnviado] = useState(false)
+  const [urlJson, setUrlJson] = useState<string>()
   const [urlPdf, setUrlPdf] = useState<string>()
   const [cargando, setCargando] = useState(false)
   const [errorApi, setErrorApi] = useState<string>()
   const [modoOscuro, setModoOscuro] = useState(() => localStorage.getItem('intitrip-theme') !== 'light')
 
-  const { pasoActual, esPrimero, esUltimo, siguiente, anterior } = usarMultiplesPasos(PASOS.length)
+  const { pasoActual, esPrimero, esUltimo, siguiente, anterior } = useMultiplesPasos(PASOS.length)
 
   const formulario = useForm<VisaFormSchema>({
     resolver: zodResolver(visaFormSchema),
@@ -73,6 +76,12 @@ export default function App() {
       tieneIdentificacionFiscalEEUU: 'no',
       tuvoTrabajoAnterior: 'no',
       asistioInstitucionEducativa: 'no',
+      tieneHistorialViajes: 'no',
+      paisVisitado1: '',
+      paisVisitado2: '',
+      paisVisitado3: '',
+      paisVisitado4: '',
+      paisVisitado5: '',
       nombresPadre: '',
       apellidosPadre: '',
       padreEnEEUU: 'no',
@@ -84,12 +93,22 @@ export default function App() {
       familiaresInmediatosEnEEUU: 'no',
       familiaresInmediatosDetalle: [],
       otrosFamiliaresEnEEUU: 'no',
-      tieneVisaActiva: 'no',
       visaNegada: 'no',
       deportadoDePais: 'no',
       tienePlanesViajeConcretos: 'no',
+      lugarPlaneadoEEUU1: '',
+      lugarPlaneadoEEUU2: '',
+      lugarPlaneadoEEUU3: '',
+      lugarPlaneadoEEUU4: '',
+      lugarPlaneadoEEUU5: '',
       unidadDuracionEstadiaPrevista: 'D',
       pagadorViaje: 'S',
+      apellidosPagador: '',
+      nombresPagador: '',
+      telefonoPagador: '',
+      correoPagador: '',
+      relacionPagador: '',
+      direccionPagadorIgualSolicitante: 'si',
       viajaConOtros: 'no',
       acompanantesViaje: [],
       haVisitadoEEUU: 'no',
@@ -125,8 +144,9 @@ export default function App() {
     setCargando(true)
     setErrorApi(undefined)
     try {
-      const resultado = await submitVisaForm(datos)
+      const resultado = await submitVisaForm(construirPayloadDs160(datos))
       if (resultado.success) {
+        setUrlJson(resultado.jsonUrl)
         setUrlPdf(resultado.pdfUrl)
         setEnviado(true)
       } else {
@@ -144,7 +164,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 text-slate-800 transition-colors duration-500 dark:bg-slate-950 dark:text-slate-100">
         <Header isDark={modoOscuro} onToggleTheme={() => setModoOscuro((valor) => !valor)} />
         <main className="max-w-4xl mx-auto px-4 py-8">
-          <SuccessScreen pdfUrl={urlPdf} onReset={() => { setEnviado(false); formulario.reset() }} />
+          <SuccessScreen jsonUrl={urlJson} pdfUrl={urlPdf} onReset={() => { setEnviado(false); formulario.reset() }} />
         </main>
       </div>
     )
@@ -183,6 +203,7 @@ export default function App() {
           <div className="space-y-6">
             {pasoActual === 0 && <SeccionPersonal form={formulario} />}
             {pasoActual === 1 && <SeccionViaje form={formulario} />}
+            {pasoActual === 1 && <SeccionContactoEEUU form={formulario} />}
             {pasoActual === 2 && <SeccionRedesSociales form={formulario} />}
             {pasoActual === 3 && <SeccionTrabajo form={formulario} />}
             {pasoActual === 4 && <SeccionFamilia form={formulario} />}

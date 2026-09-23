@@ -1,5 +1,5 @@
 {
-  "version": "2.14",
+  "version": "2.6",
   "_notas": [
     "Estructura centrada en el id del control del DS-160. Una pantalla = una URL.",
     "'variable' e 'id' son las claves canonicas; 'etiqueta' es solo informativa.",
@@ -7,7 +7,7 @@
     "'disparaPostback' proviene del relevamiento campo por campo, no se infiere. Su ausencia significa que el control NO recarga la pagina.",
     "'disparaPostback' describe el control tal como se relevo, no el valor que la app escribe: varios radios fijados en 'N' no recargan al marcar esa opcion. La espera de recarga debe tener timeout y no bloquear.",
     "'pendientes' lista variables del modelo que aun no tienen id relevado en esa pantalla.",
-    "Campos condicionales: desde la v2.6 se declaran con 'condicion' (ver notas v2.6). Un control ausente del DOM que NO tiene 'condicion' se marca 'no encontrado', no omitido (decidido el 2026-09-14, plan §7).",
+    "Campos condicionales: no se declaran en el JSON; la app los omite si no estan en el DOM.",
     "Cada campo lleva exactamente uno de: variable, variables, valor, manual.",
     "Los valores de select y radio llegan ya traducidos al value del DS-160 desde el JSON de datos.",
     "Los rbl son contenedores table: la app actua sobre id + '_0' (Y) e id + '_1' (N).",
@@ -22,28 +22,7 @@
     "v2.6: los campos que solo existen en una rama del formulario declaran 'condicion': {variable, valor} o {variable, valorExcepto}. 'valor' y 'valorExcepto' aceptan texto o lista de textos. Si el dato del cliente no cumple la condicion, la app marca el campo 'omitido - no aplica' y ni siquiera busca el control; si la cumple y el control no esta, eso si es 'no encontrado'. Un campo sin 'condicion' se comporta como siempre.",
     "v2.6: la variable disparadora de cada 'condicion' vive en la misma pantalla y la pagina web debe emitirla SIEMPRE, aunque la respuesta sea 'N'. Si no llega, la app marca 'omitido - sin dato disparador' y no adivina.",
     "v2.6: algunas condiciones llevan '_verificar' porque se dedujeron del inventario y no de una prueba en vivo. Quitar la marca cuando la prueba real las confirme.",
-    "v2.6: Spouse NO declara condicion de pantalla. El DS-160 la muestra segun ddlAPP_MARITAL_STATUS, pero no esta confirmado con que valores exactos; declararlo mal haria que la app saltara la pantalla entera.",
-    "v2.7: cbexAPP_TAX_ID_NA pasa a marcado (valor true) y se elimina tbxAPP_TAX_ID. Mismo criterio que la v2.4 con telefonoDomicilio: con el checkbox desmarcado el DS-160 exigia el numero de identificacion fiscal aunque el cliente no tuviera uno. identificacionFiscalEEUU y tieneIdentificacionFiscalEEUU salen del modelo; con esta ultima se vacia la lista de pendientes del mapeo. Contrapartida aceptada: un cliente que SI tenga tax ID ya no puede declararlo.",
-    "v2.8: se agrega dtlOTHER_NATL_ctl00_rblOTHER_PPT_IND (Personal2, 'tiene pasaporte de la otra nacionalidad') con valor fijo 'N' y condicion tieneOtraNacionalidad = Y. La primera prueba real (2026-09-14) mostro que el DS-160 lo exige cuando hay otra nacionalidad y no dejaba avanzar. tbxOTHER_PPT_NUM no se mapea: solo aparece con 'Y'. Contrapartida aceptada: un cliente con pasaporte de la otra nacionalidad no puede declararlo; se corrige a mano en el DS-160. No agrega variables: los fixtures de la v2.7 siguen valiendo.",
-    "v2.8: las notas v2.2 ('si no existen en el DOM se marcan omitidas') y v2.6 ('omitido - no aplica') quedan superadas por la implementacion de Illari: una fila de repetidor ausente es 'no encontrado', y un campo cuya condicion no se cumple es 'no aplica', un estado propio.",
-    "v2.9: correcciones de la primera prueba real (2026-09-22, fixture maximo). rblOtherPersonsTravelingWithYou, rblPREV_US_TRAVEL_IND y rblPREV_VISA_IND recargan la pagina al marcar 'Y': el bloque que revelan no existe en el DOM hasta la recarga. Pasan a disparaPostback true; el inventario los habia anotado sin postback.",
-    "v2.9: rblGroupTravel declara condicion viajaConOtros = Y, porque solo existe en esa rama. Sin ella, con viajaConOtros = N saldria 'no encontrado'.",
-    "v2.9: se agrega rblVWP_DENIAL_IND (PreviousUSTravel) con valor fijo 'N'. Es la pregunta 'Have you ever been denied travel authorization by the...?', de la autorizacion ESTA del Programa de Exencion de Visa (VWP en el id). El DS-160 la exige y no estaba relevada. No declara condicion: no esta confirmado en que rama aparece.",
-    "v2.9: dtlSocial_ctl00..ctl02_ddlSocialMedia: los value reales son FCBK, INST y LINK, no FACEBOOK, INSTAGRAM y LINKEDIN, que son el texto visible. Lo detecto la app despues de quitar el plan B que elegia por texto.",
-    "v2.9: se quita '_verificar' de las condiciones de viajaConOtros, haVisitadoEEUU y haTenidoVisaEEUU: la prueba real las confirmo.",
-    "v2.10: los campos 'fecha' pueden declarar 'formatoMes' (numero | numeroConCero | abreviado) y 'formatoDia' (numero | numeroConCero). Sin declarar, los dos valen 'numero', que es lo que la app hacia. Hacen falta porque el DS-160 usa los tres formatos a la vez y el value no se deduce del texto visible: en WorkEducation1 el dia se ve '02' y el mes 'APR', y sus value son '2' y '4'.",
-    "v2.10: formatos declarados con la prueba real del 2026-09-22 (fixture maximo): mes abreviado en ddlDOBMonth (Personal1), ddlFathersDOBMonth y ddlMothersDOBMonth (Relatives) y ddlDOBMonth (Spouse); mes 01..12 en las dos fechas de PptVisa; dia 01..31 en ddlMothersDOBDay (Relatives) y ddlDOBDay (Spouse). Las demas fechas quedan en numero, verificado en Travel, PreviousUSTravel, WorkEducation1 y WorkEducation2.",
-    "v2.10: SIN VERIFICAR, quedan en el valor por omision hasta que los fixtures minimo y jubilado los ejerciten: el dia de Personal1, de PptVisa y del padre en Relatives (el fixture maximo trae dias de dos cifras, que entran igual con cero o sin el), y la fecha de la rama B de Travel (ddlTRAVEL_DTE).",
-    "v2.11: correcciones de la prueba con el fixture minimo (2026-09-23). El bloque de direccion de hospedaje en EE.UU. de Travel (tbxStreetAddress1, tbxStreetAddress2, tbxCity, tbZIPCode, ddlTravelState) DEJA de ser condicional: el DS-160 lo exige tambien en la rama B, con tienePlanesViajeConcretos = N. Era una condicion equivocada, del tipo que el plan advierte en §16.3.",
-    "v2.11: rblPREV_US_DRIVER_LIC_IND pasa a condicion haVisitadoEEUU = Y, y rblPREV_VISA_LOST_IND, rblPREV_VISA_CANCELLED_IND y rblVWP_DENIAL_IND a haTenidoVisaEEUU = Y: con el fixture minimo esos radios no existen en el DOM, porque viven dentro de los bloques que revelan sus disparadores.",
-    "v2.11: las dos fechas de PptVisa declaran formatoDia numeroConCero. El fixture minimo trae dias de una cifra (6 y 5) y la lista solo acepta 01..31.",
-    "v2.12: rblVWP_DENIAL_IND pasa de condicion haTenidoVisaEEUU = Y a visaNegada = Y. Con el fixture jubilado (haTenidoVisaEEUU = Y, visaNegada = N) el control no existia: el DS-160 lo muestra como sub-pregunta del bloque de visa negada. Lo confirman los tres fixtures: solo aparecio con el maximo, el unico con visaNegada = Y.",
-    "v2.12: la fecha de nacimiento de Personal1 declara formatoDia numeroConCero. El fixture jubilado nacio un dia 9 y la lista solo acepta 01..31; el maximo traia dia 22, que no distingue los dos formatos.",
-    "v2.13: se agrega la pantalla DeceasedSpouse (complete_family5.aspx). El DS-160 la intercala entre Relatives y WorkEducation1 cuando el estado civil es viudo, y pide los mismos datos que Spouse, asi que reutiliza sus variables. Sus id son los de esa pantalla (tbxSURNAME, tbxGIVEN_NAME, cbxSPOUSE_POB_CITY_NA), no los de Spouse. El formato de la fecha se declara igual que en Spouse: falta confirmarlo en una prueba real.",
-    "v2.13: rblRemovalHearing, rblFailToAttend y rblVisaViolation (Security 4) y rblAttWoReimb (Security 5) declaran condicion haVisitadoEEUU = Y, una variable de PreviousUSTravel. Es la primera condicion ENTRE pantallas: con el fixture minimo esos radios no existen y con el maximo y el jubilado si. El validador ya no exige que la variable disparadora viva en la misma pantalla.",
-    "v2.14: Spouse y DeceasedSpouse declaran condicion sobre estadoCivil en todos sus campos. Confirmado en las pruebas del 2026-09-22 y 23: con casado aparece Spouse, con viudo aparece DeceasedSpouse en su lugar y con soltero no aparece ninguna de las dos. Sin esta condicion, un cliente soltero sacaba 13 'no encontrado' entre las dos pantallas, y uno casado sacaba 7 en DeceasedSpouse.",
-    "v2.14: los criterios son distintos a proposito. Spouse usa valorExcepto ['S','W'], que excluye solo lo verificado: union de hecho, union civil, divorciado, separado legalmente y otro se dejan dentro porque no se probaron, y si alguno no mostrara la pantalla sus campos saldrian 'no encontrado', que se ve. DeceasedSpouse usa valor 'W', cerrado, porque las dos pantallas comparten las mismas 6 variables y una condicion abierta haria que un casado intentara llenarla.",
-    "v2.14: la condicion va en cada campo y NO en la pantalla. El validador y ModelosMapeo solo leen 'condicion' dentro de un campo; declararla en la pantalla se ignoraria en silencio."
+    "v2.6: Spouse NO declara condicion de pantalla. El DS-160 la muestra segun ddlAPP_MARITAL_STATUS, pero no esta confirmado con que valores exactos; declararlo mal haria que la app saltara la pantalla entera."
   ],
   "pantallas": [
     {
@@ -112,8 +91,6 @@
           ],
           "etiqueta": "Fecha de nacimiento",
           "tipo": "fecha",
-          "formatoMes": "abreviado",
-          "formatoDia": "numeroConCero",
           "variable": "fechaNacimiento"
         },
         {
@@ -175,17 +152,6 @@
           }
         },
         {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlOTHER_NATL_ctl00_rblOTHER_PPT_IND",
-          "etiqueta": "Tiene pasaporte de la otra nacionalidad",
-          "tipo": "radio",
-          "disparaPostback": true,
-          "valor": "N",
-          "condicion": {
-            "variable": "tieneOtraNacionalidad",
-            "valor": "Y"
-          }
-        },
-        {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPermResOtherCntryInd",
           "etiqueta": "Es residente permanente en otro pais",
           "tipo": "radio",
@@ -225,7 +191,19 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexAPP_TAX_ID_NA",
           "etiqueta": "Identificacion fiscal de EE.UU.: no aplica",
           "tipo": "checkbox",
-          "valor": true
+          "valor": false
+        },
+        {
+          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_TAX_ID",
+          "etiqueta": "Numero de identificacion fiscal de EE.UU.",
+          "tipo": "texto",
+          "variable": "identificacionFiscalEEUU"
+        }
+      ],
+      "pendientes": [
+        {
+          "variable": "tieneIdentificacionFiscalEEUU",
+          "etiqueta": "Tiene identificacion fiscal de EE.UU."
         }
       ]
     },
@@ -388,21 +366,33 @@
           "etiqueta": "Direccion de hospedaje en EE.UU.",
           "tipo": "texto",
           "grupo": "Hospedaje",
-          "variable": "direccionHospedajeEEUU"
+          "variable": "direccionHospedajeEEUU",
+          "condicion": {
+            "variable": "tienePlanesViajeConcretos",
+            "valor": "Y"
+          }
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress2",
           "etiqueta": "Direccion de hospedaje en EE.UU. (linea 2)",
           "tipo": "texto",
           "grupo": "Hospedaje",
-          "valor": ""
+          "valor": "",
+          "condicion": {
+            "variable": "tienePlanesViajeConcretos",
+            "valor": "Y"
+          }
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxCity",
           "etiqueta": "Ciudad de hospedaje en EE.UU.",
           "tipo": "texto",
           "grupo": "Hospedaje",
-          "variable": "ciudadHospedajeEEUU"
+          "variable": "ciudadHospedajeEEUU",
+          "condicion": {
+            "variable": "tienePlanesViajeConcretos",
+            "valor": "Y"
+          }
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState",
@@ -410,14 +400,22 @@
           "tipo": "select",
           "catalogo": "estadosEEUU",
           "grupo": "Hospedaje",
-          "variable": "estadoHospedajeEEUU"
+          "variable": "estadoHospedajeEEUU",
+          "condicion": {
+            "variable": "tienePlanesViajeConcretos",
+            "valor": "Y"
+          }
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode",
           "etiqueta": "Codigo postal del hospedaje en EE.UU.",
           "tipo": "texto",
           "grupo": "Hospedaje",
-          "valor": ""
+          "valor": "",
+          "condicion": {
+            "variable": "tienePlanesViajeConcretos",
+            "valor": "Y"
+          }
         },
         {
           "id": [
@@ -543,7 +541,6 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblOtherPersonsTravelingWithYou",
           "etiqueta": "Viaja con otras personas",
           "tipo": "radio",
-          "disparaPostback": true,
           "variable": "viajaConOtros"
         },
         {
@@ -551,11 +548,7 @@
           "etiqueta": "Viaja como parte de un grupo u organizacion",
           "tipo": "radio",
           "disparaPostback": true,
-          "valor": "N",
-          "condicion": {
-            "variable": "viajaConOtros",
-            "valor": "Y"
-          }
+          "valor": "N"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_dlTravelCompanions_ctl00_tbxGivenName",
@@ -564,7 +557,8 @@
           "variable": "acompananteViaje1Nombres",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -574,7 +568,8 @@
           "variable": "acompananteViaje1Apellidos",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -585,7 +580,8 @@
           "variable": "acompananteViaje1Relacion",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -595,7 +591,8 @@
           "variable": "acompananteViaje2Nombres",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -605,7 +602,8 @@
           "variable": "acompananteViaje2Apellidos",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -616,7 +614,8 @@
           "variable": "acompananteViaje2Relacion",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -626,7 +625,8 @@
           "variable": "acompananteViaje3Nombres",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -636,7 +636,8 @@
           "variable": "acompananteViaje3Apellidos",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -647,7 +648,8 @@
           "variable": "acompananteViaje3Relacion",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -657,7 +659,8 @@
           "variable": "acompananteViaje4Nombres",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -667,7 +670,8 @@
           "variable": "acompananteViaje4Apellidos",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -678,7 +682,8 @@
           "variable": "acompananteViaje4Relacion",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -688,7 +693,8 @@
           "variable": "acompananteViaje5Nombres",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -698,7 +704,8 @@
           "variable": "acompananteViaje5Apellidos",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -709,7 +716,8 @@
           "variable": "acompananteViaje5Relacion",
           "condicion": {
             "variable": "viajaConOtros",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         }
       ],
@@ -726,7 +734,6 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_US_TRAVEL_IND",
           "etiqueta": "Ha visitado Estados Unidos anteriormente",
           "tipo": "radio",
-          "disparaPostback": true,
           "variable": "haVisitadoEEUU"
         },
         {
@@ -734,11 +741,7 @@
           "etiqueta": "Tiene licencia de conducir de EE.UU.",
           "tipo": "radio",
           "disparaPostback": true,
-          "variable": "licenciaConducirEEUU",
-          "condicion": {
-            "variable": "haVisitadoEEUU",
-            "valor": "Y"
-          }
+          "variable": "licenciaConducirEEUU"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlUS_DRIVER_LICENSE_ctl00_tbxUS_DRIVER_LICENSE",
@@ -765,7 +768,6 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblPREV_VISA_IND",
           "etiqueta": "Ha tenido visa de Estados Unidos",
           "tipo": "radio",
-          "disparaPostback": true,
           "variable": "haTenidoVisaEEUU"
         },
         {
@@ -779,7 +781,8 @@
           "variable": "fechaEmisionUltimaVisa",
           "condicion": {
             "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -789,7 +792,8 @@
           "variable": "numeroVisa",
           "condicion": {
             "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -799,7 +803,8 @@
           "variable": "mismoTipoVisa",
           "condicion": {
             "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -809,7 +814,8 @@
           "variable": "mismoPaisResidenciaVisa",
           "condicion": {
             "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -819,7 +825,8 @@
           "variable": "diezHuellasTomadas",
           "condicion": {
             "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -827,11 +834,7 @@
           "etiqueta": "Ha perdido o le han robado una visa de EE.UU.",
           "tipo": "radio",
           "disparaPostback": true,
-          "variable": "visaEEUUPerdidaORobada",
-          "condicion": {
-            "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
-          }
+          "variable": "visaEEUUPerdidaORobada"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_LOST_YEAR",
@@ -858,11 +861,7 @@
           "etiqueta": "Le han cancelado o revocado una visa de EE.UU.",
           "tipo": "radio",
           "disparaPostback": true,
-          "variable": "visaEEUUCanceladaORevocada",
-          "condicion": {
-            "variable": "haTenidoVisaEEUU",
-            "valor": "Y"
-          }
+          "variable": "visaEEUUCanceladaORevocada"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_CANCELLED_EXPL",
@@ -899,16 +898,6 @@
           "variable": "visaNegada"
         },
         {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_rblVWP_DENIAL_IND",
-          "etiqueta": "Le han negado la autorizacion de viaje ESTA",
-          "tipo": "radio",
-          "valor": "N",
-          "condicion": {
-            "variable": "visaNegada",
-            "valor": "Y"
-          }
-        },
-        {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxPREV_VISA_REFUSED_EXPL",
           "etiqueta": "Detalles de la visa negada",
           "tipo": "textarea",
@@ -930,7 +919,8 @@
           "variable": "visitaAnteriorEEUU1FechaLlegada",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -941,7 +931,8 @@
           "variable": "visitaAnteriorEEUU1ValorDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -953,7 +944,8 @@
           "variable": "visitaAnteriorEEUU1UnidadDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -968,7 +960,8 @@
           "variable": "visitaAnteriorEEUU2FechaLlegada",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -979,7 +972,8 @@
           "variable": "visitaAnteriorEEUU2ValorDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -991,7 +985,8 @@
           "variable": "visitaAnteriorEEUU2UnidadDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1006,7 +1001,8 @@
           "variable": "visitaAnteriorEEUU3FechaLlegada",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1017,7 +1013,8 @@
           "variable": "visitaAnteriorEEUU3ValorDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1029,7 +1026,8 @@
           "variable": "visitaAnteriorEEUU3UnidadDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1044,7 +1042,8 @@
           "variable": "visitaAnteriorEEUU4FechaLlegada",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1055,7 +1054,8 @@
           "variable": "visitaAnteriorEEUU4ValorDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1067,7 +1067,8 @@
           "variable": "visitaAnteriorEEUU4UnidadDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1082,7 +1083,8 @@
           "variable": "visitaAnteriorEEUU5FechaLlegada",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1093,7 +1095,8 @@
           "variable": "visitaAnteriorEEUU5ValorDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         },
         {
@@ -1105,7 +1108,8 @@
           "variable": "visitaAnteriorEEUU5UnidadDuracion",
           "condicion": {
             "variable": "haVisitadoEEUU",
-            "valor": "Y"
+            "valor": "Y",
+            "_verificar": "condicion deducida del inventario; confirmar en la primera prueba real"
           }
         }
       ],
@@ -1257,7 +1261,7 @@
           "catalogo": "redSocial",
           "grupo": "Redes sociales",
           "disparaPostback": true,
-          "valor": "FCBK"
+          "valor": "FACEBOOK"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent",
@@ -1273,7 +1277,7 @@
           "catalogo": "redSocial",
           "grupo": "Redes sociales",
           "disparaPostback": true,
-          "valor": "INST"
+          "valor": "INSTAGRAM"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl01_tbxSocialMediaIdent",
@@ -1289,7 +1293,7 @@
           "catalogo": "redSocial",
           "grupo": "Redes sociales",
           "disparaPostback": true,
-          "valor": "LINK"
+          "valor": "LINKEDIN"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl02_tbxSocialMediaIdent",
@@ -1389,8 +1393,6 @@
           ],
           "etiqueta": "Fecha de emision del pasaporte",
           "tipo": "fecha",
-          "formatoMes": "numeroConCero",
-          "formatoDia": "numeroConCero",
           "variable": "fechaEmisionPasaporte"
         },
         {
@@ -1401,8 +1403,6 @@
           ],
           "etiqueta": "Fecha de expiracion del pasaporte",
           "tipo": "fecha",
-          "formatoMes": "numeroConCero",
-          "formatoDia": "numeroConCero",
           "variable": "fechaExpiracionPasaporte"
         },
         {
@@ -1618,7 +1618,6 @@
           ],
           "etiqueta": "Fecha de nacimiento del padre",
           "tipo": "fecha",
-          "formatoMes": "abreviado",
           "grupo": "Padre",
           "variable": "fechaNacimientoPadre"
         },
@@ -1685,8 +1684,6 @@
           ],
           "etiqueta": "Fecha de nacimiento de la madre",
           "tipo": "fecha",
-          "formatoMes": "abreviado",
-          "formatoDia": "numeroConCero",
           "grupo": "Madre",
           "variable": "fechaNacimientoMadre"
         },
@@ -1968,27 +1965,13 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseGivenName",
           "etiqueta": "Nombres del conyuge",
           "tipo": "texto",
-          "variable": "nombresConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "nombresConyuge"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpouseSurname",
           "etiqueta": "Apellidos del conyuge",
           "tipo": "texto",
-          "variable": "apellidosConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "apellidosConyuge"
         },
         {
           "id": [
@@ -1998,58 +1981,28 @@
           ],
           "etiqueta": "Fecha de nacimiento del conyuge",
           "tipo": "fecha",
-          "formatoMes": "abreviado",
-          "formatoDia": "numeroConCero",
-          "variable": "fechaNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "fechaNacimientoConyuge"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList",
           "etiqueta": "Nacionalidad del conyuge",
           "tipo": "select",
           "catalogo": "paisesNacionalidadConyuge",
-          "variable": "nacionalidadConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "nacionalidadConyuge"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_cbexSPOUSE_POB_CITY_NA",
           "etiqueta": "Ciudad de nacimiento del conyuge: no la sabe",
           "tipo": "checkbox",
           "grupo": "Lugar de nacimiento del conyuge",
-          "valor": false,
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "valor": false
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity",
           "etiqueta": "Ciudad de nacimiento del conyuge",
           "tipo": "texto",
           "grupo": "Lugar de nacimiento del conyuge",
-          "variable": "ciudadNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "ciudadNacimientoConyuge"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpousePOBCountry",
@@ -2057,119 +2010,14 @@
           "tipo": "select",
           "catalogo": "paisesLugarNacimiento",
           "grupo": "Lugar de nacimiento del conyuge",
-          "variable": "paisNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
+          "variable": "paisNacimientoConyuge"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseAddressType",
           "etiqueta": "Direccion actual del conyuge",
           "tipo": "select",
           "disparaPostback": true,
-          "valor": "H",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valorExcepto": [
-              "S",
-              "W"
-            ]
-          }
-        }
-      ],
-      "pendientes": []
-    },
-    {
-      "id": "DeceasedSpouse",
-      "seccion": "Family",
-      "nombre": "Datos del conyuge fallecido",
-      "node": "DeceasedSpouse",
-      "url": "/GenNIV/General/complete/complete_family5.aspx?node=DeceasedSpouse",
-      "campos": [
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxGIVEN_NAME",
-          "etiqueta": "Nombres del conyuge fallecido",
-          "tipo": "texto",
-          "variable": "nombresConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSURNAME",
-          "etiqueta": "Apellidos del conyuge fallecido",
-          "tipo": "texto",
-          "variable": "apellidosConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": [
-            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",
-            "ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth",
-            "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear"
-          ],
-          "etiqueta": "Fecha de nacimiento del conyuge fallecido",
-          "tipo": "fecha",
-          "formatoMes": "abreviado",
-          "formatoDia": "numeroConCero",
-          "variable": "fechaNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpouseNatDropDownList",
-          "etiqueta": "Nacionalidad del conyuge fallecido",
-          "tipo": "select",
-          "catalogo": "paisesNacionalidadConyuge",
-          "variable": "nacionalidadConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_cbxSPOUSE_POB_CITY_NA",
-          "etiqueta": "Ciudad de nacimiento del conyuge fallecido: no la sabe",
-          "tipo": "checkbox",
-          "grupo": "Lugar de nacimiento del conyuge fallecido",
-          "valor": false,
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxSpousePOBCity",
-          "etiqueta": "Ciudad de nacimiento del conyuge fallecido",
-          "tipo": "texto",
-          "grupo": "Lugar de nacimiento del conyuge fallecido",
-          "variable": "ciudadNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
-        },
-        {
-          "id": "ctl00_SiteContentPlaceHolder_FormView1_ddlSpousePOBCountry",
-          "etiqueta": "Pais de nacimiento del conyuge fallecido",
-          "tipo": "select",
-          "catalogo": "paisesLugarNacimiento",
-          "grupo": "Lugar de nacimiento del conyuge fallecido",
-          "variable": "paisNacimientoConyuge",
-          "condicion": {
-            "variable": "estadoCivil",
-            "valor": "W"
-          }
+          "valor": "H"
         }
       ],
       "pendientes": []
@@ -3153,11 +3001,7 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblRemovalHearing",
           "etiqueta": "Ha sido sujeto de una audiencia de expulsion o deportacion",
           "tipo": "radio",
-          "valor": "N",
-          "condicion": {
-            "variable": "haVisitadoEEUU",
-            "valor": "Y"
-          }
+          "valor": "N"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxRemovalHearing",
@@ -3181,11 +3025,7 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblFailToAttend",
           "etiqueta": "No asistio a una audiencia sobre su expulsion",
           "tipo": "radio",
-          "valor": "N",
-          "condicion": {
-            "variable": "haVisitadoEEUU",
-            "valor": "Y"
-          }
+          "valor": "N"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxFailToAttend",
@@ -3197,11 +3037,7 @@
           "id": "ctl00_SiteContentPlaceHolder_FormView1_rblVisaViolation",
           "etiqueta": "Permanencia ilegal o violacion de los terminos de una visa",
           "tipo": "radio",
-          "valor": "N",
-          "condicion": {
-            "variable": "haVisitadoEEUU",
-            "valor": "Y"
-          }
+          "valor": "N"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxVisaViolation",
@@ -3276,11 +3112,7 @@
           "etiqueta": "Asistio a una escuela publica sin reembolsarla",
           "tipo": "radio",
           "_nota": "Postback asincrono solo al marcar Y. Con el valor fijo N no recarga ni inyecta tbxAttWoReimb.",
-          "valor": "N",
-          "condicion": {
-            "variable": "haVisitadoEEUU",
-            "valor": "Y"
-          }
+          "valor": "N"
         },
         {
           "id": "ctl00_SiteContentPlaceHolder_FormView1_tbxAttWoReimb",

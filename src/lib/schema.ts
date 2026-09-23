@@ -10,9 +10,11 @@ import {
 const requerido = (msg = 'Campo requerido') => z.string().trim().min(1, msg)
 const siNo = z.enum(['si', 'no'])
 const textoOpcional = z.string().optional().default('')
+const textoOpcionalMax = (max: number) =>
+  z.string().max(max, `Máximo ${max} caracteres`).optional().default('')
 const soloDigitos = (msg: string) => z.string().regex(/^\d+$/, msg)
 const campoNombre = (msg: string) => requerido(msg)
-  .regex(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?: [A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/, 'No ingrese números ni espacios al inicio o al final')
+  .regex(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?: [A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/, 'Use solo letras y espacios')
 const duracion = z.enum(valoresDe(catUnidadDuracion)).optional().default('D')
 const acompanante = z.object({
   apellidos: textoOpcional,
@@ -38,6 +40,8 @@ export const visaFormSchema = z.object({
   primerApellido: campoNombre('Primer apellido requerido'),
   segundoApellido: campoNombre('Segundo apellido requerido'),
   fechaNacimiento: requerido('Fecha de nacimiento requerida'),
+  ciudadNacimiento: requerido('Ciudad de nacimiento requerida').max(20, 'Máximo 20 caracteres'),
+  paisNacimiento: requerido('País de nacimiento requerido'),
   sexo: z.enum(valoresDe(catSexo), {
     required_error: 'Sexo requerido',
   }),
@@ -55,7 +59,6 @@ export const visaFormSchema = z.object({
   otraNacionalidad: textoOpcional,
   esResidentePermanenteExtranjero: siNo,
   paisResidenciaPermanente: textoOpcional,
-  telefonoDomicilio: z.string().regex(/^\d{7}$|^$/, 'Teléfono domicilio debe tener 7 dígitos').optional().default(''),
   ciudad: requerido('Ciudad requerida'),
   provincia: requerido('Provincia requerida'),
   celular: soloDigitos('Celular debe contener solo números').length(10, 'Celular debe tener 10 dígitos'),
@@ -63,10 +66,18 @@ export const visaFormSchema = z.object({
   telefonosAnteriores: z.string().regex(/^\d{10}$|^$/, 'Otros celulares debe tener 10 dígitos').optional().default(''),
   direccion: requerido('Dirección requerida'),
   codigoPostal: soloDigitos('Código postal debe contener solo números'),
+  paisDomicilio: requerido('País del domicilio requerido'),
   correo: requerido('Email requerido').email('Email inválido'),
   tuvoCorreosAnteriores: siNo,
   correosAnteriores: textoOpcional,
+  tipoDocumentoPasaporte: requerido('Tipo de documento de viaje requerido'),
+  numeroPasaporte: requerido('Número de pasaporte requerido').max(20, 'Máximo 20 caracteres'),
+  autoridadEmisoraPasaporte: requerido('País o autoridad emisora requerida'),
   ciudadPasaporte: requerido('Ciudad del pasaporte requerida'),
+  provinciaEmisionPasaporte: requerido('Provincia de emisión del pasaporte requerida').max(25, 'Máximo 25 caracteres'),
+  paisEmisionPasaporte: requerido('País de emisión del pasaporte requerido'),
+  fechaEmisionPasaporte: requerido('Fecha de emisión del pasaporte requerida'),
+  fechaExpiracionPasaporte: requerido('Fecha de expiración del pasaporte requerida'),
   pasaportePerdidoORobado: siNo,
   numeroPasaportePerdidoORobado: textoOpcional,
   paisAutoridadPasaportePerdidoORobado: textoOpcional,
@@ -75,7 +86,6 @@ export const visaFormSchema = z.object({
   facebook: textoOpcional,
   instagram: textoOpcional,
   linkedin: textoOpcional,
-  otrasRedesSociales: textoOpcional,
 
   licenciaConducirEEUU: siNo,
   numeroLicenciaConducirEEUU: textoOpcional,
@@ -87,11 +97,10 @@ export const visaFormSchema = z.object({
   cargoActual: textoOpcional,
   empleadorActual: requerido('Nombre de empresa o escuela requerido'),
   descripcionTrabajoActual: requerido('Descripción de funciones requerida'),
-  sueldoActual: textoOpcional,
+  sueldoActual: soloDigitos('El sueldo debe contener solo números').min(1, 'Sueldo mensual requerido'),
   direccionTrabajoActual: requerido('Dirección requerida'),
   ciudadTrabajoActual: requerido('Ciudad requerida'),
   provinciaTrabajoActual: requerido('Provincia requerida'),
-  codigoPostalTrabajoActual: textoOpcional,
   telefonoTrabajoActual: textoOpcional,
   fechaInicioTrabajoActual: requerido('Fecha de inicio requerida'),
 
@@ -110,7 +119,6 @@ export const visaFormSchema = z.object({
   fechaFinTrabajoAnterior: textoOpcional,
 
   asistioInstitucionEducativa: siNo,
-  institucionBachillerato: textoOpcional,
   institucionUniversitaria: textoOpcional,
   nombreCarrera: textoOpcional,
   direccionEducacion: textoOpcional,
@@ -119,16 +127,25 @@ export const visaFormSchema = z.object({
   codigoPostalEducacion: textoOpcional,
   fechaInicioEducacion: textoOpcional,
   fechaFinEducacion: textoOpcional,
-  telefonoEducacion: textoOpcional,
-  idiomas: textoOpcional,
+  idioma1: textoOpcionalMax(66),
+  idioma2: textoOpcionalMax(66),
+  idioma3: textoOpcionalMax(66),
+  idioma4: textoOpcionalMax(66),
+  idioma5: textoOpcionalMax(66),
+  tieneHistorialViajes: siNo,
+  paisVisitado1: textoOpcional,
+  paisVisitado2: textoOpcional,
+  paisVisitado3: textoOpcional,
+  paisVisitado4: textoOpcional,
+  paisVisitado5: textoOpcional,
 
-  nombresPadre: requerido('Nombres del padre requeridos'),
-  apellidosPadre: requerido('Apellidos del padre requeridos'),
+  nombresPadre: campoNombre('Nombres del padre requeridos'),
+  apellidosPadre: campoNombre('Apellidos del padre requeridos'),
   fechaNacimientoPadre: requerido('Fecha de nacimiento del padre requerida'),
   padreEnEEUU: siNo,
   estatusPadreEEUU: textoOpcional,
-  nombresMadre: requerido('Nombres de la madre requeridos'),
-  apellidosMadre: requerido('Apellidos de la madre requeridos'),
+  nombresMadre: campoNombre('Nombres de la madre requeridos'),
+  apellidosMadre: campoNombre('Apellidos de la madre requeridos'),
   fechaNacimientoMadre: requerido('Fecha de nacimiento de la madre requerida'),
   madreEnEEUU: siNo,
   estatusMadreEEUU: textoOpcional,
@@ -136,10 +153,6 @@ export const visaFormSchema = z.object({
   familiaresInmediatosDetalle: z.array(familiarInmediato).optional().default([]),
   otrosFamiliaresEnEEUU: siNo,
 
-  historialViajes: textoOpcional,
-  tieneVisaActiva: siNo,
-  paisVisa: textoOpcional,
-  fechaEmisionVisa: textoOpcional,
   visaNegada: siNo,
   detallesVisaNegada: textoOpcional,
   deportadoDePais: siNo,
@@ -155,13 +168,29 @@ export const visaFormSchema = z.object({
   ciudadLlegadaEEUU: textoOpcional,
   fechaSalidaEEUU: textoOpcional,
   ciudadSalidaEEUU: textoOpcional,
-  lugaresPlaneadosEEUU: textoOpcional,
+  lugarPlaneadoEEUU1: textoOpcionalMax(40),
+  lugarPlaneadoEEUU2: textoOpcionalMax(40),
+  lugarPlaneadoEEUU3: textoOpcionalMax(40),
+  lugarPlaneadoEEUU4: textoOpcionalMax(40),
+  lugarPlaneadoEEUU5: textoOpcionalMax(40),
   direccionHospedajeEEUU: textoOpcional,
   ciudadHospedajeEEUU: textoOpcional,
   estadoHospedajeEEUU: textoOpcional,
-  cantidadViajeros: textoOpcional,
-  relacionViaje: textoOpcional,
+
+  apellidosContactoEEUU: requerido('Apellidos del contacto requeridos').max(33, 'Máximo 33 caracteres'),
+  nombresContactoEEUU: requerido('Nombres del contacto requeridos').max(33, 'Máximo 33 caracteres'),
+  relacionContactoEEUU: requerido('Seleccione la relación con el contacto'),
+  direccionContactoEEUU: requerido('Dirección del contacto requerida').max(40, 'Máximo 40 caracteres'),
+  ciudadContactoEEUU: requerido('Ciudad del contacto requerida').max(20, 'Máximo 20 caracteres'),
+  estadoContactoEEUU: requerido('Seleccione el estado del contacto'),
+  telefonoContactoEEUU: requerido('Teléfono del contacto requerido').max(15, 'Máximo 15 caracteres'),
   pagadorViaje: z.enum(valoresDe(catQuienPaga)),
+  apellidosPagador: textoOpcional,
+  nombresPagador: textoOpcional,
+  telefonoPagador: textoOpcional,
+  correoPagador: textoOpcional,
+  relacionPagador: textoOpcional,
+  direccionPagadorIgualSolicitante: siNo,
   viajaConOtros: siNo,
   acompanantesViaje: z.array(acompanante).optional().default([]),
   haVisitadoEEUU: siNo,
@@ -294,7 +323,6 @@ export const visaFormSchema = z.object({
 
   const camposNumericos = [
     { campo: 'telefonoTrabajoActual', valor: data.telefonoTrabajoActual, mensaje: 'El teléfono debe contener solo números' },
-    { campo: 'codigoPostalTrabajoActual', valor: data.codigoPostalTrabajoActual, mensaje: 'El código postal debe contener solo números' },
     { campo: 'telefonoTrabajoAnterior', valor: data.telefonoTrabajoAnterior, mensaje: 'El teléfono debe contener solo números' },
     { campo: 'codigoPostalTrabajoAnterior', valor: data.codigoPostalTrabajoAnterior, mensaje: 'El código postal debe contener solo números' },
     { campo: 'codigoPostalEducacion', valor: data.codigoPostalEducacion, mensaje: 'El código postal debe contener solo números' },
@@ -346,7 +374,6 @@ export const visaFormSchema = z.object({
       { campo: 'codigoPostalEducacion', valor: data.codigoPostalEducacion, mensaje: 'Ingrese el código postal' },
       { campo: 'fechaInicioEducacion', valor: data.fechaInicioEducacion, mensaje: 'Ingrese la fecha de inicio' },
       { campo: 'fechaFinEducacion', valor: data.fechaFinEducacion, mensaje: 'Ingrese la fecha de finalización' },
-      { campo: 'idiomas', valor: data.idiomas, mensaje: 'Ingrese los idiomas que habla' },
     ] as const
 
     camposEducacion.forEach(({ campo, valor, mensaje }) => {
@@ -446,6 +473,66 @@ export const visaFormSchema = z.object({
       code: z.ZodIssueCode.custom,
       message: 'Ingrese la razón',
       path: ['razonVisaEEUUCanceladaORevocada'],
+    })
+  }
+
+  if (data.tienePlanesViajeConcretos === 'si' && !data.lugarPlaneadoEEUU1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Ingrese al menos un lugar que planea visitar',
+      path: ['lugarPlaneadoEEUU1'],
+    })
+  }
+
+  if (data.pagadorViaje === 'O') {
+    const camposPagador = [
+      { campo: 'apellidosPagador', valor: data.apellidosPagador, mensaje: 'Ingrese los apellidos de quien paga el viaje' },
+      { campo: 'nombresPagador', valor: data.nombresPagador, mensaje: 'Ingrese los nombres de quien paga el viaje' },
+      { campo: 'telefonoPagador', valor: data.telefonoPagador, mensaje: 'Ingrese el teléfono de quien paga el viaje' },
+      { campo: 'correoPagador', valor: data.correoPagador, mensaje: 'Ingrese el correo de quien paga el viaje' },
+      { campo: 'relacionPagador', valor: data.relacionPagador, mensaje: 'Seleccione el parentesco con quien paga el viaje' },
+    ] as const
+
+    camposPagador.forEach(({ campo, valor, mensaje }) => {
+      if (!valor) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: mensaje,
+          path: [campo],
+        })
+      }
+    })
+
+    if (data.correoPagador && !z.string().email().safeParse(data.correoPagador).success) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Ingrese un correo válido',
+        path: ['correoPagador'],
+      })
+    }
+  }
+
+  if (!data.idioma1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Ingrese al menos un idioma',
+      path: ['idioma1'],
+    })
+  }
+
+  if (data.tieneHistorialViajes === 'si' && !data.paisVisitado1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Seleccione al menos un país visitado',
+      path: ['paisVisitado1'],
+    })
+  }
+
+  if (data.deportadoDePais === 'si' && !data.detallesDeportacion) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Explique la deportación o expulsión',
+      path: ['detallesDeportacion'],
     })
   }
 

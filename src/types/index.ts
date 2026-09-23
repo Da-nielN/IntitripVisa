@@ -2,6 +2,9 @@
   success: boolean
   message: string
   folderId?: string
+  // Lo que consume Illari. Si la respuesta no lo trae, el script desplegado
+  // todavia es el que generaba PDF.
+  jsonUrl?: string
   pdfUrl?: string
 }
 

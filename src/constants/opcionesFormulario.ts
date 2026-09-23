@@ -14,7 +14,10 @@ import {
   propositoViajeEspecifico as catPropositoViajeEspecifico,
   quienPaga as catQuienPaga,
   relacionAcompanante as catRelacionAcompanante,
+  relacionContactoEEUU as catRelacionContactoEEUU,
+  relacionPagador as catRelacionPagador,
   sexo as catSexo,
+  tipoDocumentoPasaporte as catTipoDocumentoPasaporte,
   unidadDuracion as catUnidadDuracion,
   type OpcionCatalogo,
 } from './catalogos'
@@ -59,6 +62,12 @@ export const estadosEEUU = aOpciones(catEstadosEEUU)
 export const unidadDuracion = aOpciones(catUnidadDuracion)
 
 export const relacionAcompanante = aOpciones(catRelacionAcompanante)
+
+export const relacionContactoEEUU = aOpciones(catRelacionContactoEEUU)
+
+export const relacionPagador = aOpciones(catRelacionPagador)
+
+export const tipoDocumentoPasaporte = aOpciones(catTipoDocumentoPasaporte)
 
 export const estatusEEUU = aOpciones(catEstatusEEUU)
 

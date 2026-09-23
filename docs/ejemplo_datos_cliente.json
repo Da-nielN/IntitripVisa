@@ -1,0 +1,354 @@
+{
+  "primerNombre": "Daniel",
+  "segundoNombre": "Alejandro",
+  "primerApellido": "Torres",
+  "segundoApellido": "Villacis",
+  "sexo": {
+    "texto": "Masculino",
+    "valor": "M"
+  },
+  "estadoCivil": {
+    "texto": "Casado",
+    "valor": "M"
+  },
+  "fechaNacimiento": "1990-11-22",
+  "ciudadNacimiento": "Quito",
+  "paisNacimiento": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "nacionalidad": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "tieneOtraNacionalidad": "Y",
+  "otraNacionalidad": {
+    "texto": "Espana",
+    "valor": "SPN"
+  },
+  "esResidentePermanenteExtranjero": "Y",
+  "paisResidenciaPermanente": {
+    "texto": "Espana",
+    "valor": "SPN"
+  },
+  "cedula": "1712345678",
+  "categoriaMotivoViaje": {
+    "texto": "Visitante temporal de negocios o placer (B)",
+    "valor": "B"
+  },
+  "tipoVisa": {
+    "texto": "Turismo o vacaciones (B2)",
+    "valor": "B1-B2"
+  },
+  "tienePlanesViajeConcretos": "Y",
+  "fechaLlegadaEEUU": "2026-11-10",
+  "ciudadLlegadaEEUU": "Miami",
+  "fechaSalidaEEUU": "2026-11-28",
+  "ciudadSalidaEEUU": "Miami",
+  "lugarPlaneadoEEUU1": "Miami",
+  "lugarPlaneadoEEUU2": "Orlando",
+  "lugarPlaneadoEEUU3": "Key West",
+  "lugarPlaneadoEEUU4": "Tampa",
+  "lugarPlaneadoEEUU5": "Naples",
+  "direccionHospedajeEEUU": "1200 Ocean Drive, Apt 5B",
+  "ciudadHospedajeEEUU": "Miami Beach",
+  "estadoHospedajeEEUU": {
+    "texto": "Florida",
+    "valor": "FL"
+  },
+  "pagadorViaje": {
+    "texto": "Otra persona",
+    "valor": "O"
+  },
+  "apellidosPagador": "Andrade Moreno",
+  "nombresPagador": "Luis Fernando",
+  "telefonoPagador": "59322345678",
+  "correoPagador": "luis.andrade@ejemplo.ec",
+  "relacionPagador": {
+    "texto": "Padre Madre",
+    "valor": "P"
+  },
+  "direccionPagadorIgualSolicitante": "Y",
+  "viajaConOtros": "Y",
+  "acompananteViaje1Nombres": "Ana Maria",
+  "acompananteViaje1Apellidos": "Penafiel Cobos",
+  "acompananteViaje1Relacion": {
+    "texto": "Conyuge",
+    "valor": "S"
+  },
+  "acompananteViaje2Nombres": "Mateo Sebastian",
+  "acompananteViaje2Apellidos": "Torres Penafiel",
+  "acompananteViaje2Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "acompananteViaje3Nombres": "Sofia Isabel",
+  "acompananteViaje3Apellidos": "Torres Penafiel",
+  "acompananteViaje3Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "acompananteViaje4Nombres": "Diego Armando",
+  "acompananteViaje4Apellidos": "Penafiel Cobos",
+  "acompananteViaje4Relacion": {
+    "texto": "Otro familiar",
+    "valor": "R"
+  },
+  "acompananteViaje5Nombres": "Paola Cristina",
+  "acompananteViaje5Apellidos": "Vinueza Salas",
+  "acompananteViaje5Relacion": {
+    "texto": "Amigo Amiga",
+    "valor": "F"
+  },
+  "haVisitadoEEUU": "Y",
+  "licenciaConducirEEUU": "Y",
+  "numeroLicenciaConducirEEUU": "A123456789012",
+  "estadoLicenciaConducirEEUU": {
+    "texto": "Florida",
+    "valor": "FL"
+  },
+  "haTenidoVisaEEUU": "Y",
+  "fechaEmisionUltimaVisa": "2019-06-24",
+  "numeroVisa": "12345678",
+  "mismoTipoVisa": "Y",
+  "mismoPaisResidenciaVisa": "Y",
+  "diezHuellasTomadas": "Y",
+  "visaEEUUPerdidaORobada": "Y",
+  "anioVisaEEUUPerdidaORobada": "2021",
+  "motivoVisaEEUUPerdidaORobada": "La visa estaba en el pasaporte sustraido en la terminal terrestre de Quito en marzo de 2021 Se presento la denuncia ante la Fiscalia el mismo dia",
+  "visaEEUUCanceladaORevocada": "Y",
+  "razonVisaEEUUCanceladaORevocada": "El consulado anulo la visa al reponerse el pasaporte robado en 2021, por tratarse de un documento reportado como perdido",
+  "tienePeticionInmigracion": "Y",
+  "razonPeticionInmigracion": "Una hermana residente permanente presento una peticion familiar de cuarta preferencia en 2016; el tramite sigue en lista de espera",
+  "visaNegada": "Y",
+  "detallesVisaNegada": "En 2012 se nego una solicitud B1 B2 en el consulado de Guayaquil por documentacion incompleta de respaldo economico",
+  "visitaAnteriorEEUU1FechaLlegada": "2023-07-14",
+  "visitaAnteriorEEUU1ValorDuracion": "12",
+  "visitaAnteriorEEUU1UnidadDuracion": {
+    "texto": "Dias",
+    "valor": "D"
+  },
+  "visitaAnteriorEEUU2FechaLlegada": "2022-01-09",
+  "visitaAnteriorEEUU2ValorDuracion": "3",
+  "visitaAnteriorEEUU2UnidadDuracion": {
+    "texto": "Semanas",
+    "valor": "W"
+  },
+  "visitaAnteriorEEUU3FechaLlegada": "2019-12-20",
+  "visitaAnteriorEEUU3ValorDuracion": "10",
+  "visitaAnteriorEEUU3UnidadDuracion": {
+    "texto": "Dias",
+    "valor": "D"
+  },
+  "visitaAnteriorEEUU4FechaLlegada": "2017-05-03",
+  "visitaAnteriorEEUU4ValorDuracion": "2",
+  "visitaAnteriorEEUU4UnidadDuracion": {
+    "texto": "Semanas",
+    "valor": "W"
+  },
+  "visitaAnteriorEEUU5FechaLlegada": "2015-08-11",
+  "visitaAnteriorEEUU5ValorDuracion": "1",
+  "visitaAnteriorEEUU5UnidadDuracion": {
+    "texto": "Meses",
+    "valor": "M"
+  },
+  "direccion": "Av Amazonas N34-120 y La Republica",
+  "ciudad": "Quito",
+  "provincia": "Pichincha",
+  "codigoPostal": "170135",
+  "paisDomicilio": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "celular": "593987654321",
+  "tuvoTelefonosAnteriores": "Y",
+  "telefonosAnteriores": "593998877665",
+  "correo": "daniel.torres@ejemplo.ec",
+  "tuvoCorreosAnteriores": "Y",
+  "correosAnteriores": "dtorres1990@ejemplo.com",
+  "facebook": "danieltorres90",
+  "instagram": "danieltorres_ec",
+  "linkedin": "daniel-torres-villacis",
+  "tipoDocumentoPasaporte": {
+    "texto": "Regular (ordinario)",
+    "valor": "R"
+  },
+  "numeroPasaporte": "A01234567",
+  "autoridadEmisoraPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "ciudadPasaporte": "Quito",
+  "provinciaEmisionPasaporte": "Pichincha",
+  "paisEmisionPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "fechaEmisionPasaporte": "2021-02-15",
+  "fechaExpiracionPasaporte": "2031-02-14",
+  "pasaportePerdidoORobado": "Y",
+  "numeroPasaportePerdidoORobado": "A00987654",
+  "paisAutoridadPasaportePerdidoORobado": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "explicacionPasaportePerdidoORobado": "El pasaporte anterior fue sustraido junto con la billetera en la terminal terrestre de Quito en marzo de 2021 Se presento la denuncia y se emitio uno nuevo",
+  "apellidosContactoEEUU": "Salazar Rios",
+  "nombresContactoEEUU": "Maria Elena",
+  "relacionContactoEEUU": {
+    "texto": "Amigo Amiga",
+    "valor": "C"
+  },
+  "direccionContactoEEUU": "845 NW 12th Street, Suite 210",
+  "ciudadContactoEEUU": "Miami",
+  "estadoContactoEEUU": {
+    "texto": "Florida",
+    "valor": "FL"
+  },
+  "telefonoContactoEEUU": "13055551234",
+  "nombresPadre": "Luis Fernando",
+  "apellidosPadre": "Torres Moreno",
+  "fechaNacimientoPadre": "1960-07-19",
+  "padreEnEEUU": "Y",
+  "estatusPadreEEUU": {
+    "texto": "Residente permanente legal (LPR)",
+    "valor": "C"
+  },
+  "nombresMadre": "Rosa Elena",
+  "apellidosMadre": "Villacis Cordero",
+  "fechaNacimientoMadre": "1963-11-02",
+  "madreEnEEUU": "Y",
+  "estatusMadreEEUU": {
+    "texto": "Ciudadano estadounidense",
+    "valor": "S"
+  },
+  "familiaresInmediatosEnEEUU": "Y",
+  "otrosFamiliaresEnEEUU": "Y",
+  "familiarInmediato1Nombres": "Carla Beatriz",
+  "familiarInmediato1Apellidos": "Torres Villacis",
+  "familiarInmediato1Relacion": {
+    "texto": "Hermano Hermana",
+    "valor": "B"
+  },
+  "familiarInmediato1Estatus": {
+    "texto": "No inmigrante",
+    "valor": "P"
+  },
+  "familiarInmediato2Nombres": "Jorge Andres",
+  "familiarInmediato2Apellidos": "Torres Villacis",
+  "familiarInmediato2Relacion": {
+    "texto": "Hermano Hermana",
+    "valor": "B"
+  },
+  "familiarInmediato2Estatus": {
+    "texto": "Residente permanente legal (LPR)",
+    "valor": "C"
+  },
+  "familiarInmediato3Nombres": "Lucia Fernanda",
+  "familiarInmediato3Apellidos": "Torres Penafiel",
+  "familiarInmediato3Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato3Estatus": {
+    "texto": "Ciudadano estadounidense",
+    "valor": "S"
+  },
+  "familiarInmediato4Nombres": "Ana Maria",
+  "familiarInmediato4Apellidos": "Penafiel Cobos",
+  "familiarInmediato4Relacion": {
+    "texto": "Conyuge",
+    "valor": "S"
+  },
+  "familiarInmediato4Estatus": {
+    "texto": "No inmigrante",
+    "valor": "P"
+  },
+  "familiarInmediato5Nombres": "Martin Esteban",
+  "familiarInmediato5Apellidos": "Torres Penafiel",
+  "familiarInmediato5Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato5Estatus": {
+    "texto": "Otro no lo sabe",
+    "valor": "O"
+  },
+  "nombresConyuge": "Ana Maria",
+  "apellidosConyuge": "Penafiel Cobos",
+  "fechaNacimientoConyuge": "1990-09-08",
+  "nacionalidadConyuge": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "ciudadNacimientoConyuge": "Ambato",
+  "paisNacimientoConyuge": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "categoriaOcupacionActual": {
+    "texto": "Negocios",
+    "valor": "B"
+  },
+  "empleadorActual": "Comercializadora Andina SA",
+  "cargoActual": "Gerente de Operaciones",
+  "descripcionTrabajoActual": "Coordina la cadena logistica y el abastecimiento de las bodegas regionales, supervisa un equipo de doce personas y negocia contratos con proveedores nacionales",
+  "sueldoActual": "2800",
+  "direccionTrabajoActual": "Av Naciones Unidas E2-30 y Av de los",
+  "ciudadTrabajoActual": "Quito",
+  "provinciaTrabajoActual": "Pichincha",
+  "telefonoTrabajoActual": "59322987654",
+  "fechaInicioTrabajoActual": "2018-04-02",
+  "tuvoTrabajoAnterior": "Y",
+  "empleadorAnterior": "Distribuidora Los Andes Cia Ltda",
+  "cargoAnterior": "Jefe de Bodega",
+  "direccionTrabajoAnterior": "Calle Juan Leon Mera N21-45",
+  "ciudadTrabajoAnterior": "Quito",
+  "provinciaTrabajoAnterior": "Pichincha",
+  "codigoPostalTrabajoAnterior": "170143",
+  "telefonoTrabajoAnterior": "59322112233",
+  "apellidosSupervisorAnterior": "Cevallos Ordonez",
+  "nombreSupervisorAnterior": "Patricio",
+  "descripcionTrabajoAnterior": "Responsable del control de inventarios, la recepcion de mercaderia importada y la coordinacion de despachos a diez puntos de venta",
+  "fechaInicioTrabajoAnterior": "2013-08-01",
+  "fechaFinTrabajoAnterior": "2018-03-28",
+  "asistioInstitucionEducativa": "Y",
+  "institucionUniversitaria": "Pontificia Universidad Catolica del Ecuador",
+  "nombreCarrera": "Ingenieria Comercial",
+  "direccionEducacion": "Av 12 de Octubre 1076 y Roca",
+  "ciudadEducacion": "Quito",
+  "provinciaEducacion": "Pichincha",
+  "codigoPostalEducacion": "170143",
+  "fechaInicioEducacion": "2006-09-04",
+  "fechaFinEducacion": "2011-07-15",
+  "idioma1": "Espanol",
+  "idioma2": "Ingles",
+  "idioma3": "Portugues",
+  "idioma4": "Frances",
+  "idioma5": "Italiano",
+  "tieneHistorialViajes": "Y",
+  "paisVisitado1": {
+    "texto": "Espana",
+    "valor": "SPN"
+  },
+  "paisVisitado2": {
+    "texto": "Colombia",
+    "valor": "COL"
+  },
+  "paisVisitado3": {
+    "texto": "Peru",
+    "valor": "PERU"
+  },
+  "paisVisitado4": {
+    "texto": "Mexico",
+    "valor": "MEX"
+  },
+  "paisVisitado5": {
+    "texto": "Panama",
+    "valor": "PAN"
+  },
+  "enfermedadContagiosa": "Y",
+  "detalleEnfermedadContagiosa": "Tuberculosis pulmonar diagnosticada en 2019, con tratamiento completo de seis meses y alta medica en enero de 2020 Se adjunta certificado del medico tratante",
+  "deportadoDePais": "Y",
+  "detallesDeportacion": "En 2014 se nego el ingreso a Espana en Madrid-Barajas por falta de reserva de alojamiento, con retorno inmediato No hubo orden de expulsion posterior"
+}
