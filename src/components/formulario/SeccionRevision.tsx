@@ -13,6 +13,8 @@ const FilaResumen = ({ label, value }: { label: string; value?: string }) => (
   ) : null
 )
 
+const formatearLista = (...valores: (string | undefined)[]) => valores.filter(Boolean).join(', ')
+
 const formatearAcompanantes = (acompanantes?: VisaFormSchema['acompanantesViaje']) => (
   acompanantes?.map((acompanante) => (
     [acompanante.apellidos, acompanante.nombres, acompanante.relacion].filter(Boolean).join(' - ')
@@ -42,6 +44,8 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Primer apellido" value={data.primerApellido} />
       <FilaResumen label="Segundo apellido" value={data.segundoApellido} />
       <FilaResumen label="Fecha de nacimiento" value={data.fechaNacimiento} />
+      <FilaResumen label="Ciudad de nacimiento" value={data.ciudadNacimiento} />
+      <FilaResumen label="País de nacimiento" value={data.paisNacimiento} />
       <FilaResumen label="Sexo" value={data.sexo} />
       <FilaResumen label="Estado civil" value={data.estadoCivil} />
       <FilaResumen label="Nombres del cónyuge" value={data.nombresConyuge} />
@@ -60,6 +64,15 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Email" value={data.correo} />
       <FilaResumen label="Correo anterior" value={data.correosAnteriores} />
       <FilaResumen label="Dirección" value={data.direccion} />
+      <FilaResumen label="País del domicilio" value={data.paisDomicilio} />
+      <FilaResumen label="Tipo de documento de viaje" value={data.tipoDocumentoPasaporte} />
+      <FilaResumen label="Número de pasaporte" value={data.numeroPasaporte} />
+      <FilaResumen label="País/Autoridad emisora del pasaporte" value={data.autoridadEmisoraPasaporte} />
+      <FilaResumen label="Ciudad de emisión del pasaporte" value={data.ciudadPasaporte} />
+      <FilaResumen label="Provincia de emisión del pasaporte" value={data.provinciaEmisionPasaporte} />
+      <FilaResumen label="País de emisión del pasaporte" value={data.paisEmisionPasaporte} />
+      <FilaResumen label="Fecha de emisión del pasaporte" value={data.fechaEmisionPasaporte} />
+      <FilaResumen label="Fecha de expiración del pasaporte" value={data.fechaExpiracionPasaporte} />
       <FilaResumen label="Pasaporte perdido o robado" value={data.pasaportePerdidoORobado} />
       <FilaResumen label="Número de pasaporte/documento de viaje" value={data.numeroPasaportePerdidoORobado} />
       <FilaResumen label="País/Autoridad del pasaporte/documento de viaje" value={data.paisAutoridadPasaportePerdidoORobado} />
@@ -72,6 +85,8 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Instagram" value={data.instagram} />
       <FilaResumen label="Ocupación actual" value={data.categoriaOcupacionActual} />
       <FilaResumen label="Empresa o escuela actual" value={data.empleadorActual} />
+      <FilaResumen label="Cargo actual" value={data.cargoActual} />
+      <FilaResumen label="Sueldo mensual" value={data.sueldoActual} />
       <FilaResumen label="Dirección actual" value={data.direccionTrabajoActual} />
       <FilaResumen label="Provincia actual" value={data.provinciaTrabajoActual} />
       <FilaResumen label="Ciudad actual" value={data.ciudadTrabajoActual} />
@@ -99,7 +114,10 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Código postal institución educativa" value={data.codigoPostalEducacion} />
       <FilaResumen label="Fecha inicio educación" value={data.fechaInicioEducacion} />
       <FilaResumen label="Fecha fin educación" value={data.fechaFinEducacion} />
-      <FilaResumen label="Idiomas" value={data.idiomas} />
+      <FilaResumen label="Nombre de la carrera" value={data.nombreCarrera} />
+      <FilaResumen label="Idiomas" value={formatearLista(data.idioma1, data.idioma2, data.idioma3, data.idioma4, data.idioma5)} />
+      <FilaResumen label="Viajes en los últimos 5 años" value={data.tieneHistorialViajes} />
+      <FilaResumen label="Países visitados" value={formatearLista(data.paisVisitado1, data.paisVisitado2, data.paisVisitado3, data.paisVisitado4, data.paisVisitado5)} />
       <FilaResumen label="Nombres del padre" value={data.nombresPadre} />
       <FilaResumen label="Apellidos del padre" value={data.apellidosPadre} />
       <FilaResumen label="Padre en EE.UU." value={data.padreEnEEUU} />
@@ -120,11 +138,24 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Ciudad de llegada" value={data.ciudadLlegadaEEUU} />
       <FilaResumen label="Fecha de salida de EE. UU" value={data.fechaSalidaEEUU} />
       <FilaResumen label="Ciudad de salida" value={data.ciudadSalidaEEUU} />
-      <FilaResumen label="Lugares que planea visitar" value={data.lugaresPlaneadosEEUU} />
+      <FilaResumen label="Lugares que planea visitar" value={formatearLista(data.lugarPlaneadoEEUU1, data.lugarPlaneadoEEUU2, data.lugarPlaneadoEEUU3, data.lugarPlaneadoEEUU4, data.lugarPlaneadoEEUU5)} />
       <FilaResumen label="Dirección hospedaje EE.UU." value={data.direccionHospedajeEEUU} />
       <FilaResumen label="Ciudad hospedaje" value={data.ciudadHospedajeEEUU} />
       <FilaResumen label="Estado hospedaje" value={data.estadoHospedajeEEUU} />
+      <FilaResumen label="Apellidos del contacto en EE.UU." value={data.apellidosContactoEEUU} />
+      <FilaResumen label="Nombres del contacto en EE.UU." value={data.nombresContactoEEUU} />
+      <FilaResumen label="Relación con el contacto" value={data.relacionContactoEEUU} />
+      <FilaResumen label="Dirección del contacto" value={data.direccionContactoEEUU} />
+      <FilaResumen label="Ciudad del contacto" value={data.ciudadContactoEEUU} />
+      <FilaResumen label="Estado del contacto" value={data.estadoContactoEEUU} />
+      <FilaResumen label="Teléfono del contacto" value={data.telefonoContactoEEUU} />
       <FilaResumen label="Paga el viaje" value={data.pagadorViaje} />
+      <FilaResumen label="Apellidos de quien paga" value={data.apellidosPagador} />
+      <FilaResumen label="Nombres de quien paga" value={data.nombresPagador} />
+      <FilaResumen label="Teléfono de quien paga" value={data.telefonoPagador} />
+      <FilaResumen label="Correo de quien paga" value={data.correoPagador} />
+      <FilaResumen label="Parentesco con quien paga" value={data.relacionPagador} />
+      <FilaResumen label="Dirección de quien paga igual a la suya" value={data.direccionPagadorIgualSolicitante} />
       <FilaResumen label="Viaja con otras personas" value={data.viajaConOtros} />
       <FilaResumen label="Acompañantes" value={formatearAcompanantes(data.acompanantesViaje)} />
       <FilaResumen label="Ha estado en EE.UU." value={data.haVisitadoEEUU} />
@@ -142,6 +173,8 @@ export const SeccionRevision: React.FC<Props> = ({ data }) => (
       <FilaResumen label="Razón visa cancelada o revocada" value={data.razonVisaEEUUCanceladaORevocada} />
       <FilaResumen label="Visa negada" value={data.visaNegada} />
       <FilaResumen label="Motivo visa negada" value={data.detallesVisaNegada} />
+      <FilaResumen label="Deportado o expulsado de algún país" value={data.deportadoDePais} />
+      <FilaResumen label="Detalle de la deportación" value={data.detallesDeportacion} />
       <FilaResumen label="Solicitud inmigración" value={data.tienePeticionInmigracion} />
       <FilaResumen label="Razón solicitud inmigración" value={data.razonPeticionInmigracion} />
       <FilaResumen label="Enfermedad contagiosa" value={data.enfermedadContagiosa} />

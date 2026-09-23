@@ -15,6 +15,7 @@ import {
   paisesNacionalidadConyuge,
   paisesResidenciaPermanente,
   sexo,
+  tipoDocumentoPasaporte,
 } from '../../constants/opcionesFormulario'
 import { recortarEspacios, soloLetras, soloNumeros } from '../../utils/validacionesFormulario'
 import { Entrada } from '../interfaz/Entrada'
@@ -95,6 +96,11 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
           <Selector label="Sexo del cliente" required options={sexo} error={errors.sexo?.message}
             value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
         )} />
+        <Entrada label="Ciudad de nacimiento" required {...register('ciudadNacimiento')} error={errors.ciudadNacimiento?.message} placeholder="Quito" maxLength={20} />
+        <Controller name="paisNacimiento" control={control} render={({ field }) => (
+          <Selector label="País de nacimiento" required options={paisesLugarNacimiento} error={errors.paisNacimiento?.message}
+            value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+        )} />
 
         <div className="md:col-span-2">
           <Controller name="estadoCivil" control={control} render={({ field }) => (
@@ -152,8 +158,9 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
           </div>
         )}
 
-        <Entrada label="Teléfono domicilio" {...register('telefonoDomicilio', { onChange: soloNumeros(7) })} error={errors.telefonoDomicilio?.message} placeholder="2595690" type="tel" inputMode="numeric" maxLength={7} />
-        <Entrada label="Celular" required {...register('celular', { onChange: soloNumeros(10) })} error={errors.celular?.message} placeholder="0999999999" type="tel" inputMode="numeric" maxLength={10} />
+        <div className="md:col-span-2">
+          <Entrada label="Celular" required {...register('celular', { onChange: soloNumeros(10) })} error={errors.celular?.message} placeholder="0999999999" type="tel" inputMode="numeric" maxLength={10} />
+        </div>
         <div className="md:col-span-2">
           <Controller name="tuvoTelefonosAnteriores" control={control} render={({ field }) => (
             <GrupoRadios label="¿Ha tenido otros celulares en los últimos 5 años?" required name="tuvoTelefonosAnteriores"
@@ -178,6 +185,10 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
             value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} disabled={!provinciaSeleccionada} />
         )} />
         <Entrada label="Código postal domicilio" required {...register('codigoPostal', { onChange: soloNumeros() })} error={errors.codigoPostal?.message} placeholder="170302" inputMode="numeric" />
+        <Controller name="paisDomicilio" control={control} render={({ field }) => (
+          <Selector label="País del domicilio" required options={paisesResidenciaPermanente} error={errors.paisDomicilio?.message}
+            value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+        )} />
         <Entrada label="Correo electrónico" required type="email" {...register('correo')} error={errors.correo?.message} placeholder="ejemplo@gmail.com" />
         <Controller name="tuvoCorreosAnteriores" control={control} render={({ field }) => (
           <GrupoRadios label="¿Ha tenido otro correo en los últimos 5 años?" required name="tuvoCorreosAnteriores"
@@ -187,11 +198,29 @@ export const SeccionPersonal: React.FC<Props> = ({ form }) => {
           <Entrada label="Correo anterior" required type="email" {...register('correosAnteriores')} error={errors.correosAnteriores?.message} placeholder="anterior@gmail.com" />
         )}
         <div className="md:col-span-2">
-          <Controller name="ciudadPasaporte" control={control} render={({ field }) => (
-            <Selector label="Ciudad donde tramitó el pasaporte vigente" required options={opcionesCiudadesEcuador} error={errors.ciudadPasaporte?.message}
+          <Controller name="tipoDocumentoPasaporte" control={control} render={({ field }) => (
+            <Selector label="Tipo de documento de viaje" required options={tipoDocumentoPasaporte} error={errors.tipoDocumentoPasaporte?.message}
               value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
           )} />
         </div>
+        <Entrada label="Número de pasaporte" required {...register('numeroPasaporte')} error={errors.numeroPasaporte?.message} placeholder="A1234567" maxLength={20} />
+        <Controller name="autoridadEmisoraPasaporte" control={control} render={({ field }) => (
+          <Selector label="País o autoridad que emitió el pasaporte" required options={paisesAutoridadPasaporte} error={errors.autoridadEmisoraPasaporte?.message}
+            value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+        )} />
+        <Controller name="ciudadPasaporte" control={control} render={({ field }) => (
+          <Selector label="Ciudad donde tramitó el pasaporte vigente" required options={opcionesCiudadesEcuador} error={errors.ciudadPasaporte?.message}
+            value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+        )} />
+        <Entrada label="Provincia donde tramitó el pasaporte vigente" required {...register('provinciaEmisionPasaporte')} error={errors.provinciaEmisionPasaporte?.message} maxLength={25} />
+        <div className="md:col-span-2">
+          <Controller name="paisEmisionPasaporte" control={control} render={({ field }) => (
+            <Selector label="País donde tramitó el pasaporte vigente" required options={paisesResidenciaPermanente} error={errors.paisEmisionPasaporte?.message}
+              value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} />
+          )} />
+        </div>
+        <Entrada label="Fecha de emisión del pasaporte" required type="date" {...register('fechaEmisionPasaporte')} error={errors.fechaEmisionPasaporte?.message} />
+        <Entrada label="Fecha de expiración del pasaporte" required type="date" {...register('fechaExpiracionPasaporte')} error={errors.fechaExpiracionPasaporte?.message} />
         <div className="md:col-span-2">
           <Controller name="pasaportePerdidoORobado" control={control} render={({ field }) => (
             <GrupoRadios label="¿Ha perdido o le han robado un pasaporte?" required name="pasaportePerdidoORobado"

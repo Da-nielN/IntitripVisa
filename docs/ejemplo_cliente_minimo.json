@@ -1,0 +1,139 @@
+{
+  "primerNombre": "Camila",
+  "segundoNombre": "Nicole",
+  "primerApellido": "Penafiel",
+  "segundoApellido": "Ordonez",
+  "sexo": {
+    "texto": "Femenino",
+    "valor": "F"
+  },
+  "estadoCivil": {
+    "texto": "Soltero",
+    "valor": "S"
+  },
+  "fechaNacimiento": "2001-03-14",
+  "ciudadNacimiento": "Cuenca",
+  "paisNacimiento": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "nacionalidad": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "tieneOtraNacionalidad": "N",
+  "esResidentePermanenteExtranjero": "N",
+  "cedula": "0104567890",
+  "categoriaMotivoViaje": {
+    "texto": "Visitante temporal de negocios o placer (B)",
+    "valor": "B"
+  },
+  "tipoVisa": {
+    "texto": "Turismo o vacaciones (B2)",
+    "valor": "B1-B2"
+  },
+  "tienePlanesViajeConcretos": "N",
+  "fechaLlegadaPrevista": "2027-02-01",
+  "valorDuracionEstadiaPrevista": "2",
+  "unidadDuracionEstadiaPrevista": {
+    "texto": "Semanas",
+    "valor": "W"
+  },
+  "pagadorViaje": {
+    "texto": "Yo mismo",
+    "valor": "S"
+  },
+  "viajaConOtros": "N",
+  "haVisitadoEEUU": "N",
+  "licenciaConducirEEUU": "N",
+  "haTenidoVisaEEUU": "N",
+  "visaEEUUPerdidaORobada": "N",
+  "visaEEUUCanceladaORevocada": "N",
+  "tienePeticionInmigracion": "N",
+  "visaNegada": "N",
+  "direccion": "Calle Larga 7-32 y Presidente Borrero",
+  "ciudad": "Cuenca",
+  "provincia": "Azuay",
+  "codigoPostal": "010101",
+  "paisDomicilio": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "celular": "593991122334",
+  "tuvoTelefonosAnteriores": "N",
+  "correo": "camila.penafiel@ejemplo.ec",
+  "tuvoCorreosAnteriores": "N",
+  "facebook": "camilapenafiel",
+  "instagram": "cami_penafiel",
+  "linkedin": "camila-penafiel",
+  "tipoDocumentoPasaporte": {
+    "texto": "Regular (ordinario)",
+    "valor": "R"
+  },
+  "numeroPasaporte": "B07654321",
+  "autoridadEmisoraPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "ciudadPasaporte": "Cuenca",
+  "provinciaEmisionPasaporte": "Azuay",
+  "paisEmisionPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "fechaEmisionPasaporte": "2024-05-06",
+  "fechaExpiracionPasaporte": "2034-05-05",
+  "pasaportePerdidoORobado": "N",
+  "apellidosContactoEEUU": "Guerrero Paz",
+  "nombresContactoEEUU": "Tomas",
+  "relacionContactoEEUU": {
+    "texto": "Amigo Amiga",
+    "valor": "C"
+  },
+  "direccionContactoEEUU": "2200 SW 8th Street",
+  "ciudadContactoEEUU": "Miami",
+  "estadoContactoEEUU": {
+    "texto": "Florida",
+    "valor": "FL"
+  },
+  "telefonoContactoEEUU": "13055559876",
+  "nombresPadre": "Marco Vinicio",
+  "apellidosPadre": "Penafiel Cobos",
+  "fechaNacimientoPadre": "1972-01-30",
+  "padreEnEEUU": "N",
+  "nombresMadre": "Silvia Jeanneth",
+  "apellidosMadre": "Ordonez Bravo",
+  "fechaNacimientoMadre": "1975-06-12",
+  "madreEnEEUU": "N",
+  "familiaresInmediatosEnEEUU": "N",
+  "otrosFamiliaresEnEEUU": "N",
+  "categoriaOcupacionActual": {
+    "texto": "Estudiante",
+    "valor": "S"
+  },
+  "empleadorActual": "Universidad de Cuenca",
+  "cargoActual": "Estudiante de pregrado",
+  "descripcionTrabajoActual": "Cursa el septimo ciclo de la carrera de Odontologia; asiste a clases y a practicas clinicas en la facultad",
+  "sueldoActual": "0",
+  "direccionTrabajoActual": "Av 12 de Abril y Agustin Cueva",
+  "ciudadTrabajoActual": "Cuenca",
+  "provinciaTrabajoActual": "Azuay",
+  "telefonoTrabajoActual": "59374051000",
+  "fechaInicioTrabajoActual": "2022-10-03",
+  "tuvoTrabajoAnterior": "N",
+  "asistioInstitucionEducativa": "N",
+  "idioma1": "Espanol",
+  "idioma2": "Ingles",
+  "idioma3": "Portugues",
+  "idioma4": "Frances",
+  "idioma5": "Italiano",
+  "tieneHistorialViajes": "N",
+  "enfermedadContagiosa": "N",
+  "deportadoDePais": "N",
+  "direccionHospedajeEEUU": "500 5TH AVE",
+  "ciudadHospedajeEEUU": "NEW YORK",
+  "estadoHospedajeEEUU": {
+    "texto": "Nueva York",
+    "valor": "NY"
+  }
+}

@@ -1,0 +1,279 @@
+{
+  "primerNombre": "Rosa",
+  "segundoNombre": "Elena",
+  "primerApellido": "Villacis",
+  "segundoApellido": "Cordero",
+  "sexo": {
+    "texto": "Femenino",
+    "valor": "F"
+  },
+  "estadoCivil": {
+    "texto": "Viudo",
+    "valor": "W"
+  },
+  "fechaNacimiento": "1958-04-09",
+  "ciudadNacimiento": "Riobamba",
+  "paisNacimiento": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "nacionalidad": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "tieneOtraNacionalidad": "N",
+  "esResidentePermanenteExtranjero": "N",
+  "cedula": "0601234567",
+  "categoriaMotivoViaje": {
+    "texto": "Visitante temporal de negocios o placer (B)",
+    "valor": "B"
+  },
+  "tipoVisa": {
+    "texto": "Turismo o vacaciones (B2)",
+    "valor": "B1-B2"
+  },
+  "tienePlanesViajeConcretos": "Y",
+  "fechaLlegadaEEUU": "2027-01-08",
+  "ciudadLlegadaEEUU": "Houston",
+  "fechaSalidaEEUU": "2027-03-02",
+  "ciudadSalidaEEUU": "Houston",
+  "lugarPlaneadoEEUU1": "Houston",
+  "lugarPlaneadoEEUU2": "San Antonio",
+  "lugarPlaneadoEEUU3": "Austin",
+  "lugarPlaneadoEEUU4": "Tampa",
+  "lugarPlaneadoEEUU5": "Naples",
+  "direccionHospedajeEEUU": "5410 Fannin Street",
+  "ciudadHospedajeEEUU": "Houston",
+  "estadoHospedajeEEUU": {
+    "texto": "Texas",
+    "valor": "TX"
+  },
+  "pagadorViaje": {
+    "texto": "Otra persona",
+    "valor": "O"
+  },
+  "apellidosPagador": "Torres Villacis",
+  "nombresPagador": "Carla Beatriz",
+  "telefonoPagador": "17135554321",
+  "correoPagador": "carla.torres@ejemplo.com",
+  "relacionPagador": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "direccionPagadorIgualSolicitante": "Y",
+  "viajaConOtros": "N",
+  "haVisitadoEEUU": "Y",
+  "licenciaConducirEEUU": "N",
+  "haTenidoVisaEEUU": "Y",
+  "fechaEmisionUltimaVisa": "2016-03-11",
+  "numeroVisa": "87654321",
+  "mismoTipoVisa": "Y",
+  "mismoPaisResidenciaVisa": "Y",
+  "diezHuellasTomadas": "Y",
+  "visaEEUUPerdidaORobada": "N",
+  "visaEEUUCanceladaORevocada": "N",
+  "tienePeticionInmigracion": "N",
+  "visaNegada": "N",
+  "visitaAnteriorEEUU1FechaLlegada": "2018-12-02",
+  "visitaAnteriorEEUU1ValorDuracion": "2",
+  "visitaAnteriorEEUU1UnidadDuracion": {
+    "texto": "Meses",
+    "valor": "M"
+  },
+  "visitaAnteriorEEUU2FechaLlegada": "2016-06-15",
+  "visitaAnteriorEEUU2ValorDuracion": "3",
+  "visitaAnteriorEEUU2UnidadDuracion": {
+    "texto": "Semanas",
+    "valor": "W"
+  },
+  "visitaAnteriorEEUU3FechaLlegada": "2019-12-20",
+  "visitaAnteriorEEUU3ValorDuracion": "10",
+  "visitaAnteriorEEUU3UnidadDuracion": {
+    "texto": "Dias",
+    "valor": "D"
+  },
+  "visitaAnteriorEEUU4FechaLlegada": "2017-05-03",
+  "visitaAnteriorEEUU4ValorDuracion": "2",
+  "visitaAnteriorEEUU4UnidadDuracion": {
+    "texto": "Semanas",
+    "valor": "W"
+  },
+  "visitaAnteriorEEUU5FechaLlegada": "2015-08-11",
+  "visitaAnteriorEEUU5ValorDuracion": "1",
+  "visitaAnteriorEEUU5UnidadDuracion": {
+    "texto": "Meses",
+    "valor": "M"
+  },
+  "direccion": "Av Daniel Leon Borja 25-40 y Carabobo",
+  "ciudad": "Riobamba",
+  "provincia": "Chimborazo",
+  "codigoPostal": "060102",
+  "paisDomicilio": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "celular": "593984455667",
+  "tuvoTelefonosAnteriores": "N",
+  "correo": "rosa.villacis@ejemplo.ec",
+  "tuvoCorreosAnteriores": "N",
+  "facebook": "rosavillaciscordero",
+  "instagram": "rosavillacis",
+  "linkedin": "rosa-villacis",
+  "tipoDocumentoPasaporte": {
+    "texto": "Regular (ordinario)",
+    "valor": "R"
+  },
+  "numeroPasaporte": "C05551234",
+  "autoridadEmisoraPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "ciudadPasaporte": "Riobamba",
+  "provinciaEmisionPasaporte": "Chimborazo",
+  "paisEmisionPasaporte": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "fechaEmisionPasaporte": "2020-09-21",
+  "fechaExpiracionPasaporte": "2030-09-20",
+  "pasaportePerdidoORobado": "N",
+  "apellidosContactoEEUU": "Torres Villacis",
+  "nombresContactoEEUU": "Carla Beatriz",
+  "relacionContactoEEUU": {
+    "texto": "Amigo Amiga",
+    "valor": "C"
+  },
+  "direccionContactoEEUU": "5410 Fannin Street",
+  "ciudadContactoEEUU": "Houston",
+  "estadoContactoEEUU": {
+    "texto": "Texas",
+    "valor": "TX"
+  },
+  "telefonoContactoEEUU": "17135554321",
+  "nombresPadre": "Segundo Manuel",
+  "apellidosPadre": "Villacis Naranjo",
+  "fechaNacimientoPadre": "1930-02-11",
+  "padreEnEEUU": "N",
+  "nombresMadre": "Mercedes",
+  "apellidosMadre": "Cordero Chavez",
+  "fechaNacimientoMadre": "1934-08-25",
+  "madreEnEEUU": "N",
+  "familiaresInmediatosEnEEUU": "Y",
+  "otrosFamiliaresEnEEUU": "N",
+  "familiarInmediato1Nombres": "Carla Beatriz",
+  "familiarInmediato1Apellidos": "Torres Villacis",
+  "familiarInmediato1Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato1Estatus": {
+    "texto": "Residente permanente legal (LPR)",
+    "valor": "C"
+  },
+  "familiarInmediato2Nombres": "Jorge Andres",
+  "familiarInmediato2Apellidos": "Torres Villacis",
+  "familiarInmediato2Relacion": {
+    "texto": "Hermano Hermana",
+    "valor": "B"
+  },
+  "familiarInmediato2Estatus": {
+    "texto": "Residente permanente legal (LPR)",
+    "valor": "C"
+  },
+  "familiarInmediato3Nombres": "Lucia Fernanda",
+  "familiarInmediato3Apellidos": "Torres Penafiel",
+  "familiarInmediato3Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato3Estatus": {
+    "texto": "Ciudadano estadounidense",
+    "valor": "S"
+  },
+  "familiarInmediato4Nombres": "Ana Maria",
+  "familiarInmediato4Apellidos": "Penafiel Cobos",
+  "familiarInmediato4Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato4Estatus": {
+    "texto": "No inmigrante",
+    "valor": "P"
+  },
+  "familiarInmediato5Nombres": "Martin Esteban",
+  "familiarInmediato5Apellidos": "Torres Penafiel",
+  "familiarInmediato5Relacion": {
+    "texto": "Hijo Hija",
+    "valor": "C"
+  },
+  "familiarInmediato5Estatus": {
+    "texto": "Otro no lo sabe",
+    "valor": "O"
+  },
+  "nombresConyuge": "Ana Maria",
+  "apellidosConyuge": "Penafiel Cobos",
+  "fechaNacimientoConyuge": "1990-09-08",
+  "nacionalidadConyuge": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "ciudadNacimientoConyuge": "Ambato",
+  "paisNacimientoConyuge": {
+    "texto": "Ecuador",
+    "valor": "ECUA"
+  },
+  "categoriaOcupacionActual": {
+    "texto": "Jubilado",
+    "valor": "RT"
+  },
+  "tuvoTrabajoAnterior": "Y",
+  "empleadorAnterior": "Ministerio de Educacion",
+  "cargoAnterior": "Docente de educacion basica",
+  "direccionTrabajoAnterior": "Av Amazonas y Atahualpa",
+  "ciudadTrabajoAnterior": "Riobamba",
+  "provinciaTrabajoAnterior": "Chimborazo",
+  "codigoPostalTrabajoAnterior": "060104",
+  "telefonoTrabajoAnterior": "59332961000",
+  "apellidosSupervisorAnterior": "Guaman Tixi",
+  "nombreSupervisorAnterior": "Luis Alberto",
+  "descripcionTrabajoAnterior": "Docente de aula en septimo de basica; planificacion curricular, evaluacion de estudiantes y acompanamiento a representantes",
+  "fechaInicioTrabajoAnterior": "1985-09-02",
+  "fechaFinTrabajoAnterior": "2018-08-31",
+  "asistioInstitucionEducativa": "Y",
+  "institucionUniversitaria": "Universidad Nacional de Chimborazo",
+  "nombreCarrera": "Ciencias de la Educacion",
+  "direccionEducacion": "Av Antonio Jose de Sucre, km 15",
+  "ciudadEducacion": "Riobamba",
+  "provinciaEducacion": "Chimborazo",
+  "codigoPostalEducacion": "060108",
+  "fechaInicioEducacion": "1978-10-02",
+  "fechaFinEducacion": "1983-07-08",
+  "idioma1": "Espanol",
+  "idioma2": "Kichwa",
+  "idioma3": "Portugues",
+  "idioma4": "Frances",
+  "idioma5": "Italiano",
+  "tieneHistorialViajes": "Y",
+  "paisVisitado1": {
+    "texto": "Colombia",
+    "valor": "COL"
+  },
+  "paisVisitado2": {
+    "texto": "Peru",
+    "valor": "PERU"
+  },
+  "paisVisitado3": {
+    "texto": "Chile",
+    "valor": "CHIL"
+  },
+  "paisVisitado4": {
+    "texto": "Mexico",
+    "valor": "MEX"
+  },
+  "paisVisitado5": {
+    "texto": "Panama",
+    "valor": "PAN"
+  },
+  "enfermedadContagiosa": "N",
+  "deportadoDePais": "N"
+}

@@ -2,7 +2,7 @@
  
 Resultado de la sesión de decisiones sobre la sección 13 de `plan_asistente_formularios_v5.md`. Cubre 13.1, 13.2, 13.3 y valores por defecto. Fuente: `inventario_ds160_parcial.md`, `mapeo_ds160.json` y los `relevamiento_<Pantalla>.md`.
  
-**Estado al 2026-09-10:** revisado contra el mapeo **v2.7**. Lo que cambió después de la sesión
+**Estado al 2026-09-08:** revisado contra el mapeo **v2.6**. Lo que cambió después de la sesión
 original va marcado como *(actualizado v2.4 / v2.5 / v2.6)*. Los dos puntos que Illari y la
 página web habían resuelto de forma distinta **ya están decididos** — ver §16 del plan. El resto
 de este documento sigue vigente tal cual.
@@ -113,7 +113,7 @@ Sus `textarea` de explicación (`tbx<Nombre>` / `tbxDeport_EXPL`) quedan **manua
 |---|---|---|---|
 | `cbexAPP_SSN_NA` | — | Valor fijo | Marcado |
 | `cbexAPP_NATIONAL_ID_NA` | — | Valor fijo | Desmarcado |
-| `cbexAPP_TAX_ID_NA` | — | Valor fijo | Marcado *(v2.3 lo desmarcó; la v2.7 lo vuelve a marcar y elimina `tbxAPP_TAX_ID`, §16.2 del plan)* |
+| `cbexAPP_TAX_ID_NA` | — | Valor fijo | Marcado |
  
 ### Travel
  
@@ -123,24 +123,12 @@ Sus `textarea` de explicación (`tbx<Nombre>` / `tbxDeport_EXPL`) quedan **manua
 | `tbxDepartFlight` | — | Valor fijo | Vacío |
 | `tbxStreetAddress2` | — | Valor fijo | Vacío |
 | `tbZIPCode` | — | Valor fijo | Vacío |
-| `tbxPayerSurname` | `apellidosPagador` | Página web | Condicional: `pagadorViaje = "O"` — *congelado, ver abajo* |
+| `tbxPayerSurname` | `apellidosPagador` | Página web | Condicional: `pagadorViaje = "O"` |
 | `tbxPayerGivenName` | `nombresPagador` | Página web | Condicional |
 | `tbxPayerPhone` | `telefonoPagador` | Página web | Condicional |
 | `tbxPAYER_EMAIL_ADDR` | `correoPagador` | Página web | Condicional |
 | `ddlPayerRelationship` | `relacionPagador` | Página web | Condicional |
 | `rblPayerAddrSameAsInd` | `direccionPagadorIgualSolicitante` | Página web | Condicional |
- 
-> **CONGELADO (2026-09-24) — el bloque del pagador no se usa.** La web deja `pagadorViaje` fijo
-> en `"S"` (el propio solicitante) y comenta el select y estos 6 campos, sin borrarlos. El
-> catálogo `quienPaga` tiene **cinco** opciones y el mapeo solo cubre `O`: con `P` (empleador
-> actual), `U` (empleador en EE. UU.) y `C` (otra empresa) el DS-160 pide nombre y dirección de
-> la empresa, que no están relevados, y la web tampoco los pedía — así que esas tres opciones
-> producían una solicitud imposible de guardar. La rama `O` está mapeada a medias: le falta el
-> sub-bloque de dirección que aparece con `direccionPagadorIgualSolicitante = "N"`.
->
-> `pagadorViaje` **sigue viajando** en el JSON con `"S"`: es variable disparadora y sin ella la
-> app no puede evaluar la condición de estos 6 campos. Detalle en el punto 6 de §13.6 del plan y
-> en §15.3 de `variables_nuevas.md`.
  
 ### AddressPhone
  

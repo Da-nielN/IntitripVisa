@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react'
 
-export function usarMultiplesPasos(totalPasos: number) {
+export function useMultiplesPasos(totalPasos: number) {
   const [pasoActual, setPasoActual] = useState(0)
 
   const siguiente = () => setPasoActual((paso) => Math.min(paso + 1, totalPasos - 1))
